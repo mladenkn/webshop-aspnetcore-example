@@ -7,9 +7,9 @@ using Xunit;
 
 namespace WebShop.Tests
 {
-    public class DiscountServiceShould
+    public class BasketServiceShould
     {
-        private readonly DiscountService _sut = new DiscountService(Mock.Of<IMediator>());
+        private readonly BasketService _sut = new BasketService(Mock.Of<IMediator>());
 
         [Fact]
         public void Grant_discounts()
@@ -39,7 +39,7 @@ namespace WebShop.Tests
                 }
             };
 
-            var grantedDiscounts = _sut.ApplyDiscounts(basket, discounts);
+            var grantedDiscounts = _sut.GrantDiscounts(basket, discounts);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().ContainSingle(d => d.Discount.Name == discounts[0].Name);
@@ -73,7 +73,7 @@ namespace WebShop.Tests
                 }
             };
 
-            var grantedDiscounts = _sut.ApplyDiscounts(basket, discounts);
+            var grantedDiscounts = _sut.GrantDiscounts(basket, discounts);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().BeEmpty();

@@ -5,16 +5,16 @@ using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
-    public class DiscountService : IDiscountService
+    public class BasketService : IDiscountService
     {
         private readonly IMediator _mediator;
 
-        public DiscountService(IMediator mediator)
+        public BasketService(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public IEnumerable<GrantedDiscount> ApplyDiscounts(Basket basket, IEnumerable<Discount> discounts)
+        public IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket, IEnumerable<Discount> discounts)
         {
             var discountsToGrant = discounts
                 .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId &&
@@ -34,6 +34,6 @@ namespace WebShop.Discounts
 
     public interface IDiscountService
     {
-        IEnumerable<GrantedDiscount> ApplyDiscounts(Basket basket, IEnumerable<Discount> discounts);
+        IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket, IEnumerable<Discount> discounts);
     }
 }
