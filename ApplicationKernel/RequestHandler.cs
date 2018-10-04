@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace WebShop.Domain.UseCases.Abstract
+namespace ApplicationKernel
 {
     public class RequestHandler<TRequest> : IRequestHandler<TRequest, Response>
         where TRequest : IRequest<Response>

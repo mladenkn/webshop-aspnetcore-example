@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WebShop.Domain
@@ -9,6 +10,12 @@ namespace WebShop.Domain
         {
             var set = new HashSet<T>();
             return values.All(item => set.Add(item));
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> values, Action<T> action)
+        {
+            foreach (var value in values)
+                action(value);
         }
     }
 }

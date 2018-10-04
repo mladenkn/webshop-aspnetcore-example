@@ -1,11 +1,10 @@
 ﻿using System.Linq;
+using ApplicationKernel;
 using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WebShop.Domain.Baskets;
 using WebShop.Domain.Discounts;
-using WebShop.Domain.UseCases.Abstract;
-using IRequest = WebShop.Domain.UseCases.Abstract.IRequest;
+using IRequest = ApplicationKernel.IRequest;
 
 namespace WebShop.Domain.UseCases
 {
@@ -24,7 +23,7 @@ namespace WebShop.Domain.UseCases
             }
         }
 
-        public class Handler : Abstract.RequestHandler<Request>
+        public class Handler : ApplicationKernel.RequestHandler<Request>
         {
             public Handler(IQueryable<Basket> baskets, DiscountService discountService, IQueryable<Discount> discounts)
             {

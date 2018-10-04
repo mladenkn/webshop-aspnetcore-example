@@ -1,4 +1,4 @@
-﻿namespace WebShop.Domain.UseCases.Abstract
+﻿namespace ApplicationKernel
 {
     public class Response
     {
