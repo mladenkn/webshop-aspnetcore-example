@@ -39,7 +39,6 @@ namespace WebShop.Tests
             };
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
-
             var grantedDiscounts = sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
@@ -74,7 +73,6 @@ namespace WebShop.Tests
             };
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
-
             var grantedDiscounts = sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
