@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MediatR;
-using WebShop.Domain.Baskets;
+using WebShop.Baskets;
 
-namespace WebShop.Domain.Discounts
+namespace WebShop.Discounts
 {
     public class DiscountService
     {

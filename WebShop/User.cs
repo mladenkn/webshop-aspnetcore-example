@@ -1,4 +1,4 @@
-﻿namespace WebShop.Domain
+﻿namespace WebShop
 {
     public class User
     {

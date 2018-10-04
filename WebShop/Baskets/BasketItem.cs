@@ -1,4 +1,4 @@
-﻿namespace WebShop.Domain.Baskets
+﻿namespace WebShop.Baskets
 {
     public class BasketItem
     {

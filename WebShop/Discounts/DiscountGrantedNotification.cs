@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace WebShop.Domain.Discounts
+namespace WebShop.Discounts
 {
     public class DiscountGrantedNotification : INotification
     {
