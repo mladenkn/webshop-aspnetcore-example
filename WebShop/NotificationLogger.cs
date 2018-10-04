@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
 
-namespace ApplicationKernel
+namespace WebShop.Domain
 {
     public abstract class NotificationLogger : INotificationHandler<INotification>
     {

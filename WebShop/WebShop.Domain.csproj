@@ -6,10 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="5.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ApplicationKernel\ApplicationKernel.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>
