@@ -8,7 +8,14 @@ namespace WebShop.Baskets
         public string UserId { get; set; }
         public IReadOnlyCollection<Item> Items { get; set; }
 
+        /// <summary>  
+        ///  Can be null.
+        /// </summary>  
         public User User { get; set; }
+
+        /// <summary>  
+        ///  Can be null.
+        /// </summary>  
         public IReadOnlyCollection<GrantedDiscount> GrantedDiscounts { get; set; }
 
         public struct Item
