@@ -20,7 +20,7 @@ namespace WebShop.Tests
             {
                 new Discount
                 {
-                    Name = "1",
+                    Id = 1,
                     ProductId = product.Id,
                     RequiredQuantity = 3
                 }
@@ -42,7 +42,7 @@ namespace WebShop.Tests
             var grantedDiscounts = _sut.GrantDiscounts(basket, discounts);
 
             grantedDiscounts.Should().NotBeNull();
-            grantedDiscounts.Should().ContainSingle(d => d.Discount.Name == discounts[0].Name);
+            grantedDiscounts.Should().ContainSingle(d => d.Discount.Id == discounts[0].Id);
         }
 
         [Fact]
@@ -54,7 +54,6 @@ namespace WebShop.Tests
             {
                 new Discount
                 {
-                    Name = "1",
                     ProductId = product.Id,
                     RequiredQuantity = 3
                 }
