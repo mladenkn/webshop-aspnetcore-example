@@ -8,17 +8,20 @@ namespace WebShop.Discounts
     public class BasketService : IDiscountService
     {
         private readonly IMediator _mediator;
+        private readonly IQueryable<Discount> _discounts;
 
-        public BasketService(IMediator mediator)
+        public BasketService(IMediator mediator, IQueryable<Discount> discounts)
         {
             _mediator = mediator;
+            _discounts = discounts;
         }
 
-        public IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket, IEnumerable<Discount> discounts)
+        public IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket)
         {
-            var discountsToGrant = discounts
+            var discountsToGrant = _discounts
                 .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId &&
-                                                                  basketItem.Quantity >= discount.RequiredQuantity));
+                                                                  basketItem.Quantity >= discount.RequiredQuantity))
+                .ToList();
 
             Product GetProduct(int id) => basket.Items.First(p => p.ProductId == id).Product;
 
@@ -34,6 +37,6 @@ namespace WebShop.Discounts
 
     public interface IDiscountService
     {
-        IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket, IEnumerable<Discount> discounts);
+        IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket);
     }
 }

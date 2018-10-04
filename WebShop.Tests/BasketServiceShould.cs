@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using WebShop.Baskets;
@@ -9,8 +10,6 @@ namespace WebShop.Tests
 {
     public class BasketServiceShould
     {
-        private readonly BasketService _sut = new BasketService(Mock.Of<IMediator>());
-
         [Fact]
         public void Grant_discounts()
         {
@@ -39,7 +38,9 @@ namespace WebShop.Tests
                 }
             };
 
-            var grantedDiscounts = _sut.GrantDiscounts(basket, discounts);
+            var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
+
+            var grantedDiscounts = sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().ContainSingle(d => d.Discount.Id == discounts[0].Id);
@@ -72,7 +73,9 @@ namespace WebShop.Tests
                 }
             };
 
-            var grantedDiscounts = _sut.GrantDiscounts(basket, discounts);
+            var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
+
+            var grantedDiscounts = sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().BeEmpty();
