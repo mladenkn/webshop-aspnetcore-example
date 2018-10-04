@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -9,16 +10,9 @@ namespace WebShop
     {
         public Task Handle(INotification notification, CancellationToken cancellationToken)
         {
-            if (ShouldLog(notification))
-            {
-                var str = Stringify(notification);
-                // todo: log actual
-            }
+            var str = JsonConvert.SerializeObject(notification);
+            Console.WriteLine(str);
             return Task.CompletedTask;
         }
-
-        protected virtual string Stringify(INotification notification) => JsonConvert.SerializeObject(notification);
-
-        protected virtual bool ShouldLog(INotification notification) => true;
     }
 }
