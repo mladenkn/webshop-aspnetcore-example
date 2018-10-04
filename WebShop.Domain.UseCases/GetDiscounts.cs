@@ -2,15 +2,16 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebShop.Baskets;
-using WebShop.Discounts;
+using WebShop.Domain.Baskets;
+using WebShop.Domain.Discounts;
 using WebShop.Domain.UseCases.Abstract;
+using IRequest = WebShop.Domain.UseCases.Abstract.IRequest;
 
 namespace WebShop.Domain.UseCases
 {
     public static class GetDiscounts
     {
-        public struct Request : IRequest<Response>
+        public struct Request : IRequest
         {
             public string UserId { get; set; }
         }

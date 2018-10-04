@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WebShop
+namespace WebShop.Domain
 {
     public static class Utilities
     {

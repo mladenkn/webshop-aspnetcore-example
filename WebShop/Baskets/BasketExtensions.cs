@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebShop.Baskets
+namespace WebShop.Domain.Baskets
 {
     public static class BasketExtensions
     {

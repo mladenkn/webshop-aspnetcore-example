@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WebShop.Baskets;
+using WebShop.Domain.Baskets;
 
-namespace WebShop.Discounts
+namespace WebShop.Domain.Discounts
 {
     public class DiscountService
     {

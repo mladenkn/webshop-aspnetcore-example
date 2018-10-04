@@ -1,4 +1,4 @@
-﻿namespace WebShop
+﻿namespace WebShop.Domain
 {
     public class Product
     {

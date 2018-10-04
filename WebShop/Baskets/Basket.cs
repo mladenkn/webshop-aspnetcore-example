@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using WebShop.Discounts;
+using WebShop.Domain.Discounts;
 
-namespace WebShop.Baskets
+namespace WebShop.Domain.Baskets
 {
     public class Basket
     {

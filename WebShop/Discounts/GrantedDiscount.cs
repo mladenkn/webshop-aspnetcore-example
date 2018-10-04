@@ -1,4 +1,4 @@
-﻿namespace WebShop.Discounts
+﻿namespace WebShop.Domain.Discounts
 {
     public struct GrantedDiscount
     {
