@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MediatR;
-using WebShop.Baskets;
+using WebShop.Discounts;
 
-namespace WebShop.Discounts
+namespace WebShop.Baskets
 {
     public class BasketService : IBasketService
     {
