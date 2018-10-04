@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
@@ -16,16 +18,22 @@ namespace WebShop.Baskets
             _discounts = discounts;
         }
 
-        public IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket)
+        public async Task<IEnumerable<GrantedDiscount>> GrantDiscounts(Basket basket)
         {
-            var discountsToGrant = _discounts
+            var discountsToGrant = await _discounts
                 .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId &&
                                                                   basketItem.Quantity >= discount.RequiredQuantity))
-                .ToList();
+                .ToListAsync();
 
-            Product GetProduct(int id) => basket.Items.First(p => p.ProductId == id).Product;
-
-            basket.GrantedDiscounts = discountsToGrant.Select(d => new GrantedDiscount(d, GetProduct(d.ProductId))).ToList();
+            basket.GrantedDiscounts = discountsToGrant.Select(d =>
+            {
+                var items = basket.Items
+                    .Where(i => i.ProductId == d.ProductId)
+                    .Take(d.MaxNumberOfItemsToApplyTo)
+                    .ToList();
+                return new GrantedDiscount(d, items);
+            })
+            .ToList();
             
             basket.GrantedDiscounts
                 .Select(d => new DiscountGrantedNotification(d))
@@ -37,6 +45,6 @@ namespace WebShop.Baskets
 
     public interface IBasketService
     {
-        IEnumerable<GrantedDiscount> GrantDiscounts(Basket basket);
+        Task<IEnumerable<GrantedDiscount>> GrantDiscounts(Basket basket);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -11,7 +12,7 @@ namespace WebShop.Tests
     public class BasketServiceShould
     {
         [Fact]
-        public void Grant_discounts()
+        public async Task Grant_discounts()
         {
             var product = new Product {Id = 1};
 
@@ -39,14 +40,14 @@ namespace WebShop.Tests
             };
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
-            var grantedDiscounts = sut.GrantDiscounts(basket);
+            var grantedDiscounts = await sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().ContainSingle(d => d.Discount.Id == discounts[0].Id);
         }
 
         [Fact]
-        public void Not_grant_discounts()
+        public async Task Not_grant_discounts()
         {
             var product = new Product { Id = 1 };
 
@@ -73,7 +74,7 @@ namespace WebShop.Tests
             };
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
-            var grantedDiscounts = sut.GrantDiscounts(basket);
+            var grantedDiscounts = await sut.GrantDiscounts(basket);
 
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().BeEmpty();
