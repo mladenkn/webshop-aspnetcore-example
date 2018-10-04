@@ -5,7 +5,7 @@ using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
-    public class DiscountService
+    public class DiscountService : IDiscountService
     {
         private readonly IMediator _mediator;
 
@@ -30,5 +30,10 @@ namespace WebShop.Discounts
 
             return basket.GrantedDiscounts;
         }
+    }
+
+    public interface IDiscountService
+    {
+        IEnumerable<GrantedDiscount> ApplyDiscounts(Basket basket, IEnumerable<Discount> discounts);
     }
 }
