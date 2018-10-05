@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
 using FluentAssertions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using WebShop.Baskets;
 using WebShop.Discounts;
