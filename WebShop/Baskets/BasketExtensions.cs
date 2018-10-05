@@ -15,13 +15,7 @@ namespace WebShop.Baskets
 
             basket.UserId = items.First().UserId;
             basket.User = items.First().User;
-            basket.Items = items
-                .Select(i => new Basket.Item
-                {
-                    ProductId = i.ProductId,
-                    Quantity = i.ProductQuantity
-                })
-                .ToList();
+            basket.Items = items.ToList();
 
             return basket;
         }

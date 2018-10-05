@@ -6,7 +6,7 @@ namespace WebShop.Discounts
 {
     public struct GrantedDiscount
     {
-        public GrantedDiscount(Discount discount, IReadOnlyCollection<Basket.Item> items) : this()
+        public GrantedDiscount(Discount discount, IReadOnlyCollection<BasketItem> items) : this()
         {
             Discount = discount;
             Items = items;
@@ -14,6 +14,6 @@ namespace WebShop.Discounts
 
         public Discount Discount { get; }
 
-        public IReadOnlyCollection<Basket.Item> Items { get; }
+        public IReadOnlyCollection<BasketItem> Items { get; }
     }
 }

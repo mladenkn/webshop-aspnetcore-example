@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using WebShop.Baskets;
 using WebShop.Discounts;
@@ -30,11 +33,11 @@ namespace WebShop.Tests
             {
                 Items = new[]
                 {
-                    new Basket.Item
+                    new BasketItem
                     {
                         ProductId = product.Id,
                         Product = product,
-                        Quantity = 3
+                        ProductQuantity = 3
                     }
                 }
             };
@@ -64,11 +67,11 @@ namespace WebShop.Tests
             {
                 Items = new[]
                 {
-                    new Basket.Item
+                    new BasketItem
                     {
                         ProductId = product.Id,
                         Product = product,
-                        Quantity = 2
+                        ProductQuantity = 2
                     }
                 }
             };
