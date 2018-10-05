@@ -23,7 +23,7 @@ namespace WebShop.Tests
             var discounts = new Faker<Discount>()
                 .RuleFor(d => d.ProductId, product.Id)
                 .RuleFor(d => d.Product, product)
-                .RuleFor(d => d.RequiredQuantity, 3)
+                .RuleFor(d => d.RequiredMinimalQuantity, 3)
                 .Generate(1);
 
             var basket = new Faker<Basket>()
@@ -51,7 +51,7 @@ namespace WebShop.Tests
             var discounts = new Faker<Discount>()
                 .RuleFor(d => d.ProductId, product.Id)
                 .RuleFor(d => d.Product, product)
-                .RuleFor(d => d.RequiredQuantity, 3)
+                .RuleFor(d => d.RequiredMinimalQuantity, 3)
                 .Generate(1);
 
             var basket = new Faker<Basket>()
