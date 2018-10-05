@@ -20,7 +20,8 @@ namespace WebShop.Baskets
         public async Task<IEnumerable<GrantedDiscount>> GrantDiscounts(Basket basket)
         {
             var discountsToGrant = _discounts
-                .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId))
+                .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId) && 
+                                   basket.Items.Count >= discount.RequiredQuantity)
                 .ToList();
 
             basket.GrantedDiscounts = discountsToGrant.Select(d =>

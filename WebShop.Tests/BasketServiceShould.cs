@@ -36,9 +36,18 @@ namespace WebShop.Tests
                     new BasketItem
                     {
                         ProductId = product.Id,
-                        Product = product,
-                        ProductQuantity = 3
-                    }
+                        Product = product
+                    },
+                    new BasketItem
+                    {
+                        ProductId = product.Id,
+                        Product = product
+                    },
+                    new BasketItem
+                    {
+                        ProductId = product.Id,
+                        Product = product
+                    },
                 }
             };
 
@@ -70,8 +79,7 @@ namespace WebShop.Tests
                     new BasketItem
                     {
                         ProductId = product.Id,
-                        Product = product,
-                        ProductQuantity = 2
+                        Product = product
                     }
                 }
             };
