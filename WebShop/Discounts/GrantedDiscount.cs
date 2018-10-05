@@ -4,9 +4,9 @@ using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
-    public struct GrantedDiscount
+    public class GrantedDiscount
     {
-        public GrantedDiscount(Discount discount, IReadOnlyCollection<BasketItem> items) : this()
+        public GrantedDiscount(Discount discount, IReadOnlyCollection<BasketItem> items)
         {
             Discount = discount;
             Items = items;

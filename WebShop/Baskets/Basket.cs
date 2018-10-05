@@ -3,7 +3,7 @@ using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
-    public struct Basket
+    public class Basket
     {
         public int Id { get; set; }
         public string UserId { get; set; }

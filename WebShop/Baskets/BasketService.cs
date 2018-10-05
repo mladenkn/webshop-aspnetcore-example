@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
@@ -21,8 +20,7 @@ namespace WebShop.Baskets
         public async Task<IEnumerable<GrantedDiscount>> GrantDiscounts(Basket basket)
         {
             var discountsToGrant = _discounts
-                .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId &&
-                                                                  basketItem.ProductQuantity >= discount.RequiredQuantity))
+                .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId))
                 .ToList();
 
             basket.GrantedDiscounts = discountsToGrant.Select(d =>
