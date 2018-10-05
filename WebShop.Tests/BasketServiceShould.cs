@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Bogus;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,37 +20,21 @@ namespace WebShop.Tests
         {
             var product = new Product {Id = 1};
 
-            var discounts = new[]
-            {
-                new Discount
-                {
-                    Id = 1,
-                    ProductId = product.Id,
-                    RequiredQuantity = 3
-                }
-            };
+            var discounts = new Faker<Discount>()
+                .RuleFor(d => d.ProductId, product.Id)
+                .RuleFor(d => d.Product, product)
+                .RuleFor(d => d.RequiredQuantity, 3)
+                .Generate(1);
 
-            var basket = new Basket
-            {
-                Items = new[]
+            var basket = new Faker<Basket>()
+                .RuleFor(b => b.Items, f =>
                 {
-                    new BasketItem
-                    {
-                        ProductId = product.Id,
-                        Product = product
-                    },
-                    new BasketItem
-                    {
-                        ProductId = product.Id,
-                        Product = product
-                    },
-                    new BasketItem
-                    {
-                        ProductId = product.Id,
-                        Product = product
-                    },
-                }
-            };
+                    return new Faker<BasketItem>()
+                        .RuleFor(i => i.ProductId, product.Id)
+                        .RuleFor(i => i.Product, product)
+                        .Generate(3);
+                })
+                .Generate();
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
             var grantedDiscounts = await sut.GrantDiscounts(basket);
@@ -63,26 +48,21 @@ namespace WebShop.Tests
         {
             var product = new Product { Id = 1 };
 
-            var discounts = new[]
-            {
-                new Discount
-                {
-                    ProductId = product.Id,
-                    RequiredQuantity = 3
-                }
-            };
+            var discounts = new Faker<Discount>()
+                .RuleFor(d => d.ProductId, product.Id)
+                .RuleFor(d => d.Product, product)
+                .RuleFor(d => d.RequiredQuantity, 3)
+                .Generate(1);
 
-            var basket = new Basket
-            {
-                Items = new[]
+            var basket = new Faker<Basket>()
+                .RuleFor(b => b.Items, f =>
                 {
-                    new BasketItem
-                    {
-                        ProductId = product.Id,
-                        Product = product
-                    }
-                }
-            };
+                    return new Faker<BasketItem>()
+                        .RuleFor(i => i.ProductId, product.Id)
+                        .RuleFor(i => i.Product, product)
+                        .Generate(1);
+                })
+                .Generate();
 
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable());
             var grantedDiscounts = await sut.GrantDiscounts(basket);
