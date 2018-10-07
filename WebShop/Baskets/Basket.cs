@@ -15,6 +15,11 @@ namespace WebShop.Baskets
         public User User { get; set; }
 
         /// <summary>  
+        ///  Needs initialization from IModelInitializer
+        /// </summary> 
+        public decimal TotalPrice { get; set; }
+
+        /// <summary>  
         ///  Can be null.
         /// </summary>  
         public IReadOnlyCollection<GrantedDiscount> GrantedDiscounts { get; set; }

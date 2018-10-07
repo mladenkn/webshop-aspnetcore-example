@@ -5,14 +5,10 @@ namespace WebShop.Discounts
 {
     public class GrantedDiscount
     {
-        public GrantedDiscount(Discount discount, IReadOnlyCollection<BasketItem> items)
-        {
-            Discount = discount;
-            Items = items;
-        }
+        public int DiscountId { get; set; }
+        public int ItemId { get; set; }
 
-        public Discount Discount { get; }
-
-        public IReadOnlyCollection<BasketItem> Items { get; }
+        public Discount Discount { get; set; }
+        public BasketItem Item { get; set; }
     }
 }
