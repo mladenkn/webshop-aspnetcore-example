@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
@@ -16,7 +17,7 @@ namespace WebShop.Tests
 {
     public class GrantDiscountsShould : FakerContainerAware
     {
-        private void Init(int numberOfBasketItems)
+        private void ArrangeDataGenerators(int numberOfBasketItems)
         {
             FakerOf<Product>()
                 .RuleFor(p => p.Id, 1)
@@ -40,16 +41,20 @@ namespace WebShop.Tests
                 ;
         }
 
+        private async Task<IEnumerable<GrantedDiscount>> Act(IEnumerable<Discount> discounts)
+        {
+            var basket = FakerOf<Basket>().Generate();
+            var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable(), null);
+            var grantedDiscounts = await sut.GrantDiscounts(basket);
+            return grantedDiscounts;
+        }
+
         [Fact]
         public async Task Grant_correct_discount()
         {
-            Init(numberOfBasketItems: 3);
+            ArrangeDataGenerators(numberOfBasketItems: 3);
             var discounts = FakerOf<Discount>().Generate(1);
-            var basket = FakerOf<Basket>().Generate();
-
-            var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable(), null);
-
-            var grantedDiscounts = await sut.GrantDiscounts(basket);
+            var grantedDiscounts = await Act(discounts);
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().ContainSingle(d => d.Discount.Id == discounts[0].Id);
         }
@@ -57,13 +62,9 @@ namespace WebShop.Tests
         [Fact]
         public async Task Not_grant_discounts_when_there_isnt_minimal_quantity_of_items_in_basket()
         {
-            Init(numberOfBasketItems: 1);
+            ArrangeDataGenerators(numberOfBasketItems: 1);
             var discounts = FakerOf<Discount>().Generate(1);
-            var basket = FakerOf<Basket>().Generate();
-
-            var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable(), null);
-
-            var grantedDiscounts = await sut.GrantDiscounts(basket);
+            var grantedDiscounts = await Act(discounts);
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().BeEmpty();
         }

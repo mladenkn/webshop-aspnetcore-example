@@ -16,7 +16,7 @@ namespace WebShop.Tests
         private Basket _basket;
         private Product _product;
 
-        private void Init(int numberOfGrantedDiscounts, int basketItemId = 1)
+        private void ArrangeDataGenerators(int numberOfGrantedDiscounts, int basketItemId = 1)
         {
             FakerOf<Product>()
                 .RuleFor(p => p.Id, 1)
@@ -37,18 +37,21 @@ namespace WebShop.Tests
                 ;
         }
 
+        private static async Task Act(BasketItem basketItem)
+        {
+            var sut = new BasketItemService();
+            await sut.Initialize(basketItem);
+        }
+
         private Basket Basket => _basket ?? (_basket = FakerOf<Basket>().Generate());
         private Product Product => _product ?? (_product = FakerOf<Product>().Generate());
 
         [Fact]
         public async Task Set_price_equal_to_regular_price()
         {
-            Init(numberOfGrantedDiscounts: 0);
-
+            ArrangeDataGenerators(numberOfGrantedDiscounts: 0);
             var item = FakerOf<BasketItem>().Generate();
-
-            var sut = new BasketItemService();
-            await sut.Initialize(item);
+            await Act(item);
             item.Price.Should().Be(Product.RegularPrice);
         }
 
@@ -56,7 +59,7 @@ namespace WebShop.Tests
         public async Task Set_discounted_price()
         {
             var basketItemId = 1;
-            Init(numberOfGrantedDiscounts: 1, basketItemId: basketItemId);
+            ArrangeDataGenerators(numberOfGrantedDiscounts: 1, basketItemId: basketItemId);
 
             var discount = FakerOf<Discount>()
                 .RuleFor(p => p.ProductId, Product.Id)
@@ -72,9 +75,7 @@ namespace WebShop.Tests
                 ;
 
             var item = FakerOf<BasketItem>().Generate();
-
-            var sut = new BasketItemService();
-            await sut.Initialize(item);
+            await Act(item);
             item.Price.Should().Be(45);
         }
     }
