@@ -14,7 +14,7 @@ namespace WebShop.Tests
         public async Task Set_price_equal_to_regular_price()
         {
             var basket = Basket(new GrantedDiscount[0]).Generate();
-            var product = Products().Generate();
+            var product = Product().Generate();
             var basketItem = BasketItem(1, product, basket).Generate();
 
             await Act(basketItem);
@@ -28,7 +28,7 @@ namespace WebShop.Tests
             var basketItemId = 1;
             var numberOfGrantedDiscounts = 1;
 
-            var product = Products().Generate();
+            var product = Product().Generate();
 
             var discount = new Faker<Discount>()
                 .RuleFor(p => p.ProductId, product.Id)
@@ -57,7 +57,7 @@ namespace WebShop.Tests
             await sut.Initialize(basketItem);
         }
 
-        private Faker<Product> Products()
+        private Faker<Product> Product()
         {
             return new Faker<Product>()
                 .RuleFor(p => p.Id, 1)

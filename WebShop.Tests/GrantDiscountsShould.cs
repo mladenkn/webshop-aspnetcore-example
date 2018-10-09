@@ -19,7 +19,7 @@ namespace WebShop.Tests
             var product = Products().Generate();
             var discounts = Discounts(product).Generate(1);
             var basketItems = BasketItems(product).Generate(3);
-            var basket = Baskets(product, basketItems).Generate();
+            var basket = Baskets(basketItems).Generate();
 
             var grantedDiscounts = await Act(discounts, basket);
 
@@ -33,7 +33,7 @@ namespace WebShop.Tests
             var product = Products().Generate();
             var discounts = Discounts(product).Generate(1);
             var basketItems = BasketItems(product).Generate(1);
-            var basket = Baskets(product, basketItems).Generate();
+            var basket = Baskets(basketItems).Generate();
 
             var grantedDiscounts = await Act(discounts, basket);
 
@@ -72,7 +72,7 @@ namespace WebShop.Tests
                 ;
         }
 
-        private Faker<Basket> Baskets(Product product, IReadOnlyCollection<BasketItem> basketItems)
+        private Faker<Basket> Baskets(IReadOnlyCollection<BasketItem> basketItems)
         {
             return new Faker<Basket>()
                 .RuleFor(b => b.Items, basketItems)
