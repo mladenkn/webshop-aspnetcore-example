@@ -16,10 +16,19 @@ namespace WebShop.Tests
         [Fact]
         public async Task Grant_correct_discount()
         {
-            var product = Products().Generate();
-            var discounts = Discounts(product).Generate(1);
-            var basketItems = BasketItems(product).Generate(3);
-            var basket = Baskets(basketItems).Generate();
+            var product = FakerOf<Product>().Generate();
+
+            var discounts = FakerOfDiscount()
+                .RuleForProduct(product)
+                .Generate(1);
+
+            var basketItems = FakerOf<BasketItem>()
+                .RuleForProduct(product)
+                .Generate(3);
+
+            var basket = FakerOf<Basket>()
+                .RuleFor(b => b.Items, basketItems)
+                .Generate();
 
             var grantedDiscounts = await Act(discounts, basket);
 
@@ -30,10 +39,19 @@ namespace WebShop.Tests
         [Fact]
         public async Task Not_grant_discounts_when_there_isnt_minimal_quantity_of_items_in_basket()
         {
-            var product = Products().Generate();
-            var discounts = Discounts(product).Generate(1);
-            var basketItems = BasketItems(product).Generate(1);
-            var basket = Baskets(basketItems).Generate();
+            var product = FakerOf<Product>().Generate();
+
+            var discounts = FakerOfDiscount()
+                .RuleForProduct(product)
+                .Generate(1);
+
+            var basketItems = FakerOf<BasketItem>()
+                .RuleForProduct(product)
+                .Generate(1);
+
+            var basket = FakerOf<Basket>()
+                .RuleFor(b => b.Items, basketItems)
+                .Generate();
 
             var grantedDiscounts = await Act(discounts, basket);
 
@@ -48,35 +66,14 @@ namespace WebShop.Tests
             return grantedDiscounts;
         }
 
-        private Faker<Product> Products()
-        {
-            return new Faker<Product>()
-                    .RuleFor(p => p.Id, 1)
-                ;
-        }
-
-        private Faker<Discount> Discounts(Product product)
+        private Faker<Discount> FakerOfDiscount()
         {
             return new Faker<Discount>()
-                .RuleFor(d => d.ProductId, product.Id)
                 .RuleFor(d => d.RequiredMinimalQuantity, 3)
                 .RuleFor(d => d.MaxNumberOfItemsToApplyTo, 1)
                 ;
         }
 
-        private Faker<BasketItem> BasketItems(Product product)
-        {
-            return new Faker<BasketItem>()
-                .RuleFor(i => i.ProductId, product.Id)
-                .RuleFor(i => i.Product, product)
-                ;
-        }
-
-        private Faker<Basket> Baskets(IReadOnlyCollection<BasketItem> basketItems)
-        {
-            return new Faker<Basket>()
-                .RuleFor(b => b.Items, basketItems)
-                ;
-        }
+        private Faker<T> FakerOf<T>() where T : class => new Faker<T>();
     }
 }
