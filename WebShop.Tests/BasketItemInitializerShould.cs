@@ -1,54 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bogus;
 using FluentAssertions;
 using WebShop.Baskets;
 using WebShop.Discounts;
-using WebShop.Tests.Abstract;
 using Xunit;
 
 namespace WebShop.Tests
 {
-    public class BasketItemInitializerShould : FakerContainerAware
+    public class BasketItemInitializerShould
     {
-        private Basket _basket;
-        private Product _product;
-
-        private Basket Basket => _basket ?? (_basket = FakerOf<Basket>().Generate());
-        private Product Product => _product ?? (_product = FakerOf<Product>().Generate());
-
         [Fact]
         public async Task Set_price_equal_to_regular_price()
         {
-            ArrangeDataGenerators(numberOfGrantedDiscounts: 0);
-            var item = FakerOf<BasketItem>().Generate();
-            await Act(item);
-            item.Price.Should().Be(Product.RegularPrice);
+            var basket = Basket(new GrantedDiscount[0]).Generate();
+            var product = Products().Generate();
+            var basketItem = BasketItem(1, product, basket).Generate();
+
+            await Act(basketItem);
+
+            basketItem.Price.Should().Be(product.RegularPrice);
         }
 
         [Fact]
         public async Task Set_discounted_price()
         {
             var basketItemId = 1;
-            ArrangeDataGenerators(numberOfGrantedDiscounts: 1, basketItemId: basketItemId);
+            var numberOfGrantedDiscounts = 1;
 
-            var discount = FakerOf<Discount>()
-                .RuleFor(p => p.ProductId, Product.Id)
+            var product = Products().Generate();
+
+            var discount = new Faker<Discount>()
+                .RuleFor(p => p.ProductId, product.Id)
                 .RuleFor(p => p.MaxNumberOfItemsToApplyTo, 1)
                 .RuleFor(p => p.RequiredMinimalQuantity, 1)
                 .RuleFor(p => p.Value, (decimal) 0.1)
                 .Generate();
 
-            FakerOf<GrantedDiscount>()
+            var grantedDiscounts = new Faker<GrantedDiscount>()
                 .RuleFor(gd => gd.DiscountId, discount.Id)
                 .RuleFor(gd => gd.Discount, discount)
                 .RuleFor(gd => gd.ItemId, basketItemId)
-                ;
+                .Generate(numberOfGrantedDiscounts);
 
-            var item = FakerOf<BasketItem>().Generate();
+            var basket = Basket(grantedDiscounts).Generate();
+            var item = BasketItem(basketItemId, product, basket).Generate();
+
             await Act(item);
+
             item.Price.Should().Be(45);
         }
 
@@ -58,24 +57,30 @@ namespace WebShop.Tests
             await sut.Initialize(basketItem);
         }
 
-        private void ArrangeDataGenerators(int numberOfGrantedDiscounts, int basketItemId = 1)
+        private Faker<Product> Products()
         {
-            FakerOf<Product>()
+            return new Faker<Product>()
                 .RuleFor(p => p.Id, 1)
                 .RuleFor(p => p.RegularPrice, 50)
                 ;
+        }
 
-            FakerOf<Basket>()
-                .RuleFor(b => b.Id, 1)
-                .RuleFor(b => b.GrantedDiscounts, f => FakerOf<GrantedDiscount>().Generate(numberOfGrantedDiscounts))
+        private Faker<BasketItem> BasketItem(int id, Product product, Basket basket)
+        {
+            return new Faker<BasketItem>()
+                .RuleFor(i => i.Id, id)
+                .RuleFor(i => i.BasketId, f => basket.Id)
+                .RuleFor(i => i.Basket, f => basket)
+                .RuleFor(i => i.ProductId, product.Id)
+                .RuleFor(i => i.Product, product)
                 ;
+        }
 
-            FakerOf<BasketItem>()
-                .RuleFor(i => i.Id, basketItemId)
-                .RuleFor(i => i.Basket, f => Basket)
-                .RuleFor(i => i.BasketId, f => Basket.Id)
-                .RuleFor(i => i.ProductId, f => Product.Id)
-                .RuleFor(i => i.Product, f => Product)
+        private Faker<Basket> Basket(IReadOnlyCollection<GrantedDiscount> grantedDiscounts)
+        {
+            return new Faker<Basket>()
+                .RuleFor(b => b.Id, 1)
+                .RuleFor(b => b.GrantedDiscounts, grantedDiscounts)
                 ;
         }
     }

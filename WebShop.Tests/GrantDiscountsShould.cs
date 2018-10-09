@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
 using FluentAssertions;
-using FluentAssertions.Collections;
 using MediatR;
 using Moq;
-using WebShop.Abstract;
 using WebShop.Baskets;
 using WebShop.Discounts;
-using WebShop.Tests.Abstract;
 using Xunit;
 
 namespace WebShop.Tests
 {
-    public class GrantDiscountsShould : FakerContainerAware
+    public class GrantDiscountsShould
     {
         [Fact]
         public async Task Grant_correct_discount()
         {
-            ArrangeDataGenerators(numberOfBasketItems: 3);
-            var discounts = FakerOf<Discount>().Generate(1);
-            var grantedDiscounts = await Act(discounts);
+            var product = Products().Generate();
+            var discounts = Discounts(product).Generate(1);
+            var basketItems = BasketItems(product).Generate(3);
+            var basket = Baskets(product, basketItems).Generate();
+
+            var grantedDiscounts = await Act(discounts, basket);
+
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().ContainSingle(d => d.Discount.Id == discounts[0].Id);
         }
@@ -30,42 +30,52 @@ namespace WebShop.Tests
         [Fact]
         public async Task Not_grant_discounts_when_there_isnt_minimal_quantity_of_items_in_basket()
         {
-            ArrangeDataGenerators(numberOfBasketItems: 1);
-            var discounts = FakerOf<Discount>().Generate(1);
-            var grantedDiscounts = await Act(discounts);
+            var product = Products().Generate();
+            var discounts = Discounts(product).Generate(1);
+            var basketItems = BasketItems(product).Generate(1);
+            var basket = Baskets(product, basketItems).Generate();
+
+            var grantedDiscounts = await Act(discounts, basket);
+
             grantedDiscounts.Should().NotBeNull();
             grantedDiscounts.Should().BeEmpty();
         }
 
-        private async Task<IEnumerable<GrantedDiscount>> Act(IEnumerable<Discount> discounts)
+        private async Task<IEnumerable<GrantedDiscount>> Act(IEnumerable<Discount> discounts, Basket basket)
         {
-            var basket = FakerOf<Basket>().Generate();
             var sut = new BasketService(Mock.Of<IMediator>(), discounts.AsQueryable(), null);
             var grantedDiscounts = await sut.GrantDiscounts(basket);
             return grantedDiscounts;
         }
 
-        private void ArrangeDataGenerators(int numberOfBasketItems)
+        private Faker<Product> Products()
         {
-            FakerOf<Product>()
-                .RuleFor(p => p.Id, 1)
+            return new Faker<Product>()
+                    .RuleFor(p => p.Id, 1)
                 ;
+        }
 
-            var product = FakerOf<Product>().Generate();
-
-            FakerOf<Discount>()
+        private Faker<Discount> Discounts(Product product)
+        {
+            return new Faker<Discount>()
                 .RuleFor(d => d.ProductId, product.Id)
                 .RuleFor(d => d.RequiredMinimalQuantity, 3)
                 .RuleFor(d => d.MaxNumberOfItemsToApplyTo, 1)
                 ;
+        }
 
-            FakerOf<BasketItem>()
+        private Faker<BasketItem> BasketItems(Product product)
+        {
+            return new Faker<BasketItem>()
                 .RuleFor(i => i.ProductId, product.Id)
                 .RuleFor(i => i.Product, product)
                 ;
+        }
 
-            FakerOf<Basket>()
-                .RuleFor(b => b.Items, f => FakerOf<BasketItem>().Generate(numberOfBasketItems))
+        private Faker<Basket> Baskets(Product product, IReadOnlyCollection<BasketItem> basketItems)
+        {
+            return new Faker<Basket>()
+                .RuleFor(b => b.Items, basketItems)
                 ;
         }
     }
