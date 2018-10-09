@@ -1,4 +1,7 @@
-﻿using Bogus;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using Bogus;
 using WebShop.Baskets;
 using WebShop.Discounts;
 
@@ -25,6 +28,20 @@ namespace WebShop.Tests
             return faker
                 .RuleFor(i => i.Product, product)
                 .RuleFor(i => i.ProductId, product.Id);
+        }
+
+        public static Faker<GrantedDiscount> RuleForDiscount(this Faker<GrantedDiscount> faker, Discount discount)
+        {
+            return faker
+                .RuleFor(i => i.Discount, discount)
+                .RuleFor(i => i.DiscountId, discount.Id);
+        }
+
+        public static Faker<T> EmptyCollectionRuleFor<T, TListItem>(
+            this Faker<T> faker, Expression<Func<T, IReadOnlyCollection<TListItem>>> list)
+            where T : class
+        {
+            return faker.RuleFor(list, new TListItem[0]);
         }
     }
 }

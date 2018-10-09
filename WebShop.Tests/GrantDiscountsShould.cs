@@ -11,7 +11,7 @@ using Xunit;
 
 namespace WebShop.Tests
 {
-    public class GrantDiscountsShould
+    public class GrantDiscountsShould : BaseTest
     {
         [Fact]
         public async Task Grant_correct_discount()
@@ -66,14 +66,12 @@ namespace WebShop.Tests
             return grantedDiscounts;
         }
 
-        private Faker<Discount> FakerOfDiscount()
+        private static Faker<Discount> FakerOfDiscount()
         {
             return new Faker<Discount>()
                 .RuleFor(d => d.RequiredMinimalQuantity, 3)
                 .RuleFor(d => d.MaxNumberOfItemsToApplyTo, 1)
                 ;
         }
-
-        private Faker<T> FakerOf<T>() where T : class => new Faker<T>();
     }
 }

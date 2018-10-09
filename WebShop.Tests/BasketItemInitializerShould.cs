@@ -8,13 +8,13 @@ using Xunit;
 
 namespace WebShop.Tests
 {
-    public class BasketItemInitializerShould
+    public class BasketItemInitializerShould : BaseTest
     {
         [Fact]
         public async Task Set_price_equal_to_regular_price()
         {
             var basket = FakerOf<Basket>()
-                .RuleFor(b => b.GrantedDiscounts, new GrantedDiscount[0])
+                .EmptyCollectionRuleFor(b => b.GrantedDiscounts)
                 .Generate();
 
             var product = FakerOfProduct().Generate();
@@ -33,22 +33,20 @@ namespace WebShop.Tests
         public async Task Set_discounted_price()
         {
             var basketItemId = 1;
-            var numberOfGrantedDiscounts = 1;
 
             var product = FakerOfProduct().Generate();
 
             var discount = FakerOf<Discount>()
-                .RuleFor(p => p.ProductId, product.Id)
+                .RuleForProduct(product)
                 .RuleFor(p => p.MaxNumberOfItemsToApplyTo, 1)
                 .RuleFor(p => p.RequiredMinimalQuantity, 1)
                 .RuleFor(p => p.Value, (decimal) 0.1)
                 .Generate();
 
             var grantedDiscounts = FakerOf<GrantedDiscount>()
-                .RuleFor(gd => gd.DiscountId, discount.Id)
-                .RuleFor(gd => gd.Discount, discount)
+                .RuleForDiscount(discount)
                 .RuleFor(gd => gd.ItemId, basketItemId)
-                .Generate(numberOfGrantedDiscounts);
+                .Generate(1);
 
             var basket = FakerOf<Basket>()
                 .RuleFor(b => b.GrantedDiscounts, grantedDiscounts)
@@ -78,7 +76,5 @@ namespace WebShop.Tests
                 .RuleFor(p => p.RegularPrice, 50)
                 ;
         }
-
-        private static Faker<T> FakerOf<T>() where T : class => new Faker<T>();
     }
 }
