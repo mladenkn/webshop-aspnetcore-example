@@ -13,9 +13,9 @@ namespace WebShop.Baskets
         
         public Product Product { get; set; }
         public Basket Basket { get; set; }
-        public IReadOnlyCollection<BasketItemDiscount> BasketDiscounts { get; set; }
+        public IReadOnlyCollection<BasketItemDiscount> BasketItemDiscount { get; set; }
 
-        public IEnumerable<Discount> Discounts => BasketDiscounts.Select(bd => bd.Discount);
+        public IEnumerable<Discount> Discounts => BasketItemDiscount.Select(bd => bd.Discount);
 
         /// <summary>  
         ///  Needs to be set after read from DB
