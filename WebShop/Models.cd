@@ -1,61 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="WebShop.Baskets.BasketItem">
-    <Position X="8.75" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>FAACAAAAAQAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Baskets\BasketItem.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Product" />
-    </ShowAsAssociation>
-  </Class>
-  <Class Name="WebShop.Product">
-    <Position X="8.25" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>Product.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="WebShop.Discounts.Discount">
-    <Position X="2" Y="2" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>EQACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAQAA=</HashCode>
-      <FileName>Discounts\Discount.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Product" />
-    </ShowAsAssociation>
-  </Class>
   <Class Name="WebShop.Baskets.Basket">
-    <Position X="2.75" Y="4" Width="1.5" />
+    <Position X="7" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAADAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAADAAAAAAAACAAAAAAAAAgAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Baskets\Basket.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Items" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="WebShop.Discounts.GrantedDiscount">
-    <Position X="5.25" Y="0.5" Width="1.5" />
+  <Class Name="WebShop.Baskets.BasketItem">
+    <Position X="1.75" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAgAAAAAAAAA=</HashCode>
-      <FileName>Discounts\GrantedDiscount.cs</FileName>
+      <HashCode>FAACAAAAARAAgAAAAAAAAAAAAAAAAAACAgAAAAAAAAA=</HashCode>
+      <FileName>Baskets\BasketItem.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Discount" />
+      <Property Name="Product" />
+      <Property Name="Basket" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Discounts" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="WebShop.Discounts.Discount">
+    <Position X="2.25" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAAAAAAAAAAQAAAAAAACAAAAAAAAAAAgAAAAQAA=</HashCode>
+      <FileName>Discounts\Discount.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ForProduct" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="WebShop.Baskets.BasketWithPrice">
-    <Position X="5" Y="4.75" Width="2" />
+  <Class Name="WebShop.Product">
+    <Position X="6.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAACAAAAAAA=</HashCode>
-      <FileName>Baskets\BasketWithPrice.cs</FileName>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Product.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="GrantedDiscounts" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
