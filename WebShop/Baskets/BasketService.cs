@@ -9,15 +9,28 @@ using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
+    public interface IBasketService
+    {
+        void CalculatePrice(Basket basket);
+        void CalculatePrice(BasketItem item);
+        Task AddBasketItem(BasketItem basketItem);
+        Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount);
+    }
+
     public class BasketService : IBasketService
     {
         private readonly IDiscountService _discountService;
         private readonly NewTransaction _newTransaction;
+        private readonly IQueryable<BasketItem> _basketItems;
 
-        public BasketService(IDiscountService discountService, NewTransaction newTransaction)
+        public BasketService(
+            IDiscountService discountService,
+            NewTransaction newTransaction, 
+            IQueryable<BasketItem> basketItems)
         {
             _discountService = discountService;
             _newTransaction = newTransaction;
+            _basketItems = basketItems;
         }
 
         public void CalculatePrice(Basket basket)
@@ -30,9 +43,13 @@ namespace WebShop.Baskets
         public void CalculatePrice(BasketItem item)
         {
             item.Product.Must().NotBeNull();
-            item.Discount.Must().NotBeNull();
+            item.Discounts.Must().NotBeNull();
 
-            var without = item.Product.RegularPrice * item.Discount.Value;
+            var totalDiscount = item.Discounts.Select(d => d.Value).Sum();
+            if (totalDiscount > 100)
+                totalDiscount = 100;
+
+            var without = item.Product.RegularPrice * totalDiscount;
             item.Price = item.Product.RegularPrice - without;
         }
 
@@ -45,15 +62,9 @@ namespace WebShop.Baskets
 
         public Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
         {
+
+
             throw new NotImplementedException();
         }
-    }
-
-    public interface IBasketService
-    {
-        void CalculatePrice(Basket basket);
-        void CalculatePrice(BasketItem item);
-        Task AddBasketItem(BasketItem basketItem);
-        Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount);
     }
 }

@@ -1,4 +1,6 @@
-﻿using WebShop.Discounts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
@@ -7,7 +9,7 @@ namespace WebShop.Baskets
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int BasketId { get; set; }
-        public int? DiscountId { get; set; }
+        public bool IsDiscounted { get; set; }
 
         /// <summary>  
         ///  Can be null.
@@ -19,16 +21,13 @@ namespace WebShop.Baskets
         /// </summary>  
         public Basket Basket { get; set; }
 
-        /// <summary>  
-        ///  Can be null.
-        /// </summary>  
-        public Discount Discount { get; set; }
+        public IReadOnlyCollection<BasketItemDiscount> BasketDiscounts { get; set; }
+
+        public IEnumerable<Discount> Discounts => BasketDiscounts.Select(bd => bd.Discount);
 
         /// <summary>  
-        ///  Needs initialization from IModelInitializer
+        ///  Needs to be set after read from DB
         /// </summary> 
         public decimal Price { get; set; }
-
-        public bool IsDiscounted => DiscountId != null;
     }
 }

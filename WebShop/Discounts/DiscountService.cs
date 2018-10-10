@@ -10,6 +10,13 @@ using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
+    public interface IDiscountService
+    {
+        Task Add(Discount discount);
+        Task Discount(BasketItem basketItem, Discount discount);
+        Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem);
+    }
+
     public class DiscountService : IDiscountService
     {
         private readonly NewTransaction _newTransaction;
@@ -32,12 +39,12 @@ namespace WebShop.Discounts
 
         public Task Discount(BasketItem basketItem, Discount discount)
         {
-            basketItem.DiscountId = discount.Id;
-            basketItem.Discount = discount;
+            basketItem.IsDiscounted = true;
+            var basketDiscount = new BasketItemDiscount {BasketItemId = basketItem.Id, DiscountId = discount.Id};
             return new []
             {
                 new DiscountGrantedNotification(basketItem).PublishWith(_mediator),
-                _newTransaction().Update(basketItem).Commit()
+                _newTransaction().Update(basketItem).Save(basketDiscount).Commit()
             }
             .WhenAll();
         }
@@ -46,12 +53,5 @@ namespace WebShop.Discounts
         {
             throw new NotImplementedException();
         }
-    }
-
-    public interface IDiscountService
-    {
-        Task Add(Discount discount);
-        Task Discount(BasketItem basketItem, Discount discount);
-        Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem);
     }
 }
