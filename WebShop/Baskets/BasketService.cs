@@ -21,12 +21,13 @@ namespace WebShop.Baskets
 
         public void CalculatePrice(Basket basket)
         {
-            throw new NotImplementedException();
+            basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
         }
 
         public void CalculatePrice(BasketItem item)
         {
-            throw new NotImplementedException();
+            var without = item.Product.RegularPrice * item.Discount.Value;
+            item.Price = item.Product.RegularPrice - without;
         }
 
         public async Task AddBasketItem(BasketItem basketItem)
