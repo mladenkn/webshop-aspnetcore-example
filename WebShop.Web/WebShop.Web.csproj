@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj" />
     <ProjectReference Include="..\WebShop.UseCases\WebShop.UseCases.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ApplicationKernel.Domain.MediatorSystem;
 using FluentValidation;
-using MediatR;
+using IRequest = ApplicationKernel.Domain.MediatorSystem.IRequest;
 
 namespace WebShop.UseCases
 {
@@ -26,7 +27,7 @@ namespace WebShop.UseCases
 
         public class Handler : IRequestHandler<Request>
         {
-            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
