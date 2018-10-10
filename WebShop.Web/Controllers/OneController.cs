@@ -1,36 +1,42 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ApplicationKernel.Infrastructure;
 using ApplicationKernel.Infrastructure.RestApi;
 using Microsoft.AspNetCore.Mvc;
+using Utilities;
+using WebShop.Baskets;
 using WebShop.UseCases;
 
 namespace WebShop.Web.Controllers
 {
     [ApiController]
-    public class OneController
+    public class OneController : ApiController
     {
-        private readonly HandleApiRequest _handle;
-
-        public OneController(HandleApiRequest handle)
-        {
-            _handle = handle;
-        }
-
         [Route("/discounts")]
-        public IActionResult Post(AddDiscount.Request request)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IActionResult> Post(AddDiscount.Request request) => Handle(request);
 
         [Route("/basketitems")]
-        public IActionResult Post(AddBasketItem.Request request)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IActionResult> Post(AddBasketItem.Request request) => Handle(request);
 
         [Route("baskets")]
-        public IActionResult Get(GetBasket.Request request)
+        public async Task<IActionResult> Get(int basketId)
         {
-            throw new NotImplementedException();
+            var response = await Handle(new GetBasket.Request{Id = basketId});
+            if (response is OkObjectResult result)
+            {
+                var basket = (Basket) result.Value;
+
+                basket.Items.Must().NotBeNull();
+                basket.Items.First().Discounts.Must().NotBeNull();
+                basket.Items.First().Product.Must().NotBeNull();
+
+                return SerializerOf<Basket>()
+                    .IgnoreProperty("Items.BasketItemDiscounts")
+                    .Serialize()
+                    .WrapIntoOkObjectResult();
+            }
+            return response;
         }
     }
 }
