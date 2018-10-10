@@ -22,12 +22,18 @@ namespace WebShop.Discounts
         private readonly NewTransaction _newTransaction;
         private readonly IMediator _mediator;
         private readonly IBasketService _basketService;
+        private readonly IQueryable<Discount> _discounts;
 
-        public DiscountService(NewTransaction newTransaction, IMediator mediator, IBasketService basketService)
+        public DiscountService(
+            NewTransaction newTransaction, 
+            IMediator mediator,
+            IBasketService basketService,
+            IQueryable<Discount> discounts)
         {
             _newTransaction = newTransaction;
             _mediator = mediator;
             _basketService = basketService;
+            _discounts = discounts;
         }
 
         public async Task Add(Discount discount)
@@ -49,9 +55,19 @@ namespace WebShop.Discounts
             .WhenAll();
         }
 
-        public Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem)
+        public async Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem)
         {
-            throw new NotImplementedException();
+            basketItem.Basket.Must().NotBeNull();
+            basketItem.Basket.Items.Must().NotBeNull();
+
+            var numberOfProductsInBasket = basketItem.Basket.Items.Count(i => i.ProductId == basketItem.ProductId);
+
+            var discounts = await _discounts
+                .Where(d => d.ForProductId == basketItem.ProductId &&
+                            numberOfProductsInBasket >= d.RequiredMinimalQuantity)
+                .ToListAsync();
+
+            return discounts;
         }
     }
 }

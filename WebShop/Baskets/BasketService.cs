@@ -60,11 +60,15 @@ namespace WebShop.Baskets
             await discounts.Select(d => _discountService.Discount(basketItem, d)).WhenAll();
         }
 
-        public Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
+        public async Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
         {
-
-
-            throw new NotImplementedException();
+            var basketItems = await _basketItems
+                .Where(i => i.Product.Id == discount.ForProductId &&
+                            i.Basket.Items.Count(bi => bi.ProductId == discount.ForProductId) >=
+                            discount.RequiredMinimalQuantity)
+                .Take(discount.MaxNumberOfItemsToApplyTo)
+                .ToListAsync();
+            return basketItems;
         }
     }
 }

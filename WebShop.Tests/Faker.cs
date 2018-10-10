@@ -26,15 +26,8 @@ namespace WebShop.Tests
         public static Faker<Discount> RuleForProduct(this Faker<Discount> faker, Product product)
         {
             return faker
-                .RuleFor(i => i.Product, product)
-                .RuleFor(i => i.ProductId, product.Id);
-        }
-
-        public static Faker<GrantedDiscount> RuleForDiscount(this Faker<GrantedDiscount> faker, Discount discount)
-        {
-            return faker
-                .RuleFor(i => i.Discount, discount)
-                .RuleFor(i => i.DiscountId, discount.Id);
+                .RuleFor(i => i.ForProduct, product)
+                .RuleFor(i => i.ForProductId, product.Id);
         }
 
         public static Faker<T> EmptyCollectionRuleFor<T, TListItem>(
