@@ -10,7 +10,10 @@ namespace WebShop.UseCases
     {
         public struct Request : IRequest
         {
-
+            public int ForProductId { get; set; }
+            public int RequiredMinimalQuantity { get; set; }
+            public decimal Value { get; set; }
+            public int MaxNumberOfItemsToApplyTo { get; set; }
         }
 
         public class Validator : AbstractValidator<Request>

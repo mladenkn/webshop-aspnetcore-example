@@ -10,7 +10,7 @@ namespace WebShop.UseCases
     {
         public struct Request : IRequest
         {
-
+            public int Id { get; set; }
         }
 
         public class Validator : AbstractValidator<Request>
