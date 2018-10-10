@@ -22,11 +22,16 @@ namespace WebShop.Baskets
 
         public void CalculatePrice(Basket basket)
         {
+            basket.Items.Must().NotBeNull();
+
             basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
         }
 
         public void CalculatePrice(BasketItem item)
         {
+            item.Product.Must().NotBeNull();
+            item.Discount.Must().NotBeNull();
+
             var without = item.Product.RegularPrice * item.Discount.Value;
             item.Price = item.Product.RegularPrice - without;
         }

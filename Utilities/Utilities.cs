@@ -13,5 +13,7 @@ namespace Utilities
         }
 
         public static Task WhenAll(this IEnumerable<Task> tasks) => Task.WhenAll(tasks);
+
+        public static MustAssertions Must<T>(this T o) => new MustAssertions(o);
     }
 }
