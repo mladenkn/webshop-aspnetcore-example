@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
@@ -18,10 +17,5 @@ namespace WebShop.Baskets
         ///  Needs initialization from IModelInitializer
         /// </summary> 
         public decimal TotalPrice { get; set; }
-
-        /// <summary>  
-        ///  Can be null.
-        /// </summary>  
-        public IReadOnlyCollection<GrantedDiscount> GrantedDiscounts { get; set; }
     }
 }

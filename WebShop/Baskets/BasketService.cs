@@ -1,64 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
+using Microsoft.EntityFrameworkCore;
 using WebShop.Abstract;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
-    public class BasketService : IAsyncModelInitializer<Basket>
+    public class BasketService : IBasketService
     {
-        private readonly IMediator _mediator;
-        private readonly IQueryable<Discount> _discounts;
-        private readonly IAsyncModelInitializer<BasketItem> _basketItemInitializer;
+        private readonly IDiscountService _discountService;
+        private readonly NewTransaction _newTransaction;
 
-        public BasketService(
-            IMediator mediator,
-            IQueryable<Discount> discounts,
-            IAsyncModelInitializer<BasketItem> basketItemInitializer)
+        public BasketService(IDiscountService discountService, NewTransaction newTransaction)
         {
-            _mediator = mediator;
-            _discounts = discounts;
-            _basketItemInitializer = basketItemInitializer;
+            _discountService = discountService;
+            _newTransaction = newTransaction;
         }
 
-        public async Task<IEnumerable<GrantedDiscount>> GrantDiscounts(Basket basket)
+        public void CalculatePrice(Basket basket)
         {
-            // not using async to simplify tests
-            var discountsToGrant = _discounts
-                .Where(discount => basket.Items.Any(basketItem => basketItem.ProductId == discount.ProductId) && 
-                                   basket.Items.Count >= discount.RequiredMinimalQuantity)
-                .ToList();
-
-            var grantedDiscounts = discountsToGrant.SelectMany(discount =>
-            {
-                var items = basket.Items
-                    .Where(i => i.ProductId == discount.ProductId)
-                    .Take(discount.MaxNumberOfItemsToApplyTo)
-                    .ToList();
-                return items.Select(i => new GrantedDiscount
-                {
-                    Discount = discount,
-                    Item = i,
-                    DiscountId = discount.Id,
-                    ItemId = i.Id
-                });
-            });
-
-            grantedDiscounts
-                .Select(d => new DiscountGrantedNotification(d))
-                .ForEach(n => _mediator.Publish(n));
-
-            return grantedDiscounts;
+            throw new NotImplementedException();
         }
 
-        public async Task Initialize(Basket basket)
+        public void CalculatePrice(BasketItem item)
         {
-            basket.GrantedDiscounts = (await GrantDiscounts(basket)).ToList();
-            var initDiscountTasks = basket.GrantedDiscounts.Select(d => d.Item).Select(_basketItemInitializer.Initialize);
-            await Task.WhenAll(initDiscountTasks);
-            basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
+            throw new NotImplementedException();
         }
+
+        public async Task AddBasketItem(BasketItem basketItem)
+        {
+            await _newTransaction().Save(basketItem).Commit();
+            var discounts = await _discountService.GetDiscountsFor(basketItem);
+            await discounts.Select(d => _discountService.Discount(basketItem, d)).WhenAll();
+        }
+
+        public Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public interface IBasketService
+    {
+        void CalculatePrice(Basket basket);
+        void CalculatePrice(BasketItem item);
+        Task AddBasketItem(BasketItem basketItem);
+        Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount);
     }
 }
