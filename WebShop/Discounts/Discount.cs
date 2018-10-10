@@ -8,9 +8,6 @@
         public decimal Value { get; set; }
         public int MaxNumberOfItemsToApplyTo { get; set; }
 
-        /// <summary>  
-        ///  Can be null.
-        /// </summary>
         public Product ForProduct { get; set; }
     }
 }
