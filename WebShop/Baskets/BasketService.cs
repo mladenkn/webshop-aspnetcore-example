@@ -22,15 +22,18 @@ namespace WebShop.Baskets
         private readonly IDiscountService _discountService;
         private readonly NewTransaction _newTransaction;
         private readonly IQueryable<BasketItem> _basketItems;
+        private readonly decimal _maxAllowedDiscount;
 
         public BasketService(
             IDiscountService discountService,
             NewTransaction newTransaction, 
-            IQueryable<BasketItem> basketItems)
+            IQueryable<BasketItem> basketItems,
+            decimal maxAllowedDiscount)
         {
             _discountService = discountService;
             _newTransaction = newTransaction;
             _basketItems = basketItems;
+            _maxAllowedDiscount = maxAllowedDiscount;
         }
 
         public void CalculatePrice(Basket basket)
@@ -46,8 +49,8 @@ namespace WebShop.Baskets
             item.Discounts.Must().NotBeNull();
 
             var totalDiscount = item.Discounts.Select(d => d.Value).Sum();
-            if (totalDiscount > 100)
-                totalDiscount = 100;
+            if (totalDiscount > _maxAllowedDiscount)
+                totalDiscount = _maxAllowedDiscount;
 
             var without = item.Product.RegularPrice * totalDiscount;
             item.Price = item.Product.RegularPrice - without;
