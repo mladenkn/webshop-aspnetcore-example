@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+﻿using ApplicationKernel.Domain.MediatorSystem;
 using FluentValidation;
 using WebShop.Baskets;
 
@@ -21,19 +19,17 @@ namespace WebShop.UseCases
             }
         }
 
-        public class Handler : IRequestHandler<Request>
+        public class Handler : RequestHandler<Request>
         {
-            private readonly IBasketService _basketService;
-
             public Handler(IBasketService basketService)
             {
-                _basketService = basketService;
-            }
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-            {
-                var basket = await _basketService.GetBasket(request.Id);
-                return Responses.Success(basket);
+                HandleWith(async (request, token) =>
+                {
+                    var basket = await basketService.GetBasket(request.Id);
+                    return basket == null ? 
+                        Responses.Failure("Basket not found") :
+                        Responses.Success(basket);
+                });
             }
         }
     }

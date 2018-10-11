@@ -11,7 +11,5 @@ namespace ApplicationKernel.Infrastructure.RestApi
         {
             throw new NotImplementedException();
         }
-
-        protected IObjectSerializer<T> SerializerOf<T>() => new ObjectSerializer<T>();
     }
 }

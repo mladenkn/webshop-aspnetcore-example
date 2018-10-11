@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+﻿using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
 using WebShop.Baskets;
-using AutoMapperExtension = ApplicationKernel.Domain.AutoMapperExtension;
 
 namespace WebShop.UseCases
 {
@@ -26,22 +22,16 @@ namespace WebShop.UseCases
             }
         }
         
-        public class Handler : IRequestHandler<Request>
+        public class Handler : RequestHandler<Request>
         {
-            private readonly IBasketService _basketService;
-            private readonly IMapper _mapper;
-
             public Handler(IBasketService basketService, IMapper mapper)
             {
-                _basketService = basketService;
-                _mapper = mapper;
-            }
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-            {
-                var basketItem = _mapper.Map<BasketItem>(request);
-                basketItem = await _basketService.AddBasketItem(basketItem);
-                return Responses.Success(basketItem);
+                HandleWith(async (request, cancellationToken) =>
+                {
+                    var basketItem = mapper.Map<BasketItem>(request);
+                    basketItem = await basketService.AddBasketItem(basketItem);
+                    return Responses.Success(basketItem);
+                });
             }
         }
     }

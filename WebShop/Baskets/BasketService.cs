@@ -72,6 +72,7 @@ namespace WebShop.Baskets
             await _newTransaction().Save(basketItem).Commit();
             var discounts = await _discountService.GetDiscountsFor(basketItem);
             await discounts.Select(d => _discountService.Discount(basketItem, d)).WhenAll();
+            return basketItem;
         }
 
         public async Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+﻿using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
 using WebShop.Discounts;
@@ -30,22 +27,16 @@ namespace WebShop.UseCases
             }
         }
 
-        public class Handler : IRequestHandler<Request>
+        public class Handler : RequestHandler<Request>
         {
-            private readonly IMapper _mapper;
-            private readonly IDiscountService _service;
-
             public Handler(IMapper mapper, IDiscountService service)
             {
-                _mapper = mapper;
-                _service = service;
-            }
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-            {
-                var discount = _mapper.Map<Discount>(request);
-                discount = await _service.Add(discount);
-                return Responses.Success(discount);
+                HandleWith(async (request, token) =>
+                {
+                    var discount = mapper.Map<Discount>(request);
+                    discount = await service.Add(discount);
+                    return Responses.Success(discount);
+                });
             }
         }
     }
