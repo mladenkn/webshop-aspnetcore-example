@@ -11,9 +11,10 @@ namespace WebShop.Baskets
 {
     public interface IBasketService
     {
+        Task<Basket> GetBasket(int id);
         void CalculatePrice(Basket basket);
         void CalculatePrice(BasketItem item);
-        Task AddBasketItem(BasketItem basketItem);
+        Task<BasketItem> AddBasketItem(BasketItem basketItem);
         Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount);
     }
 
@@ -22,18 +23,28 @@ namespace WebShop.Baskets
         private readonly IDiscountService _discountService;
         private readonly NewTransaction _newTransaction;
         private readonly IQueryable<BasketItem> _basketItems;
+        private readonly IQueryable<Basket> _baskets;
         private readonly decimal _maxAllowedDiscount;
 
         public BasketService(
             IDiscountService discountService,
             NewTransaction newTransaction, 
             IQueryable<BasketItem> basketItems,
+            IQueryable<Basket> baskets,
             decimal maxAllowedDiscount)
         {
             _discountService = discountService;
             _newTransaction = newTransaction;
             _basketItems = basketItems;
+            _baskets = baskets;
             _maxAllowedDiscount = maxAllowedDiscount;
+        }
+
+        public async Task<Basket> GetBasket(int id)
+        {
+            var basket = await _baskets.FirstOrDefaultAsync(b => b.Id == id);
+            CalculatePrice(basket);
+            return basket;
         }
 
         public void CalculatePrice(Basket basket)
@@ -56,7 +67,7 @@ namespace WebShop.Baskets
             item.Price = item.Product.RegularPrice - without;
         }
 
-        public async Task AddBasketItem(BasketItem basketItem)
+        public async Task<BasketItem> AddBasketItem(BasketItem basketItem)
         {
             await _newTransaction().Save(basketItem).Commit();
             var discounts = await _discountService.GetDiscountsFor(basketItem);

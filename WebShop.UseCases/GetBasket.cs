@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ApplicationKernel.Domain.MediatorSystem;
 using FluentValidation;
+using WebShop.Baskets;
 
 namespace WebShop.UseCases
 {
@@ -18,15 +17,23 @@ namespace WebShop.UseCases
         {
             public Validator()
             {
-
+                RuleFor(r => r.Id).GreaterThan(0);
             }
         }
 
         public class Handler : IRequestHandler<Request>
         {
-            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            private readonly IBasketService _basketService;
+
+            public Handler(IBasketService basketService)
             {
-                throw new NotImplementedException();
+                _basketService = basketService;
+            }
+
+            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            {
+                var basket = await _basketService.GetBasket(request.Id);
+                return Responses.Success(basket);
             }
         }
     }

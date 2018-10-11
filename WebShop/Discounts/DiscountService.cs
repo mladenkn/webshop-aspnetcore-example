@@ -12,7 +12,7 @@ namespace WebShop.Discounts
 {
     public interface IDiscountService
     {
-        Task Add(Discount discount);
+        Task<Discount> Add(Discount discount);
         Task Discount(BasketItem basketItem, Discount discount);
         Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem);
     }
@@ -36,7 +36,7 @@ namespace WebShop.Discounts
             _discounts = discounts;
         }
 
-        public async Task Add(Discount discount)
+        public async Task<Discount> Add(Discount discount)
         {
             await _newTransaction().Save(discount).Commit();
             var discountableBasketItems = await _basketService.GetBasketItemsDiscountableWith(discount);
