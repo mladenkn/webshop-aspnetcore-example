@@ -1,8 +1,15 @@
-﻿using ApplicationKernel.Domain.MediatorSystem;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Utilities;
+using WebShop.Abstract;
+using WebShop.Baskets;
 using WebShop.Discounts;
-using IRequest = ApplicationKernel.Domain.MediatorSystem.IRequest;
 
 namespace WebShop.UseCases
 {
@@ -29,14 +36,30 @@ namespace WebShop.UseCases
 
         public class Handler : RequestHandler<Request>
         {
-            public Handler(IMapper mapper, IDiscountService service)
+            public Handler(IMapper mapper,
+                NewTransaction newTransaction, 
+                ApplyDiscountToBasketItem applyDiscount,
+                IQueryable<BasketItem> basketItemStore)
             {
                 HandleWith(async (request, token) =>
                 {
                     var discount = mapper.Map<Discount>(request);
-                    discount = await service.Add(discount);
+                    await newTransaction().Save(discount).Commit();
+                    var basketItems = await GetBasketItemsDiscountableWith(discount);
+                    await basketItems.Select(basketItem => applyDiscount(basketItem, discount)).WhenAll();
                     return Responses.Success(discount);
                 });
+
+                async Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
+                {
+                    var basketItems = await basketItemStore
+                        .Where(i => i.Product.Id == discount.ForProductId &&
+                                    i.Basket.Items.Count(bi => bi.ProductId == discount.ForProductId) >=
+                                    discount.RequiredMinimalQuantity)
+                        .Take(discount.MaxNumberOfItemsToApplyTo)
+                        .ToListAsync();
+                    return basketItems;
+                }
             }
         }
     }

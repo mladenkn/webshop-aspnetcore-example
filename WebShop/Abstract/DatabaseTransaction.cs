@@ -12,11 +12,17 @@ namespace WebShop.Abstract
         Task Commit();
     }
 
-    public class DatabaseTransactionExtensions
+    public static class DatabaseTransactionExtensions
     {
-        public IDatabaseTransaction UpdateRange(IDatabaseTransaction transaction, IEnumerable<object> objects)
+        public static IDatabaseTransaction UpdateRange(this IDatabaseTransaction transaction, IEnumerable<object> objects)
         {
             objects.ForEach(o => transaction.Update(o));
+            return transaction;
+        }
+
+        public static IDatabaseTransaction SaveRange(this IDatabaseTransaction transaction, IEnumerable<object> objects)
+        {
+            objects.ForEach(o => transaction.Save(o));
             return transaction;
         }
     }

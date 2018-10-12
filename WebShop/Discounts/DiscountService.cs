@@ -17,6 +17,8 @@ namespace WebShop.Discounts
         Task<IEnumerable<Discount>> GetDiscountsFor(BasketItem basketItem);
     }
 
+    public delegate Task ApplyDiscountToBasketItem(BasketItem basketItem, Discount discount);
+
     public class DiscountService : IDiscountService
     {
         private readonly NewTransaction _newTransaction;
