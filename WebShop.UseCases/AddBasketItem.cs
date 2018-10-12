@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationKernel.Domain.MediatorSystem;
@@ -11,7 +10,7 @@ using WebShop.Abstract;
 using WebShop.Baskets;
 using WebShop.Discounts;
 
-namespace WebShop.UseCases
+namespace WebShop.Features
 {
     public class AddBasketItem
     {

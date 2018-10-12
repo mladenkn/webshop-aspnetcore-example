@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop", "WebShop\WebShop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{BD088815-DAEF-43D9-9D3C-64BD18569414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.UseCases", "WebShop.UseCases\WebShop.UseCases.csproj", "{D6BA5EE6-367F-4332-ACFF-912FEB466134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Features", "WebShop.UseCases\WebShop.Features.csproj", "{D6BA5EE6-367F-4332-ACFF-912FEB466134}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationKernel.Domain", "ApplicationKernel.Domain\ApplicationKernel.Domain.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Domain", "ApplicationKernel.Domain\ApplicationKernel.Domain.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Web", "WebShop.Web\WebShop.Web.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.RestApi", "WebShop.Web\WebShop.RestApi.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationKernel.Infrastructure", "ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj", "{9585483D-0BD9-46A8-8B17-D58CC82B9D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Infrastructure", "ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj", "{9585483D-0BD9-46A8-8B17-D58CC82B9D4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

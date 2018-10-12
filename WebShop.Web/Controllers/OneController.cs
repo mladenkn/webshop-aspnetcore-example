@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using ApplicationKernel.Infrastructure.RestApi;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.UseCases;
+using WebShop.Features;
 
-namespace WebShop.Web.Controllers
+namespace WebShop.RestApi.Controllers
 {
     [ApiController]
     public class OneController : ApiController

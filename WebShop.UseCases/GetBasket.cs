@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Utilities;
 using WebShop.Baskets;
 
-namespace WebShop.UseCases
+namespace WebShop.Features
 {
     public class GetBasket
     {
