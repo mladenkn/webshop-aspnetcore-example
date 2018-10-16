@@ -45,7 +45,7 @@ namespace WebShop.Features
                     var discount = mapper.Map<Discount>(request);
                     await newTransaction().Save(discount).Commit();
                     var basketItems = await GetBasketItemsDiscountableWith(discount);
-                    await basketItems.Select(basketItem => applyDiscount(basketItem, discount)).WhenAll();
+                    await basketItems.Select(basketItem => applyDiscount(basketItem, discount, newTransaction())).WhenAll();
                     return Responses.Success(discount);
                 });
 
