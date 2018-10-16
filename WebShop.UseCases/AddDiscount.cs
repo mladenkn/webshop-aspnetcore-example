@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+﻿using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Utilities;
 using WebShop.Abstract;
-using WebShop.Baskets;
 using WebShop.Discounts;
 
 namespace WebShop.Features
@@ -35,30 +29,14 @@ namespace WebShop.Features
 
         public class Handler : RequestHandler<Request>
         {
-            public Handler(IMapper mapper,
-                NewTransaction newTransaction, 
-                ApplyDiscountToBasketItem applyDiscount,
-                IQueryable<BasketItem> basketItemStore)
+            public Handler(IMapper mapper, NewTransaction newTransaction)
             {
                 HandleWith(async (request, token) =>
                 {
                     var discount = mapper.Map<Discount>(request);
                     await newTransaction().Save(discount).Commit();
-                    var basketItems = await GetBasketItemsDiscountableWith(discount);
-                    await basketItems.Select(basketItem => applyDiscount(basketItem, discount, newTransaction())).WhenAll();
                     return Responses.Success(discount);
                 });
-
-                async Task<IEnumerable<BasketItem>> GetBasketItemsDiscountableWith(Discount discount)
-                {
-                    var basketItems = await basketItemStore
-                        .Where(i => i.Product.Id == discount.ForProductId &&
-                                    i.Basket.Items.Count(bi => bi.ProductId == discount.ForProductId) >=
-                                    discount.RequiredMinimalQuantity)
-                        .Take(discount.MaxNumberOfItemsToApplyTo)
-                        .ToListAsync();
-                    return basketItems;
-                }
             }
         }
     }

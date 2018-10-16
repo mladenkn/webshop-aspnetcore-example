@@ -9,9 +9,9 @@ namespace WebShop.Baskets
         public IReadOnlyCollection<BasketItem> Items { get; set; }
 
         public User User { get; set; }
-        
+
         /// <summary>  
-        ///  Needs to be set after read from DB
+        ///  Not persisted
         /// </summary> 
         public decimal TotalPrice { get; set; }
     }

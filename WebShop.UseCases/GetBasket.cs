@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ApplicationKernel.Domain.MediatorSystem;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Utilities;
 using WebShop.Baskets;
+using WebShop.Discounts;
 
 namespace WebShop.Features
 {
@@ -24,7 +26,7 @@ namespace WebShop.Features
 
         public class Handler : RequestHandler<Request>
         {
-            public Handler(IQueryable<Basket> baskets, decimal maxAllowedDiscount)
+            public Handler(IQueryable<Basket> baskets, IQueryable<Discount> discountStore, decimal maxAllowedDiscount)
             {
                 HandleWith(async (request, token) =>
                 {
@@ -40,7 +42,12 @@ namespace WebShop.Features
                         return Responses.Failure("Basket not found");
 
                     basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
-                    basket.Items.ForEach(CalculateItemPrice);
+                    
+                    foreach (var basketItem in basket.Items)
+                    {
+                        basketItem.Discounts = await GetDiscountsFor(basketItem);
+                        CalculateItemPrice(basketItem);
+                    }
 
                     return Responses.Success(basket);
                 });
@@ -53,6 +60,16 @@ namespace WebShop.Features
 
                     var without = item.Product.RegularPrice * totalDiscount;
                     item.Price = item.Product.RegularPrice - without;
+                }
+
+                async Task<List<Discount>> GetDiscountsFor(BasketItem item)
+                {
+                    var numberOfProductsInBasket = item.Basket.Items.Count(i => i.ProductId == item.ProductId);
+                    var discounts = await discountStore
+                        .Where(d => d.ForProductId == item.ProductId &&
+                                    numberOfProductsInBasket >= d.RequiredMinimalQuantity)
+                        .ToListAsync();
+                    return discounts;
                 }
             }
         }

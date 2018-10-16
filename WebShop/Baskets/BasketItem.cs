@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
@@ -13,12 +12,14 @@ namespace WebShop.Baskets
         
         public Product Product { get; set; }
         public Basket Basket { get; set; }
-        public IReadOnlyCollection<BasketItemDiscount> BasketItemDiscounts { get; set; }
-
-        public IEnumerable<Discount> Discounts => BasketItemDiscounts.Select(bd => bd.Discount);
 
         /// <summary>  
-        ///  Needs to be set after read from DB
+        ///  Not persisted
+        /// </summary> 
+        public IReadOnlyCollection<Discount> Discounts { get; set; }
+
+        /// <summary>  
+        ///  Not persisted
         /// </summary> 
         public decimal Price { get; set; }
     }
