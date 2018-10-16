@@ -1,4 +1,5 @@
-﻿using ApplicationKernel.Domain.MediatorSystem;
+﻿using System;
+using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
 using WebShop.Abstract;
@@ -30,7 +31,14 @@ namespace WebShop.Features
                 HandleWith(async (request, cancellationToken) =>
                 {
                     var basketItem = mapper.Map<BasketItem>(request);
-                    await newTransaction().Save(basketItem).Commit();
+                    try
+                    {
+                        await newTransaction().Save(basketItem).Commit();
+                    }
+                    catch (Exception)
+                    {
+                        // handle if product or basket do not exist
+                    }
                     return Responses.Success(basketItem);
                 });
             }

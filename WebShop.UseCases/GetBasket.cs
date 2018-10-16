@@ -62,14 +62,13 @@ namespace WebShop.Features
                     item.Price = item.Product.RegularPrice - without;
                 }
 
-                async Task<List<Discount>> GetDiscountsFor(BasketItem item)
+                Task<List<Discount>> GetDiscountsFor(BasketItem item)
                 {
                     var numberOfProductsInBasket = item.Basket.Items.Count(i => i.ProductId == item.ProductId);
-                    var discounts = await discountStore
+                    return discountStore
                         .Where(d => d.ForProductId == item.ProductId &&
                                     numberOfProductsInBasket >= d.RequiredMinimalQuantity)
                         .ToListAsync();
-                    return discounts;
                 }
             }
         }

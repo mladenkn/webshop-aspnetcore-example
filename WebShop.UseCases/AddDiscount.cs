@@ -1,4 +1,5 @@
-﻿using ApplicationKernel.Domain.MediatorSystem;
+﻿using System;
+using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
 using WebShop.Abstract;
@@ -34,7 +35,14 @@ namespace WebShop.Features
                 HandleWith(async (request, token) =>
                 {
                     var discount = mapper.Map<Discount>(request);
-                    await newTransaction().Save(discount).Commit();
+                    try
+                    {
+                        await newTransaction().Save(discount).Commit();
+                    }
+                    catch (Exception)
+                    {
+                        // catch if product does not exist
+                    }
                     return Responses.Success(discount);
                 });
             }
