@@ -34,8 +34,6 @@ namespace WebShop.Features
                         .Where(b => b.Id == request.Id)
                         .Include(b => b.Items)
                             .ThenInclude(i => i.Product)
-                        .Include(b => b.Items)
-                            .ThenInclude(b => b.Discounts)
                         .FirstOrDefaultAsync();
 
                     if (basket == null)
