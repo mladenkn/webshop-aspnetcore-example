@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Utilities;
 using WebShop.Baskets;
 using WebShop.Discounts;
 
@@ -31,13 +32,16 @@ namespace WebShop.Queries
             if (basket == null)
                 return null;
 
-            basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
+            var allDiscounts = await _discountStore.ToListAsync();
 
+            var grantedDiscounts = new List<DiscountGranted>();
             foreach (var basketItem in basket.Items)
             {
-                basketItem.Discounts = await GetDiscountsFor(basketItem);
+                basketItem.Discounts = GetDiscountsFor(basketItem, allDiscounts, grantedDiscounts);
                 CalculateItemPrice(basketItem);
             }
+
+            basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
 
             return basket;
         }
@@ -52,13 +56,48 @@ namespace WebShop.Queries
             item.Price = item.Product.RegularPrice - without;
         }
 
-        private Task<List<Discount>> GetDiscountsFor(BasketItem item)
+        private List<Discount> GetDiscountsFor(
+            BasketItem basketItem, IEnumerable<Discount> allDiscounts, ICollection<DiscountGranted> grantedDiscounts)
         {
-            var numberOfProductsInBasket = item.Basket.Items.Count(i => i.ProductId == item.ProductId);
-            return _discountStore
-                .Where(d => d.ForProductId == item.ProductId &&
-                            numberOfProductsInBasket >= d.RequiredMinimalQuantity)
-                .ToListAsync();
+            bool ShouldDiscountWith(Discount discount)
+            {
+                bool DoesContainProductInRequiredQuantity()
+                {
+                    return basketItem.Basket.Items
+                        .ContainsN(it => it.ProductId == discount.RequiredProductId, discount.RequiredProductMinimalQuantity);
+                }
+
+                bool IsDiscountGrantedMaxTimes()
+                {
+                    return grantedDiscounts
+                        .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, discount.MaxNumberOfItemsToApplyTo);
+                }
+
+                var shouldDiscount = discount.ForProductId == basketItem.ProductId &&
+                                     DoesContainProductInRequiredQuantity() &&
+                                     !IsDiscountGrantedMaxTimes();
+
+                if (shouldDiscount)
+                    grantedDiscounts.Add(new DiscountGranted(basketItem.ProductId, discount.Id));
+
+                return shouldDiscount;
+            }
+
+            return allDiscounts
+                .Where(ShouldDiscountWith)
+                .ToList();
+        }
+
+        private struct DiscountGranted
+        {
+            public DiscountGranted(int productId, int discountId) : this()
+            {
+                ProductId = productId;
+                DiscountId = discountId;
+            }
+
+            public int ProductId { get; }
+            public int DiscountId { get; }
         }
     }
 }
