@@ -7,9 +7,13 @@ namespace ApplicationKernel.Infrastructure.RestApi
 {
     public abstract class ApiController
     {
-        protected Task<IActionResult> Handle(IRequest request)
+        private readonly HandleApiRequest _handle;
+
+        protected ApiController(HandleApiRequest handle)
         {
-            throw new NotImplementedException();
+            _handle = handle;
         }
+
+        protected Task<IActionResult> Handle(IRequest request) => _handle(request);
     }
 }
