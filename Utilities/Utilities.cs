@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Utilities
 {
@@ -11,9 +10,11 @@ namespace Utilities
         {
             return enumerable.Count(func) == count;
         }
+
         public static IEnumerable<T> New<T>(Func<T> get, int count)
         {
-            return Enumerable.Range(0, count)
+            return Enumerable
+                .Range(0, count)
                 .Select(it => get());
         }
     }
