@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ApplicationKernel;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
-using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
