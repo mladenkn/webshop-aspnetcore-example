@@ -4,7 +4,9 @@ using ApplicationKernel;
 using FluentAssertions;
 using Moq;
 using Utilities;
+using WebShop.BasketItems;
 using WebShop.Baskets;
+using WebShop.Discounts;
 using WebShop.Infrastructure;
 using Xunit;
 
@@ -100,7 +102,16 @@ namespace WebShop.Tests
                 _db.AddRange(_basketItems);
                 _db.SaveChanges();
 
-                var sut = new BasketQueries(_db.Baskets, _db.Discounts, 1, Mock.Of<IEventDispatcher>());
+                var basketItemService = new BasketItemService(1);
+
+                var sut = new BasketService(
+                    _db.Baskets,
+                    _db.Discounts,
+                    Mock.Of<IMediator>(),
+                    DiscountService.GetDiscountsFor, 
+                    basketItemService.CalculateItemPrice
+                );
+
                 var returnedBasket = await sut.GetBasketWithDiscountsApplied(basket.Id);
                 returnedBasket.Should().NotBeNull();
                 returnedBasket.Id.Should().Be(returnedBasket.Id);
