@@ -95,4 +95,6 @@ namespace WebShop.Baskets
             public int DiscountId { get; }
         }
     }
+
+    public delegate Task<Basket> GetBasketWithDiscountsApplied(int basketId);
 }
