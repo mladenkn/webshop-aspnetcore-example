@@ -6,9 +6,9 @@ using WebShop.Features;
 namespace WebShop.Infrastructure.RestApi.Controllers
 {
     [ApiController]
-    public class OneController : ApiController
+    public class Controller : ApiController
     {
-        public OneController(HandleApiRequest handle) : base(handle)
+        public Controller(HandleApiRequest handle) : base(handle)
         {
         }
 
