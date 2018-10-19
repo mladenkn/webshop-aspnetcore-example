@@ -14,6 +14,8 @@ namespace WebShop.Discounts
         public static List<Discount> GetDiscountsFor(
             BasketItem basketItem, IEnumerable<Discount> allDiscounts, ICollection<DiscountGranted> grantedDiscounts)
         {
+            basketItem.Basket.Must().NotBeNull();
+
             bool ShouldDiscountWith(Discount discount)
             {
                 if (discount.TargetProductId != basketItem.ProductId)

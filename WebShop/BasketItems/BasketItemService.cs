@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using WebShop.Baskets;
+using Utilities;
 
 namespace WebShop.BasketItems
 {
@@ -16,6 +16,9 @@ namespace WebShop.BasketItems
 
         public decimal CalculateItemPrice(BasketItem item)
         {
+            item.Discounts.Must().NotBeNull();
+            item.Product.Must().NotBeNull();
+
             var totalDiscount = item.Discounts.Select(d => d.Value).Sum();
             if (totalDiscount > _maxAllowedDiscount)
                 totalDiscount = _maxAllowedDiscount;
