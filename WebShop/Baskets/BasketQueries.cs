@@ -5,7 +5,6 @@ using MediatR;
 using ApplicationKernel.Domain.MediatorSystem;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
-using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {

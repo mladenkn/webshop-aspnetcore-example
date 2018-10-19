@@ -5,7 +5,6 @@ using MediatR;
 using Moq;
 using Utilities;
 using WebShop.Baskets;
-using WebShop.Discounts;
 using WebShop.Infrastructure;
 using Xunit;
 
