@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationKernel;
 using Microsoft.EntityFrameworkCore;
-using Utilities;
 using WebShop.BasketItems;
 using WebShop.Discounts;
 
