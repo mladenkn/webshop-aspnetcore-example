@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Moq;
 using Utilities;
+using WebShop.Abstract;
 using WebShop.Baskets;
 using WebShop.Discounts;
 using WebShop.Infrastructure;
@@ -99,7 +101,7 @@ namespace WebShop.Tests
                 _db.AddRange(_basketItems);
                 _db.SaveChanges();
 
-                var sut = new BasketQueries(_db.Baskets, _db.Discounts, 1);
+                var sut = new BasketQueries(_db.Baskets, _db.Discounts, 1, Mock.Of<IEventDispatcher>());
                 var returnedBasket = await sut.GetBasketWithDiscountsApplied(basket.Id);
                 returnedBasket.Should().NotBeNull();
                 returnedBasket.Id.Should().Be(returnedBasket.Id);

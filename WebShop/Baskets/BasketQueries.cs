@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
+using WebShop.Abstract;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
@@ -14,12 +15,18 @@ namespace WebShop.Baskets
         private readonly IQueryable<Basket> _basketStore;
         private readonly IQueryable<Discount> _discountStore;
         private readonly decimal _maxAllowedDiscount;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public BasketQueries(IQueryable<Basket> basketStore, IQueryable<Discount> discountStore, decimal maxAllowedDiscount)
+        public BasketQueries(
+            IQueryable<Basket> basketStore,
+            IQueryable<Discount> discountStore,
+            decimal maxAllowedDiscount, 
+            IEventDispatcher eventDispatcher)
         {
             _basketStore = basketStore;
             _discountStore = discountStore;
             _maxAllowedDiscount = maxAllowedDiscount;
+            _eventDispatcher = eventDispatcher;
         }
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
@@ -43,6 +50,8 @@ namespace WebShop.Baskets
             }
 
             basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
+
+            await _eventDispatcher.Dispatch(new BasketSumCalculatedEvent(basket));
 
             return basket;
         }
