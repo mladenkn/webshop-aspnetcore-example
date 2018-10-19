@@ -61,20 +61,18 @@ namespace WebShop.Queries
         {
             bool ShouldDiscountWith(Discount discount)
             {
-                bool DoesContainProductInRequiredQuantity()
-                {
-                    return basketItem.Basket.Items
-                        .ContainsN(it => it.ProductId == discount.RequiredProductId, discount.RequiredProductMinimalQuantity);
-                }
+                var numOfTimesToGrant = 
+                    basketItem.Basket.Items.Count(it => it.ProductId == discount.RequiredProductId) /
+                    discount.RequiredProductQuantity;
 
                 bool IsDiscountGrantedMaxTimes()
                 {
                     return grantedDiscounts
-                        .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, discount.MaxNumberOfItemsToApplyTo);
+                        .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, numOfTimesToGrant);
                 }
 
                 var shouldDiscount = discount.ForProductId == basketItem.ProductId &&
-                                     DoesContainProductInRequiredQuantity() &&
+                                     numOfTimesToGrant <= discount.RequiredProductQuantity &&
                                      !IsDiscountGrantedMaxTimes();
 
                 if (shouldDiscount)
