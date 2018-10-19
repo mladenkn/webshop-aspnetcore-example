@@ -3,7 +3,7 @@ using ApplicationKernel.Infrastructure.RestApi;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Features;
 
-namespace WebShop.RestApi.Controllers
+namespace WebShop.Infrastructure.RestApi.Controllers
 {
     [ApiController]
     public class OneController : ApiController

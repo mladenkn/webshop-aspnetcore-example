@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Newtonsoft.Json;
 
-namespace WebShop
+namespace WebShop.Infrastructure
 {
     public abstract class NotificationLogger : INotificationHandler<INotification>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace WebShop.RestApi
+namespace WebShop.Infrastructure.RestApi
 {
     public class Program
     {

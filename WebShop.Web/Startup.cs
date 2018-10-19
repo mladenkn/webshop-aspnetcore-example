@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebShop.RestApi
+namespace WebShop.Infrastructure.RestApi
 {
     public class Startup
     {
