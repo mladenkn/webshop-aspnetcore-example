@@ -71,7 +71,7 @@ namespace WebShop.Queries
                         .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, numOfTimesToGrant);
                 }
 
-                var shouldDiscount = discount.ForProductId == basketItem.ProductId &&
+                var shouldDiscount = discount.TargetProductId == basketItem.ProductId &&
                                      numOfTimesToGrant <= discount.RequiredProductQuantity &&
                                      !IsDiscountGrantedMaxTimes();
 

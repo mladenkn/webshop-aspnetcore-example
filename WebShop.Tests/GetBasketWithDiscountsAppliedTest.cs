@@ -26,7 +26,7 @@ namespace WebShop.Tests
         //{
         //    var discount = new Discount
         //    {
-        //        ForProductId = _data.Milk.Id,
+        //        TargetProductId = _data.Milk.Id,
         //        RequiredProductId = _data.Milk.Id,
         //        RequiredProductQuantity = 1,
         //        TargetProductQuantity = int.MaxValue
@@ -56,7 +56,7 @@ namespace WebShop.Tests
             
         //    var discount = new Discount
         //    {
-        //        ForProductId = _data.Milk.Id,
+        //        TargetProductId = _data.Milk.Id,
         //        RequiredProductId = _data.Butter.Id,
         //        RequiredProductQuantity = 2,
         //        TargetProductQuantity = 1
@@ -240,7 +240,7 @@ namespace WebShop.Tests
             {
                 MilkDiscount = new Discount
                 {
-                    ForProductId = Milk.Id,
+                    TargetProductId = Milk.Id,
                     RequiredProductId = Milk.Id,
                     RequiredProductQuantity = 3,
                     TargetProductQuantity = 1,
@@ -248,7 +248,7 @@ namespace WebShop.Tests
                 };
                 BreadDiscount = new Discount
                 {
-                    ForProductId = Bread.Id,
+                    TargetProductId = Bread.Id,
                     RequiredProductId = Butter.Id,
                     RequiredProductQuantity = 2,
                     TargetProductQuantity = 1,
