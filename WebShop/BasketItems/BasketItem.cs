@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using WebShop.Baskets;
+using WebShop.Discounts;
 
-namespace WebShop.Baskets
+namespace WebShop.BasketItems
 {
     public class BasketItem
     {

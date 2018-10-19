@@ -1,4 +1,4 @@
-﻿namespace WebShop
+﻿namespace WebShop.Discounts
 {
     public class Discount
     {

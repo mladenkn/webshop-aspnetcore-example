@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebShop.BasketItems;
 using WebShop.Baskets;
+using WebShop.Discounts;
 
 namespace WebShop.Infrastructure
 {

@@ -3,6 +3,7 @@ using ApplicationKernel.Domain;
 using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
+using WebShop.Discounts;
 
 namespace WebShop.Features
 {
