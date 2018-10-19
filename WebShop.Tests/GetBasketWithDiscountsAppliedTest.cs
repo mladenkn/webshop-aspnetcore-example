@@ -4,7 +4,7 @@ using FluentAssertions;
 using Utilities;
 using WebShop.Baskets;
 using WebShop.Discounts;
-using WebShop.Queries;
+using WebShop.RelationalQueries;
 using Xunit;
 
 namespace WebShop.Tests

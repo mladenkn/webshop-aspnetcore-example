@@ -6,7 +6,7 @@ using Utilities;
 using WebShop.Baskets;
 using WebShop.Discounts;
 
-namespace WebShop.Queries
+namespace WebShop.RelationalQueries
 {
     public class BasketQueries
     {
