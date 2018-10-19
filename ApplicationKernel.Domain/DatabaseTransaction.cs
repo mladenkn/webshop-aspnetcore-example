@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Utilities;
 
-namespace WebShop.Abstract
+namespace ApplicationKernel.Domain
 {
     public interface IDatabaseTransaction
     {

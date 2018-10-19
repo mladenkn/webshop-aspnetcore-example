@@ -1,8 +1,8 @@
 ﻿using System;
+using ApplicationKernel.Domain;
 using ApplicationKernel.Domain.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
-using WebShop.Abstract;
 using WebShop.Baskets;
 
 namespace WebShop.Features
