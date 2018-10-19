@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebShop.Queries\WebShop.Queries.csproj" />
     <ProjectReference Include="..\WebShop\WebShop.csproj" />
   </ItemGroup>
 
