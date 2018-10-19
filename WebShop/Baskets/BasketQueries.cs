@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationKernel;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
-using WebShop.Abstract;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ApplicationKernel;
 using FluentAssertions;
 using Moq;
 using Utilities;
-using WebShop.Abstract;
 using WebShop.Baskets;
 using WebShop.Discounts;
 using WebShop.Infrastructure;

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebShop.Abstract
+namespace ApplicationKernel
 {
     public interface IEventDispatcher
     {
