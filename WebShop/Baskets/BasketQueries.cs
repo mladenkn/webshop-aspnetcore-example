@@ -7,6 +7,8 @@ using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
+    public delegate Task<Basket> GetBasketWithDiscountsApplied(int basketId);
+
     public class BasketQueries
     {
         private readonly IQueryable<Basket> _basketStore;
