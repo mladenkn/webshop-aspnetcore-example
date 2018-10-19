@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MediatR;
+using Moq;
 using Utilities;
 using WebShop.Baskets;
 using WebShop.Discounts;
@@ -99,7 +101,7 @@ namespace WebShop.Tests
                 _db.AddRange(_basketItems);
                 _db.SaveChanges();
 
-                var sut = new BasketQueries(_db.Baskets, _db.Discounts, 1);
+                var sut = new BasketQueries(_db.Baskets, _db.Discounts, Mock.Of<IMediator>(), 1);
                 var returnedBasket = await sut.GetBasketWithDiscountsApplied(basket.Id);
                 returnedBasket.Should().NotBeNull();
                 returnedBasket.Id.Should().Be(returnedBasket.Id);

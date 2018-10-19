@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using ApplicationKernel.Domain.MediatorSystem;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
 using WebShop.Discounts;
@@ -13,12 +15,18 @@ namespace WebShop.Baskets
     {
         private readonly IQueryable<Basket> _basketStore;
         private readonly IQueryable<Discount> _discountStore;
+        private readonly IMediator _mediator;
         private readonly decimal _maxAllowedDiscount;
 
-        public BasketQueries(IQueryable<Basket> basketStore, IQueryable<Discount> discountStore, decimal maxAllowedDiscount)
+        public BasketQueries(
+            IQueryable<Basket> basketStore, 
+            IQueryable<Discount> discountStore, 
+            IMediator mediator,
+            decimal maxAllowedDiscount)
         {
             _basketStore = basketStore;
             _discountStore = discountStore;
+            _mediator = mediator;
             _maxAllowedDiscount = maxAllowedDiscount;
         }
 
@@ -43,6 +51,11 @@ namespace WebShop.Baskets
             }
 
             basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
+
+            await MediatorExtensions.Publish(_mediator, new BasketSumCalculatedEvent(basket));
+
+            // why doesn't this work?
+            //await _mediator.Publish(new BasketSumCalculatedEvent(basket));
 
             return basket;
         }
