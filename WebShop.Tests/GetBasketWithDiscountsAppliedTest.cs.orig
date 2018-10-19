@@ -102,16 +102,20 @@ namespace WebShop.Tests
                 _db.AddRange(_basketItems);
                 _db.SaveChanges();
 
+<<<<<<< HEAD
+                var sut = new BasketQueries(_db.Baskets, _db.Discounts, 1, Mock.Of<IEventDispatcher>());
+=======
                 var basketItemService = new BasketItemService(1);
 
                 var sut = new BasketService(
                     _db.Baskets,
                     _db.Discounts,
+                    Mock.Of<IMediator>(),
                     DiscountService.GetDiscountsFor, 
-                    Mock.Of<IEventDispatcher>(),
                     basketItemService.CalculateItemPrice
                 );
 
+>>>>>>> 4802096... decoupled into more services
                 var returnedBasket = await sut.GetBasketWithDiscountsApplied(basket.Id);
                 returnedBasket.Should().NotBeNull();
                 returnedBasket.Id.Should().Be(returnedBasket.Id);
