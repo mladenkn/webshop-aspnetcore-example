@@ -56,11 +56,6 @@ namespace WebShop.Baskets
 
             basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();
 
-            await MediatorExtensions.Publish(_mediator, new BasketSumCalculatedEvent(basket));
-
-            // why doesn't this work?
-            //await _mediator.Publish(new BasketSumCalculatedEvent(basket));
-
             return basket;
         }
     }
