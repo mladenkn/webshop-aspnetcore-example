@@ -16,13 +16,13 @@ namespace ApplicationKernel.Domain
     {
         public static IDatabaseTransaction UpdateRange(this IDatabaseTransaction transaction, IEnumerable<object> objects)
         {
-            objects.ForEach(o => transaction.Update(o));
+            objects.ForEach(transaction.Update);
             return transaction;
         }
 
         public static IDatabaseTransaction SaveRange(this IDatabaseTransaction transaction, IEnumerable<object> objects)
         {
-            objects.ForEach(o => transaction.Save(o));
+            objects.ForEach(transaction.Save);
             return transaction;
         }
     }

@@ -12,7 +12,12 @@ namespace Utilities
             foreach (var value in values)
                    action(value);
         }
-        
+        public static void ForEach<T>(this IEnumerable<T> values, Func<T, object> action)
+        {
+            foreach (var value in values)
+                action(value);
+        }
+
         public static decimal PercentOf(this decimal percentage, decimal valueToBeDiscounted)
         {
             var dec = percentage / 100;
