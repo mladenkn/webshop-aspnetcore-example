@@ -3,10 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
-using WebShop.Baskets;
 using WebShop.Discounts;
 
-namespace WebShop.RelationalQueries
+namespace WebShop.Baskets
 {
     public class BasketQueries
     {

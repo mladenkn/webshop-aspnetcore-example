@@ -10,9 +10,7 @@ namespace WebShop
     {
         public Task Handle(INotification notification, CancellationToken cancellationToken)
         {
-            var str = JsonConvert.SerializeObject(notification);
-            Console.WriteLine(str);
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
     }
 }
