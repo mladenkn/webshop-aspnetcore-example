@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 
-namespace WebShop
+namespace ApplicationKernel.Domain.MediatorSystem
 {
     public static class Utilities
     {
