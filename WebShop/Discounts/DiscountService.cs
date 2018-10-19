@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Utilities;
+using WebShop.BasketItems;
 using WebShop.Baskets;
 
 namespace WebShop.Discounts
