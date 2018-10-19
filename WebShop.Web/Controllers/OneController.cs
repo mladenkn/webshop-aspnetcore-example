@@ -8,6 +8,10 @@ namespace WebShop.RestApi.Controllers
     [ApiController]
     public class OneController : ApiController
     {
+        public OneController(HandleApiRequest handle) : base(handle)
+        {
+        }
+
         [HttpPost]
         [Route("/discounts")]
         public Task<IActionResult> Post(AddDiscount.Request request) => Handle(request);
