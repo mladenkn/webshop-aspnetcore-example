@@ -2,7 +2,7 @@
 using WebShop.Baskets;
 using WebShop.Discounts;
 
-namespace WebShop
+namespace WebShop.Infrastructure
 {
     public class WebShopDbContext : DbContext
     {
