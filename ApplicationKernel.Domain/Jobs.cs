@@ -5,7 +5,7 @@ namespace ApplicationKernel.Domain
 {
     public interface IJobQueue
     {
-        IReadOnlyList<IJob> Current { get; }
+        IReadOnlyList<IJob> Jobs { get; }
         void Add(IJob job);
     }
 
@@ -13,7 +13,7 @@ namespace ApplicationKernel.Domain
     {
         private readonly List<IJob> _current = new List<IJob>();
 
-        public IReadOnlyList<IJob> Current => _current;
+        public IReadOnlyList<IJob> Jobs => _current;
 
         public void Add(IJob job)
         {

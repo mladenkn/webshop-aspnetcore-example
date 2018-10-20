@@ -40,13 +40,13 @@ namespace WebShop.Infrastructure.PersistentCache
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
-            var jobs = _jobs.Current.OfType<CacheBasketItemJob>().Where(j => j.BasketId == basketId).ToArray();
+            var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId).ToArray();
 
-            if (jobs.Any())
+            if (basketJobs.Any())
                 return await _cache.GetBasketWithDiscountsApplied(basketId);
             else
             {
-                await jobs.Select(j => j.Task).WhenAll();
+                await basketJobs.Select(j => j.Task).WhenAll();
                 return await _cache.GetBasketWithDiscountsApplied(basketId);
             }
         }
@@ -79,7 +79,7 @@ namespace WebShop.Infrastructure.PersistentCache
             _jobs.Add(job);
         }
 
-        private class CacheBasketItemJob : IJob
+        private class CacheBasketItemJob : IBasketCacheJob
         {
             public Task Task { get; set; }
             public int BasketId { get; set; }
