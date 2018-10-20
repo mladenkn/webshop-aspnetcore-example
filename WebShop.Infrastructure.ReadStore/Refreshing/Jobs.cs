@@ -4,7 +4,7 @@ namespace WebShop.Infrastructure.ReadStore.Refreshing
 {
     public interface IDataRefreshJob
     {
-        
+        Task Task { get; set; }
     }
 
     public class RefreshBasketWithItemJob : IDataRefreshJob

@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using WebShop.BasketItems;
 using WebShop.Baskets;
 using WebShop.Discounts;
-using WebShop.Infrastructure.ReadStore.Queries;
 
 namespace WebShop.Infrastructure.ReadStore.Refreshing
 {
-    public delegate void RefreshBasketWithItem(BasketItem item);
+    public interface IDataRefresher
+    {
+        void RefreshBasketWithItemJob(BasketItem item);
+    }
 
-    public class DataRefresher
+    public class DataRefresher : IDataRefresher
     {
         private readonly IQueryable<Discount> _discounts;
         private readonly IQueryable<Basket> _baskets;
@@ -32,25 +34,26 @@ namespace WebShop.Infrastructure.ReadStore.Refreshing
             _addDiscountsToBasketItem = addDiscountsToBasketItem;
             _jobs = jobs;
         }
-        
-        private async Task RefreshBasketWithItemJobActual(BasketItem item)
-        {
-            var productDiscounts = await _discounts
-                .Where(d => d.TargetProductId == item.ProductId)
-                .ToArrayAsync();
-            item.Basket = await _baskets.FirstOrDefaultAsync(b => b.Id == item.BasketId);
-            _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
-            await _addToStore(item);
-        }
 
         public void RefreshBasketWithItemJob(BasketItem item)
         {
+            async Task RefreshActual()
+            {
+                var productDiscounts = await _discounts
+                    .Where(d => d.TargetProductId == item.ProductId)
+                    .ToArrayAsync();
+                item.Basket = await _baskets.FirstOrDefaultAsync(b => b.Id == item.BasketId);
+                _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
+                await _addToStore(item);
+            }
+
             var job = new RefreshBasketWithItemJob
             {
                 BasketId = item.BasketId,
                 BasketItemId = item.Id,
-                Task = RefreshBasketWithItemJobActual(item)
+                Task = RefreshActual()
             };
+
             _jobs.Add(job);
         }
     }

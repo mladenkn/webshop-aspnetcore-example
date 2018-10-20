@@ -9,19 +9,20 @@ namespace WebShop.Infrastructure.ReadStore
 {
     public class EventHandler : IRequestPostProcessor<AddBasketItem.Request, Response<BasketItem>>
     {
-        private readonly RefreshBasketWithItem _refreshBasketWithItem;
+        private readonly IDataRefresher _dataRefresher;
 
-        public EventHandler(RefreshBasketWithItem refreshBasketWithItem)
+        public EventHandler(IDataRefresher dataRefresher)
         {
-            _refreshBasketWithItem = refreshBasketWithItem;
+            _dataRefresher = dataRefresher;
         }
 
         public Task Process(AddBasketItem.Request request, Response<BasketItem> response)
         {
-            if (!response.IsSuccess)
-                return Task.CompletedTask;
-            var item = response.Payload;
-            _refreshBasketWithItem(item);
+            if (response.IsSuccess)
+            {
+                var item = response.Payload;
+                _dataRefresher.RefreshBasketWithItemJob(item);
+            }
             return Task.CompletedTask;
         }
     }
