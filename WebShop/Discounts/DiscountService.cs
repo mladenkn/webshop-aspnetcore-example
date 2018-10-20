@@ -2,7 +2,6 @@
 using System.Linq;
 using Utilities;
 using WebShop.BasketItems;
-using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
@@ -31,5 +30,17 @@ namespace WebShop.Discounts
 
             return shouldGrant;
         }
+    }
+
+    public struct DiscountGranted
+    {
+        public DiscountGranted(int productId, int discountId) : this()
+        {
+            ProductId = productId;
+            DiscountId = discountId;
+        }
+
+        public int ProductId { get; }
+        public int DiscountId { get; }
     }
 }
