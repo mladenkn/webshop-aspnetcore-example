@@ -10,25 +10,20 @@ using WebShop.Discounts;
 
 namespace WebShop.Baskets
 {
-    public delegate Task<Basket> GetBasketWithDiscountsApplied(int basketId);
-
     public class BasketService
     {
         private readonly IQueryable<Basket> _basketStore;
         private readonly IQueryable<Discount> _discountStore;
-        private readonly ShouldApplyToBasketItem _shouldApplyToBasketItem;
-        private readonly CalculateBasketItemPrice _calculateBasketItemPrice;
+        private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
 
         public BasketService(
             IQueryable<Basket> basketStore, 
             IQueryable<Discount> discountStore, 
-            ShouldApplyToBasketItem shouldApplyToBasketItem,
-            CalculateBasketItemPrice calculateBasketItemPrice)
+            AddDiscountsToBasketItem addDiscountsToBasketItem)
         {
             _basketStore = basketStore;
             _discountStore = discountStore;
-            _shouldApplyToBasketItem = shouldApplyToBasketItem;
-            _calculateBasketItemPrice = calculateBasketItemPrice;
+            _addDiscountsToBasketItem = addDiscountsToBasketItem;
         }
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
@@ -47,8 +42,8 @@ namespace WebShop.Baskets
 
             foreach (var basketItem in basket.Items)
             {
-                basketItem.Discounts = allDiscounts.Where(d => _shouldApplyToBasketItem(basketItem, d, grantedDiscounts)).ToList();
-                _calculateBasketItemPrice(basketItem);
+                var discounts = allDiscounts.Where(d => d.TargetProductId == basketItem.ProductId);
+                _addDiscountsToBasketItem(basketItem, discounts, grantedDiscounts);
             }
 
             basket.TotalPrice = basket.Items.Select(i => i.Price).Sum();

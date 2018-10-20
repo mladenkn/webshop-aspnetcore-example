@@ -5,11 +5,18 @@ using WebShop.BasketItems;
 
 namespace WebShop.Discounts
 {
-    public delegate bool ShouldApplyToBasketItem(
-        BasketItem basketItem, Discount discount, ICollection<DiscountGranted> grantedDiscounts);
+    public delegate IReadOnlyCollection<Discount> AddDiscountsToBasketItem(
+        BasketItem basketItem, IEnumerable<Discount> discountsForProduct, ICollection<DiscountGranted> grantedDiscounts);
 
     public class DiscountService
     {
+        private readonly CalculateBasketItemPrice _calculatePrice;
+
+        public DiscountService(CalculateBasketItemPrice calculatePrice)
+        {
+            _calculatePrice = calculatePrice;
+        }
+
         public static bool ShouldApplyToBasketItem(
             BasketItem basketItem, Discount discount, ICollection<DiscountGranted> grantedDiscounts)
         {
@@ -29,6 +36,14 @@ namespace WebShop.Discounts
                 grantedDiscounts.Add(new DiscountGranted(basketItem.ProductId, discount.Id));
 
             return shouldGrant;
+        }
+
+        public IReadOnlyCollection<Discount> AddDiscountsToBasketItem(
+            BasketItem basketItem, IEnumerable<Discount> discountsForProduct, ICollection<DiscountGranted> grantedDiscounts)
+        {
+            basketItem.Discounts = discountsForProduct.Where(d => ShouldApplyToBasketItem(basketItem, d, grantedDiscounts)).ToList();
+            _calculatePrice(basketItem);
+            return basketItem.Discounts;
         }
     }
 
