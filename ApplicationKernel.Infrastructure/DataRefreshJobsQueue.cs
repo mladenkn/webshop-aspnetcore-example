@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace WebShop.Infrastructure.ReadStore.Refreshing
+namespace ApplicationKernel.Infrastructure
 {
     public interface IDataRefreshJobsQueue
     {
@@ -19,5 +20,10 @@ namespace WebShop.Infrastructure.ReadStore.Refreshing
             _current.Add(job);
             job.Task.ContinueWith(t => _current.Remove(job));
         }
+    }
+
+    public interface IDataRefreshJob
+    {
+        Task Task { get; set; }
     }
 }
