@@ -16,20 +16,17 @@ namespace WebShop.Baskets
     {
         private readonly IQueryable<Basket> _basketStore;
         private readonly IQueryable<Discount> _discountStore;
-        private readonly IMediator _mediator;
         private readonly GetDiscountsFor _getDiscountsFor;
         private readonly CalculateBasketItemPrice _calculateBasketItemPrice;
 
         public BasketService(
             IQueryable<Basket> basketStore, 
             IQueryable<Discount> discountStore, 
-            IMediator mediator,
             GetDiscountsFor getDiscountsFor,
             CalculateBasketItemPrice calculateBasketItemPrice)
         {
             _basketStore = basketStore;
             _discountStore = discountStore;
-            _mediator = mediator;
             _getDiscountsFor = getDiscountsFor;
             _calculateBasketItemPrice = calculateBasketItemPrice;
         }
