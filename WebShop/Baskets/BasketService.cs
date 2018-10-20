@@ -32,6 +32,7 @@ namespace WebShop.Baskets
             _calculateBasketItemPrice = calculateBasketItemPrice;
         }
 
+        // this is a slow query, and that problem is solved on the 'extended' branch
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
             var basket = await _basketStore
