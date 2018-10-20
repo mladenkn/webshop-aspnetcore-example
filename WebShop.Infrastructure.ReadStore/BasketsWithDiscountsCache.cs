@@ -1,32 +1,89 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ApplicationKernel.Domain;
+using Microsoft.EntityFrameworkCore;
+using Utilities;
 using WebShop.BasketItems;
 using WebShop.Baskets;
+using WebShop.Discounts;
 
 namespace WebShop.Infrastructure.PersistentCache
 {
-    public interface IBasketsWithDiscountsCache
-    {
-        Task<Basket> GetBasketWithDiscountsApplied(int basketId);
-        Task AddItem(BasketItem item);
-        Task Add(Basket basket);
-    }
+    public delegate void AddItemToBasket(BasketItem item);
+    public delegate Task AddBasket(int basketId);
 
-    public class BasketsWithDiscountsMongoRepository : IBasketsWithDiscountsCache
+    public class BasketsWithDiscountsCache
     {
-        public Task<Basket> GetBasketWithDiscountsApplied(int basketId)
+        private readonly IJobQueue _jobs;
+        private readonly IQueryable<Discount> _discountsTable;
+        private readonly IQueryable<Basket> _basketTable;
+        private readonly IBasketsWithDiscountsLowLevelCache _lowLevelCache;
+        private readonly GetBasketWithDiscountsApplied _getBasket;
+        private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
+
+        public BasketsWithDiscountsCache(
+            IJobQueue jobs, 
+            IQueryable<Discount> discountsTable, 
+            IQueryable<Basket> basketTable,
+            IBasketsWithDiscountsLowLevelCache lowLevelCache,
+            GetBasketWithDiscountsApplied getBasket,
+            AddDiscountsToBasketItem addDiscountsToBasketItem)
         {
-            throw new NotImplementedException();
+            _jobs = jobs;
+            _discountsTable = discountsTable;
+            _basketTable = basketTable;
+            _lowLevelCache = lowLevelCache;
+            _getBasket = getBasket;
+            _addDiscountsToBasketItem = addDiscountsToBasketItem;
         }
 
-        public Task AddItem(BasketItem item)
+        public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
-            throw new NotImplementedException();
+            var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId).ToArray();
+
+            if (basketJobs.Any())
+                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
+            else
+            {
+                await basketJobs.Select(j => j.Task).WhenAll();
+                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
+            }
         }
 
-        public Task Add(Basket basket)
+        public async Task AddBasket(int basketId)
         {
-            throw new NotImplementedException();
+            var basket = await _getBasket(basketId);
+            await _lowLevelCache.Add(basket);
+        }
+
+        public void AddItemToBasket(BasketItem item)
+        {
+            async Task AddActual()
+            {
+                var productDiscounts = await _discountsTable
+                    .Where(d => d.TargetProductId == item.ProductId)
+                    .ToArrayAsync();
+                item.Basket = await _basketTable.FirstOrDefaultAsync(b => b.Id == item.BasketId);
+                _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
+                await _lowLevelCache.AddItem(item);
+            }
+
+            var job = new CacheBasketItemJob
+            {
+                BasketId = item.BasketId,
+                BasketItemId = item.Id,
+                Task = AddActual()
+            };
+
+            _jobs.Add(job);
+        }
+
+        private class CacheBasketItemJob : IBasketCacheJob
+        {
+            public Task Task { get; set; }
+            public int BasketId { get; set; }
+            public int BasketItemId { get; set; }
         }
     }
 }
