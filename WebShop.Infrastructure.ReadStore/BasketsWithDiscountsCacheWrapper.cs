@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationKernel.Domain;
 using Microsoft.EntityFrameworkCore;
+using Utilities;
 using WebShop.BasketItems;
 using WebShop.Baskets;
 using WebShop.Discounts;
@@ -39,13 +40,13 @@ namespace WebShop.Infrastructure.PersistentCache
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
-            var job = _jobs.Current.OfType<CacheBasketItemJob>().FirstOrDefault(j => j.BasketId == basketId);
+            var jobs = _jobs.Current.OfType<CacheBasketItemJob>().Where(j => j.BasketId == basketId).ToArray();
 
-            if (job == null)
+            if (jobs.Any())
                 return await _cache.GetBasketWithDiscountsApplied(basketId);
             else
             {
-                await job.Task;
+                await jobs.Select(j => j.Task).WhenAll();
                 return await _cache.GetBasketWithDiscountsApplied(basketId);
             }
         }
