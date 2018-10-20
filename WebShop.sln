@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Tests", "WebShop.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure", "WebShop.Infrastructure\WebShop.Infrastructure.csproj", "{B1873642-95FB-4A6D-B213-765AECC036E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Infrastructure.ReadStore", "WebShop.Infrastructure.ReadStore\WebShop.Infrastructure.ReadStore.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Infrastructure.PersistentCache", "WebShop.Infrastructure.ReadStore\WebShop.Infrastructure.PersistentCache.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

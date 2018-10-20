@@ -4,7 +4,7 @@ using MediatR.Pipeline;
 using WebShop.BasketItems;
 using WebShop.Features;
 
-namespace WebShop.Infrastructure.ReadStore
+namespace WebShop.Infrastructure.PersistentCache
 {
     public class EventHandler : IRequestPostProcessor<AddBasketItem.Request, Response<BasketItem>>
     {

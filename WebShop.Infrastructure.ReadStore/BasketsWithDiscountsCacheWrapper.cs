@@ -7,29 +7,33 @@ using WebShop.BasketItems;
 using WebShop.Baskets;
 using WebShop.Discounts;
 
-namespace WebShop.Infrastructure.ReadStore
+namespace WebShop.Infrastructure.PersistentCache
 {
     public delegate void AddItemToBasket(BasketItem item);
+    public delegate Task AddBasket(int basketId);
 
-    public class BasketRepository
+    public class BasketsWithDiscountsCacheWrapper
     {
         private readonly IDataRefreshJobsQueue _jobs;
         private readonly IQueryable<Discount> _discountsTable;
         private readonly IQueryable<Basket> _basketTable;
-        private readonly IBasketLowLevelRepository _basketLowLevelRepository;
+        private readonly IBasketsWithDiscountsCache _cache;
+        private readonly GetBasketWithDiscountsApplied _getBasket;
         private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
 
-        public BasketRepository(
+        public BasketsWithDiscountsCacheWrapper(
             IDataRefreshJobsQueue jobs, 
             IQueryable<Discount> discountsTable, 
             IQueryable<Basket> basketTable,
-            IBasketLowLevelRepository basketLowLevelRepository,
+            IBasketsWithDiscountsCache cache,
+            GetBasketWithDiscountsApplied getBasket,
             AddDiscountsToBasketItem addDiscountsToBasketItem)
         {
             _jobs = jobs;
             _discountsTable = discountsTable;
             _basketTable = basketTable;
-            _basketLowLevelRepository = basketLowLevelRepository;
+            _cache = cache;
+            _getBasket = getBasket;
             _addDiscountsToBasketItem = addDiscountsToBasketItem;
         }
 
@@ -38,12 +42,18 @@ namespace WebShop.Infrastructure.ReadStore
             var job = _jobs.Current.OfType<RefreshBasketWithItemJob>().FirstOrDefault(j => j.BasketId == basketId);
 
             if (job == null)
-                return await _basketLowLevelRepository.GetBasketWithDiscountsApplied(basketId);
+                return await _cache.GetBasketWithDiscountsApplied(basketId);
             else
             {
                 await job.Task;
-                return await _basketLowLevelRepository.GetBasketWithDiscountsApplied(basketId);
+                return await _cache.GetBasketWithDiscountsApplied(basketId);
             }
+        }
+
+        public async Task AddBasket(int basketId)
+        {
+            var basket = await _getBasket(basketId);
+            await _cache.Add(basket);
         }
 
         public void AddItemToBasket(BasketItem item)
@@ -55,7 +65,7 @@ namespace WebShop.Infrastructure.ReadStore
                     .ToArrayAsync();
                 item.Basket = await _basketTable.FirstOrDefaultAsync(b => b.Id == item.BasketId);
                 _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
-                await _basketLowLevelRepository.AddItemToBasket(item);
+                await _cache.AddItem(item);
             }
 
             var job = new RefreshBasketWithItemJob
