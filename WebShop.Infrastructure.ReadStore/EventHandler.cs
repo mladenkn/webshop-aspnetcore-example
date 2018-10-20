@@ -3,26 +3,22 @@ using ApplicationKernel.Domain.MediatorSystem;
 using MediatR.Pipeline;
 using WebShop.BasketItems;
 using WebShop.Features;
-using WebShop.Infrastructure.ReadStore.Refreshing;
 
 namespace WebShop.Infrastructure.ReadStore
 {
     public class EventHandler : IRequestPostProcessor<AddBasketItem.Request, Response<BasketItem>>
     {
-        private readonly IDataRefresher _dataRefresher;
+        private readonly AddItemToBasket _addItemToBasket;
 
-        public EventHandler(IDataRefresher dataRefresher)
+        public EventHandler(AddItemToBasket addItemToBasket)
         {
-            _dataRefresher = dataRefresher;
+            _addItemToBasket = addItemToBasket;
         }
 
         public Task Process(AddBasketItem.Request request, Response<BasketItem> response)
         {
             if (response.IsSuccess)
-            {
-                var item = response.Payload;
-                _dataRefresher.RefreshBasketWithItemJob(item);
-            }
+                _addItemToBasket(response.Payload);
             return Task.CompletedTask;
         }
     }
