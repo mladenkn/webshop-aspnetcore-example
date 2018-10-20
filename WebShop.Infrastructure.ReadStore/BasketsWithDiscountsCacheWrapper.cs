@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApplicationKernel.Infrastructure;
+using ApplicationKernel.Domain;
 using Microsoft.EntityFrameworkCore;
 using WebShop.BasketItems;
 using WebShop.Baskets;
