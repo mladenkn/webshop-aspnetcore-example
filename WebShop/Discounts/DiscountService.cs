@@ -6,39 +6,30 @@ using WebShop.Baskets;
 
 namespace WebShop.Discounts
 {
-    public delegate List<Discount> GetDiscountsFor(
-        BasketItem basketItem, IEnumerable<Discount> allDiscounts, ICollection<DiscountGranted> grantedDiscounts);
+    public delegate bool ShouldApplyToBasketItem(
+        BasketItem basketItem, Discount discount, ICollection<DiscountGranted> grantedDiscounts);
 
     public class DiscountService
     {
-        public static List<Discount> GetDiscountsFor(
-            BasketItem basketItem, IEnumerable<Discount> allDiscounts, ICollection<DiscountGranted> grantedDiscounts)
+        public static bool ShouldApplyToBasketItem(
+            BasketItem basketItem, Discount discount, ICollection<DiscountGranted> grantedDiscounts)
         {
-            basketItem.Basket.Must().NotBeNull();
+            if (discount.TargetProductId != basketItem.ProductId)
+                return false;
 
-            bool ShouldDiscountWith(Discount discount)
-            {
-                if (discount.TargetProductId != basketItem.ProductId)
-                    return false;
+            var numOfTimesToGrant =
+                basketItem.Basket.Items.Count(it => it.ProductId == discount.RequiredProductId) /
+                discount.RequiredProductQuantity;
 
-                var numOfTimesToGrant =
-                    basketItem.Basket.Items.Count(it => it.ProductId == discount.RequiredProductId) /
-                    discount.RequiredProductQuantity;
+            var isGrantedMaxTimes = grantedDiscounts
+                .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, numOfTimesToGrant);
 
-                var isGrantedMaxTimes = grantedDiscounts
-                    .ContainsN(it => it.ProductId == basketItem.ProductId && it.DiscountId == discount.Id, numOfTimesToGrant);
+            var shouldGrant = !isGrantedMaxTimes;
 
-                var shouldGrant = !isGrantedMaxTimes;
+            if (shouldGrant)
+                grantedDiscounts.Add(new DiscountGranted(basketItem.ProductId, discount.Id));
 
-                if (shouldGrant)
-                    grantedDiscounts.Add(new DiscountGranted(basketItem.ProductId, discount.Id));
-
-                return shouldGrant;
-            }
-
-            return allDiscounts
-                .Where(ShouldDiscountWith)
-                .ToList();
+            return shouldGrant;
         }
     }
 }
