@@ -107,8 +107,8 @@ namespace WebShop.Tests
                 var sut = new BasketService(
                     _db.Baskets,
                     _db.Discounts,
-                    DiscountService.GetDiscountsFor, 
                     Mock.Of<IEventDispatcher>(),
+                    DiscountService.ShouldApplyToBasketItem,
                     basketItemService.CalculateItemPrice
                 );
 
