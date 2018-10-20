@@ -14,21 +14,21 @@ namespace WebShop.Baskets
     {
         private readonly IQueryable<Basket> _basketStore;
         private readonly IQueryable<Discount> _discountStore;
-        private readonly GetDiscountsFor _getDiscountsFor;
         private readonly IEventDispatcher _eventDispatcher;
+        private readonly ShouldApplyToBasketItem _shouldApplyToBasketItem;
         private readonly CalculateBasketItemPrice _calculateBasketItemPrice;
 
         public BasketService(
             IQueryable<Basket> basketStore, 
             IQueryable<Discount> discountStore, 
-            GetDiscountsFor getDiscountsFor,
             IEventDispatcher eventDispatcher,
+            ShouldApplyToBasketItem shouldApplyToBasketItem,
             CalculateBasketItemPrice calculateBasketItemPrice)
         {
             _basketStore = basketStore;
             _discountStore = discountStore;
-            _getDiscountsFor = getDiscountsFor;
             _eventDispatcher = eventDispatcher;
+            _shouldApplyToBasketItem = shouldApplyToBasketItem;
             _calculateBasketItemPrice = calculateBasketItemPrice;
         }
 
@@ -45,11 +45,11 @@ namespace WebShop.Baskets
                 return null;
 
             var allDiscounts = await _discountStore.ToListAsync();
-
             var grantedDiscounts = new List<DiscountGranted>();
+
             foreach (var basketItem in basket.Items)
             {
-                basketItem.Discounts = _getDiscountsFor(basketItem, allDiscounts, grantedDiscounts);
+                basketItem.Discounts = allDiscounts.Where(d => _shouldApplyToBasketItem(basketItem, d, grantedDiscounts)).ToList();
                 _calculateBasketItemPrice(basketItem);
             }
 
