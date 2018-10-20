@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebShop.Infrastructure.ReadStore
+namespace WebShop.Infrastructure.ReadStore.Refreshing
 {
-    public interface IDataSyncJob
+    public interface IDataRefreshJob
     {
         
     }
 
-    public class AddItemToBasketJob : IDataSyncJob
+    public class RefreshBasketWithItemJob : IDataRefreshJob
     {
         public Task Task { get; set; }
         public int BasketId { get; set; }

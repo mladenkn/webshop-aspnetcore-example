@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebShop.BasketItems;
 using WebShop.Baskets;
 using WebShop.Discounts;
+using WebShop.Infrastructure.ReadStore.Queries;
 
-namespace WebShop.Infrastructure.ReadStore
+namespace WebShop.Infrastructure.ReadStore.Refreshing
 {
-    public delegate void AddItemToBasket(BasketItem item);
+    public delegate void RefreshBasketWithItem(BasketItem item);
 
-    public class DataSynchronizer
+    public class DataRefresher
     {
         private readonly IQueryable<Discount> _discounts;
         private readonly IQueryable<Basket> _baskets;
         private readonly AddItemToBasketStore _addToStore;
         private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
-        private readonly IDataSyncJobsQueue _jobs;
+        private readonly IDataRefreshJobsQueue _jobs;
 
-        public DataSynchronizer(
+        public DataRefresher(
             IQueryable<Discount> discounts,
             IQueryable<Basket> baskets,
             AddItemToBasketStore addToStore,
             AddDiscountsToBasketItem addDiscountsToBasketItem, 
-            IDataSyncJobsQueue jobs)
+            IDataRefreshJobsQueue jobs)
         {
             _discounts = discounts;
             _baskets = baskets;
@@ -34,7 +33,7 @@ namespace WebShop.Infrastructure.ReadStore
             _jobs = jobs;
         }
         
-        private async Task AddItemToBasketActual(BasketItem item)
+        private async Task RefreshBasketWithItemJobActual(BasketItem item)
         {
             var productDiscounts = await _discounts
                 .Where(d => d.TargetProductId == item.ProductId)
@@ -44,13 +43,13 @@ namespace WebShop.Infrastructure.ReadStore
             await _addToStore(item);
         }
 
-        public void AddItemToBasket(BasketItem item)
+        public void RefreshBasketWithItemJob(BasketItem item)
         {
-            var job = new AddItemToBasketJob
+            var job = new RefreshBasketWithItemJob
             {
                 BasketId = item.BasketId,
                 BasketItemId = item.Id,
-                Task = AddItemToBasketActual(item)
+                Task = RefreshBasketWithItemJobActual(item)
             };
             _jobs.Add(job);
         }

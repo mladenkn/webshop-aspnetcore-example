@@ -103,12 +103,12 @@ namespace WebShop.Tests
                 _db.SaveChanges();
 
                 var basketItemService = new BasketItemService(1);
+                var discountService = new DiscountService(basketItemService.CalculateItemPrice);
 
                 var sut = new BasketService(
                     _db.Baskets,
                     _db.Discounts,
-                    DiscountService.ShouldApplyToBasketItem, 
-                    basketItemService.CalculateItemPrice
+                    discountService.AddDiscountsToBasketItem
                 );
 
                 var returnedBasket = await sut.GetBasketWithDiscountsApplied(basket.Id);
