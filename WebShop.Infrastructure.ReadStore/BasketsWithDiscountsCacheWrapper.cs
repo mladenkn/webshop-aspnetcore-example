@@ -14,7 +14,7 @@ namespace WebShop.Infrastructure.PersistentCache
 
     public class BasketsWithDiscountsCacheWrapper
     {
-        private readonly IDataRefreshJobsQueue _jobs;
+        private readonly IJobQueue _jobs;
         private readonly IQueryable<Discount> _discountsTable;
         private readonly IQueryable<Basket> _basketTable;
         private readonly IBasketsWithDiscountsCache _cache;
@@ -22,7 +22,7 @@ namespace WebShop.Infrastructure.PersistentCache
         private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
 
         public BasketsWithDiscountsCacheWrapper(
-            IDataRefreshJobsQueue jobs, 
+            IJobQueue jobs, 
             IQueryable<Discount> discountsTable, 
             IQueryable<Basket> basketTable,
             IBasketsWithDiscountsCache cache,
@@ -78,7 +78,7 @@ namespace WebShop.Infrastructure.PersistentCache
             _jobs.Add(job);
         }
 
-        internal class RefreshBasketWithItemJob : IDataRefreshJob
+        internal class RefreshBasketWithItemJob : IJob
         {
             public Task Task { get; set; }
             public int BasketId { get; set; }
