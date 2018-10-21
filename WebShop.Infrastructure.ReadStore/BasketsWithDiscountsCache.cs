@@ -64,7 +64,11 @@ namespace WebShop.Infrastructure.PersistentCache
                 var productDiscounts = await _discountsTable
                     .Where(d => d.TargetProductId == item.ProductId)
                     .ToArrayAsync();
-                item.Basket = await _basketTable.FirstOrDefaultAsync(b => b.Id == item.BasketId);
+
+                item.Basket = await _basketTable
+                    .Include(b => b.Items)
+                    .FirstOrDefaultAsync(b => b.Id == item.BasketId);
+
                 _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
                 await _lowLevelCache.AddItem(item);
             }
