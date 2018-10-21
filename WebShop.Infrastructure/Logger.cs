@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ApplicationKernel;
+using WebShop;
 using WebShop.Baskets;
 
 namespace WebShop.Infrastructure

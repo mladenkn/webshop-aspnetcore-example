@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ApplicationKernel;
+using WebShop;
 using FluentAssertions;
 using Moq;
 using Utilities;
