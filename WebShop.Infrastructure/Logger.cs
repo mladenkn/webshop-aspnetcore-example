@@ -5,10 +5,11 @@ using WebShop.Baskets;
 
 namespace WebShop.Infrastructure
 {
-    public class EventHandler : IEventHandler<BasketSumCalculatedEvent>
+    public class Logger : IEventHandler<BasketSumCalculatedEvent>
     {
         public Task Handle(BasketSumCalculatedEvent @event)
         {
+            // TODO: log
             throw new NotImplementedException();
         }
     }
