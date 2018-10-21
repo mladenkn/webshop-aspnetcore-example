@@ -9,7 +9,7 @@ using WebShop.Features;
 namespace WebShop.Infrastructure
 {
     // instead of using BasketSumCalculatedEvent 
-    // this is invoked by mediator after processing GetBasket.Request
+    // invoked by mediator after processing GetBasket.Request
     public class OnBasketWithPriceRequested: IRequestPostProcessor<GetBasket.Request, Response<Basket>>
     {
         public Task Process(GetBasket.Request request, Response<Basket> response)
