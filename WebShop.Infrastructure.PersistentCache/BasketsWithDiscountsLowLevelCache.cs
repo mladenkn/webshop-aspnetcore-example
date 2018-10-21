@@ -8,7 +8,7 @@ namespace WebShop.Infrastructure.PersistentCache
     public interface IBasketsWithDiscountsLowLevelCache
     {
         Task<Basket> GetBasketWithDiscountsApplied(int basketId);
-        Task AddItem(BasketItem item);
         Task Add(Basket basket);
+        Task Update(Basket basket);
     }
 }

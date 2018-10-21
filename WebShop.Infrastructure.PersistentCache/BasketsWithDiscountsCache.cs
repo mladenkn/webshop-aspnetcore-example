@@ -23,25 +23,20 @@ namespace WebShop.Infrastructure.PersistentCache
         private readonly IQueryable<Basket> _basketTable;
         private readonly IBasketsWithDiscountsLowLevelCache _lowLevelCache;
         private readonly GetBasketWithDiscountsApplied _getBasket;
-        private readonly AddDiscountsToBasketItem _addDiscountsToBasketItem;
 
         public BasketsWithDiscountsCache(
             IJobQueue jobs, 
             IQueryable<Discount> discountsTable, 
             IQueryable<Basket> basketTable,
             IBasketsWithDiscountsLowLevelCache lowLevelCache,
-            GetBasketWithDiscountsApplied getBasket,
-            AddDiscountsToBasketItem addDiscountsToBasketItem)
+            GetBasketWithDiscountsApplied getBasket)
         {
             _jobs = jobs;
             _discountsTable = discountsTable;
             _basketTable = basketTable;
             _lowLevelCache = lowLevelCache;
             _getBasket = getBasket;
-            _addDiscountsToBasketItem = addDiscountsToBasketItem;
         }
-
-        // TODO: Either calculate basket price in GetBasketWithDiscountsApplied or in AddItem
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
@@ -66,16 +61,9 @@ namespace WebShop.Infrastructure.PersistentCache
         {
             async Task AddActual()
             {
-                var productDiscounts = await _discountsTable
-                    .Where(d => d.TargetProductId == item.ProductId)
-                    .ToArrayAsync();
-
-                item.Basket = await _basketTable
-                    .Include(b => b.Items)
-                    .FirstOrDefaultAsync(b => b.Id == item.BasketId);
-
-                _addDiscountsToBasketItem(item, productDiscounts, new List<DiscountGranted>());
-                await _lowLevelCache.AddItem(item);
+                // need to actually update whole basket because the total price has changed
+                var basket = await _getBasket(item.BasketId);
+                await _lowLevelCache.Update(basket);
             }
 
             var job = new CacheBasketItemJob
