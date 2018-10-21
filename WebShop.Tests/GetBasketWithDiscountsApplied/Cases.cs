@@ -9,7 +9,7 @@ namespace WebShop.Tests.GetBasketWithDiscountsApplied
         private readonly DataContainer _data = new DataContainer();
 
         [Fact]
-        public async Task Basket_has___1_bread_1_butter_1__milk()
+        public async Task Basket_has___1_bread__1_butter__1__milk()
         {
             await _fixture
                 .WithBasketItemOf(_data.Butter)
@@ -20,7 +20,7 @@ namespace WebShop.Tests.GetBasketWithDiscountsApplied
         }
 
         [Fact]
-        public async Task Basket_has___2_butters_2_breads()
+        public async Task Basket_has___2_butters__2_breads()
         {
             await _fixture
                 .WithDiscounts(_data.BreadDiscount)
@@ -41,7 +41,7 @@ namespace WebShop.Tests.GetBasketWithDiscountsApplied
         }
 
         [Fact]
-        public async Task Basket_has___2_butter_1_bread_8_milk()
+        public async Task Basket_has___2_butter__1_bread__8_milk()
         {
             await _fixture
                 .WithDiscounts(_data.MilkDiscount, _data.BreadDiscount)
