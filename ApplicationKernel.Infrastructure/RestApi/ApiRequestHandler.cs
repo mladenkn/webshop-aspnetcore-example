@@ -18,8 +18,8 @@ namespace ApplicationKernel.Infrastructure.RestApi
         {
             /*
              * should:
-             * 1. validatie request
-             * 2. handle with appropiate handler
+             * 1. validate request
+             * 2. handle with appropriate handler
              * 3. map to handler response to IActionResult
              */
             // you can see this implemented here:
