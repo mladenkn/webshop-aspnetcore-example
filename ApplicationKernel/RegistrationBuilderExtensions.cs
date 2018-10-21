@@ -7,7 +7,7 @@ namespace ApplicationKernel
     {
         public static ContainerBuilder RegisterDelegate<T, TDelegate>(this ContainerBuilder container, Func<T, TDelegate> getDelegate)
         {
-            container.RegisterType<T>();
+            container.RegisterType<T>(); // not sure if this is safe, what if it is already registered?
             container.Register(c => getDelegate(c.Resolve<T>()));
             return container;
         }
