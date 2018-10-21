@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel", "Applic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.RestApi", "WebShop.Infrastructure.RestApi\WebShop.Infrastructure.RestApi.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Infrastructure", "ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj", "{9585483D-0BD9-46A8-8B17-D58CC82B9D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Infrastructure.RestApi", "ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.RestApi.csproj", "{9585483D-0BD9-46A8-8B17-D58CC82B9D4B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Tests", "WebShop.Tests\WebShop.Tests.csproj", "{71A9E48A-D912-4EDB-981E-722C8940B364}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.Pers
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BDCFE6EE-3619-4092-A3F8-B80A4FAB9C5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.TestsLib", "WebShop.TestsLib\WebShop.TestsLib.csproj", "{FBF2BDC0-673A-42DE-B506-E1EE664E0FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.TestsLib", "WebShop.TestsLib\WebShop.TestsLib.csproj", "{FBF2BDC0-673A-42DE-B506-E1EE664E0FA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

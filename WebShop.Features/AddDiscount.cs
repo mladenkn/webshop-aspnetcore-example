@@ -1,5 +1,4 @@
-﻿using System;
-using ApplicationKernel;
+﻿using ApplicationKernel;
 using ApplicationKernel.MediatorSystem;
 using AutoMapper;
 using FluentValidation;

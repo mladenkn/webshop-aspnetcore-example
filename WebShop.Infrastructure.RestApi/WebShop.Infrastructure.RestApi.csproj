@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj" />
+    <ProjectReference Include="..\ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.RestApi.csproj" />
     <ProjectReference Include="..\WebShop.Features\WebShop.Features.csproj" />
   </ItemGroup>
 

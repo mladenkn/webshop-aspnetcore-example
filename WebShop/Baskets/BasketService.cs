@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Utilities;
-using WebShop.BasketItems;
 using WebShop.Discounts;
 
 namespace WebShop.Baskets
