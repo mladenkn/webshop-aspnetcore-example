@@ -41,6 +41,8 @@ namespace WebShop.Infrastructure.PersistentCache
             _addDiscountsToBasketItem = addDiscountsToBasketItem;
         }
 
+        // TODO: Either calculate basket price in GetBasketWithDiscountsApplied or in AddItem
+
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
             var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId).ToArray();
@@ -64,8 +66,6 @@ namespace WebShop.Infrastructure.PersistentCache
         {
             async Task AddActual()
             {
-                // TODO: recalculate basket total price
-
                 var productDiscounts = await _discountsTable
                     .Where(d => d.TargetProductId == item.ProductId)
                     .ToArrayAsync();
