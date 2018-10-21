@@ -3,7 +3,7 @@ using Autofac;
 
 namespace ApplicationKernel
 {
-    public static class RegistrationBuilderExtensions
+    public static class AutofacExtensions
     {
         public static ContainerBuilder RegisterDelegate<T, TDelegate>(this ContainerBuilder container, Func<T, TDelegate> getDelegate)
         {
