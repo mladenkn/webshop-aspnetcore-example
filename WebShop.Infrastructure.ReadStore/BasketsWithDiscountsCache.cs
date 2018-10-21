@@ -43,12 +43,12 @@ namespace WebShop.Infrastructure.PersistentCache
             var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId).ToArray();
 
             if (basketJobs.Any())
-                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
-            else
             {
                 await basketJobs.Select(j => j.Task).WhenAll();
                 return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
             }
+            else
+                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
         }
 
         public async Task AddBasket(int basketId)
