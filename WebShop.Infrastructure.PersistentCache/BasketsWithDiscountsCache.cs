@@ -45,15 +45,15 @@ namespace WebShop.Infrastructure.PersistentCache
             if (basketJobs.Any())
             {
                 await basketJobs.Select(j => j.Task).WhenAll();
-                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
+                return await _lowLevelCache.Get(basketId);
             }
             else
-                return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
+                return await _lowLevelCache.Get(basketId);
         }
 
         public async Task Add(int basketId)
         {
-            var basket = await _getBasket(basketId);
+            var basket = await _lowLevelCache.Get(basketId);
             await _lowLevelCache.Add(basket);
         }
 
@@ -62,7 +62,7 @@ namespace WebShop.Infrastructure.PersistentCache
             async Task AddActual()
             {
                 // need to actually update whole basket because the total price has changed
-                var basket = await _getBasket(item.BasketId);
+                var basket = await _getBasket(item.BasketId); // there is probably a faster way
                 await _lowLevelCache.Update(basket);
             }
 
