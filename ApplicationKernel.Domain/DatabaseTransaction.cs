@@ -4,6 +4,7 @@ using Utilities;
 
 namespace ApplicationKernel
 {
+    // This is used instead of unit of work pattern
     public interface IDatabaseTransaction
     {
         IDatabaseTransaction Save(object o);
