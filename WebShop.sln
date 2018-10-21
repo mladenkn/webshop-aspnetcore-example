@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop", "WebShop\WebShop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{BD088815-DAEF-43D9-9D3C-64BD18569414}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Features", "WebShop.UseCases\WebShop.Features.csproj", "{D6BA5EE6-367F-4332-ACFF-912FEB466134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Features", "WebShop.Features\WebShop.Features.csproj", "{D6BA5EE6-367F-4332-ACFF-912FEB466134}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel", "ApplicationKernel.Domain\ApplicationKernel.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel", "ApplicationKernel\ApplicationKernel.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.RestApi", "WebShop.Web\WebShop.Infrastructure.RestApi.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.RestApi", "WebShop.Infrastructure.RestApi\WebShop.Infrastructure.RestApi.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Infrastructure", "ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj", "{9585483D-0BD9-46A8-8B17-D58CC82B9D4B}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Tests", "WebShop.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure", "WebShop.Infrastructure\WebShop.Infrastructure.csproj", "{B1873642-95FB-4A6D-B213-765AECC036E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.PersistentCache", "WebShop.Infrastructure.ReadStore\WebShop.Infrastructure.PersistentCache.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.PersistentCache", "WebShop.Infrastructure.PersistentCache\WebShop.Infrastructure.PersistentCache.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BDCFE6EE-3619-4092-A3F8-B80A4FAB9C5B}"
 EndProject

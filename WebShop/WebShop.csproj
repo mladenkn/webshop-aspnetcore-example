@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationKernel.Domain\ApplicationKernel.csproj" />
+    <ProjectReference Include="..\ApplicationKernel\ApplicationKernel.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 

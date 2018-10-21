@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationKernel.Domain\ApplicationKernel.csproj" />
-    <ProjectReference Include="..\WebShop.UseCases\WebShop.Features.csproj" />
+    <ProjectReference Include="..\ApplicationKernel\ApplicationKernel.csproj" />
+    <ProjectReference Include="..\WebShop.Features\WebShop.Features.csproj" />
     <ProjectReference Include="..\WebShop\WebShop.csproj" />
   </ItemGroup>
 

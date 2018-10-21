@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationKernel.Infrastructure\ApplicationKernel.Infrastructure.csproj" />
-    <ProjectReference Include="..\WebShop.UseCases\WebShop.Features.csproj" />
+    <ProjectReference Include="..\WebShop.Features\WebShop.Features.csproj" />
   </ItemGroup>
 
 </Project>
