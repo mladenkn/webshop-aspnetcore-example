@@ -8,17 +8,17 @@ namespace WebShop.Infrastructure.PersistentCache
 {
     public class EventHandler : IRequestPostProcessor<AddBasketItem.Request, Response<BasketItem>>
     {
-        private readonly AddItemToBasket _addItemToBasket;
+        private readonly IBasketsWithDiscountsCache _cache;
 
-        public EventHandler(AddItemToBasket addItemToBasket)
+        public EventHandler(IBasketsWithDiscountsCache cache)
         {
-            _addItemToBasket = addItemToBasket;
+            _cache = cache;
         }
 
         public Task Process(AddBasketItem.Request request, Response<BasketItem> response)
         {
             if (response.IsSuccess)
-                _addItemToBasket(response.Payload);
+                _cache.AddItem(response.Payload);
             return Task.CompletedTask;
         }
     }

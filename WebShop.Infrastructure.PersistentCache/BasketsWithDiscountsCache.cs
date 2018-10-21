@@ -10,10 +10,13 @@ using WebShop.Discounts;
 
 namespace WebShop.Infrastructure.PersistentCache
 {
-    public delegate void AddItemToBasket(BasketItem item);
-    public delegate Task AddBasket(int basketId);
+    public interface IBasketsWithDiscountsCache
+    {
+        Task Add(int basketId);
+        void AddItem(BasketItem item);
+    }
 
-    public class BasketsWithDiscountsCache
+    public class BasketsWithDiscountsCache : IBasketsWithDiscountsCache
     {
         private readonly IJobQueue _jobs;
         private readonly IQueryable<Discount> _discountsTable;
@@ -51,13 +54,13 @@ namespace WebShop.Infrastructure.PersistentCache
                 return await _lowLevelCache.GetBasketWithDiscountsApplied(basketId);
         }
 
-        public async Task AddBasket(int basketId)
+        public async Task Add(int basketId)
         {
             var basket = await _getBasket(basketId);
             await _lowLevelCache.Add(basket);
         }
 
-        public void AddItemToBasket(BasketItem item)
+        public void AddItem(BasketItem item)
         {
             async Task AddActual()
             {
