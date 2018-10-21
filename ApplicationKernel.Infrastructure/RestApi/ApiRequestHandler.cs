@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ApplicationKernel.MediatorSystem;
 using Microsoft.AspNetCore.Mvc;
 using IRequest = ApplicationKernel.MediatorSystem.IRequest;
 
 namespace ApplicationKernel.Infrastructure.RestApi
 {
-    public class ApiRequestHandler
+    public interface IApiRequestHandler
     {
-        public async Task<IActionResult> Handle(IRequest request)
+        Task<IActionResult> Handle(IRequest request);
+        Task<Response> HandleWithoutMapping(IRequest request);
+    }
+
+    public class ApiRequestHandler : IApiRequestHandler
+    {
+        public Task<IActionResult> Handle(IRequest request)
         {
             /*
              * should:
@@ -19,7 +26,10 @@ namespace ApplicationKernel.Infrastructure.RestApi
                 // https://github.com/mladenkn/ddd-cqrs-example/blob/master/ApplicationKernel.Infrastructure/WebApi/ApiRequestHandler.cs
             throw new NotImplementedException();
         }
-    }
 
-    public delegate Task<IActionResult> HandleApiRequest(IRequest request);
+        public Task<Response> HandleWithoutMapping(IRequest request)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -6,22 +6,25 @@ using WebShop.Features;
 namespace WebShop.Infrastructure.RestApi.Controllers
 {
     [ApiController]
-    public class Controller : ApiController
+    public class Controller
     {
-        public Controller(HandleApiRequest handle) : base(handle)
+        private readonly IApiRequestHandler _handler;
+
+        public Controller(IApiRequestHandler handler)
         {
+            _handler = handler;
         }
 
         [HttpPost]
         [Route("/discounts")]
-        public Task<IActionResult> Post(AddDiscount.Request request) => Handle(request);
+        public Task<IActionResult> Post(AddDiscount.Request request) => _handler.Handle(request);
 
         [HttpPost]
         [Route("/basketitems")]
-        public Task<IActionResult> Post(AddBasketItem.Request request) => Handle(request);
+        public Task<IActionResult> Post(AddBasketItem.Request request) => _handler.Handle(request);
 
         [HttpGet]
         [Route("baskets")]
-        public Task<IActionResult> Get(int basketId) => Handle(new GetBasket.Request{Id = basketId});
+        public Task<IActionResult> Get(int basketId) => _handler.Handle(new GetBasket.Request{Id = basketId});
     }
 }
