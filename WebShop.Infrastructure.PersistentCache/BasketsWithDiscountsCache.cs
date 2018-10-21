@@ -64,6 +64,8 @@ namespace WebShop.Infrastructure.PersistentCache
         {
             async Task AddActual()
             {
+                // TODO: recalculate basket total price
+
                 var productDiscounts = await _discountsTable
                     .Where(d => d.TargetProductId == item.ProductId)
                     .ToArrayAsync();
