@@ -8,17 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="24.3.0" />
-    <PackageReference Include="FluentAssertions" Version="5.4.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WebShop.Infrastructure\WebShop.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebShop.TestsLib\WebShop.TestsLib.csproj" />
     <ProjectReference Include="..\WebShop\WebShop.csproj" />
   </ItemGroup>
 

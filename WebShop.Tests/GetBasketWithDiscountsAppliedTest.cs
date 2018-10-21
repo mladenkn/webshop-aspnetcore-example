@@ -8,6 +8,7 @@ using WebShop.BasketItems;
 using WebShop.Baskets;
 using WebShop.Discounts;
 using WebShop.Infrastructure;
+using WebShop.TestsLib;
 using Xunit;
 
 namespace WebShop.Tests

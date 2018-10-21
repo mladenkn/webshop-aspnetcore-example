@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebShop.Infrastructure;
 
-namespace WebShop.Tests
+namespace WebShop.TestsLib
 {
     public static class TestServiceFactory
     {
