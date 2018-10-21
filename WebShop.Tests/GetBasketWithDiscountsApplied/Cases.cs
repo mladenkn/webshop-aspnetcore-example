@@ -9,7 +9,7 @@ namespace WebShop.Tests.GetBasketWithDiscountsApplied
         private readonly DataContainer _data = new DataContainer();
 
         [Fact]
-        public async Task Basket_has___1_bread__1_butter__1__milk()
+        public async Task Basket_has___1_bread__1_butter__1_milk()
         {
             await _fixture
                 .WithBasketItemOf(_data.Butter)
