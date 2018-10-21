@@ -33,6 +33,11 @@ namespace Utilities
         public static Task WhenAll(this IEnumerable<Task> tasks) => Task.WhenAll(tasks);
 
         public static MustAssertions Must<T>(this T o) => new MustAssertions(o);
+
+        public static void SaveTo<T>(this T o, out T v)
+        {
+            v = o;
+        }
     }
 
     public static class Collections

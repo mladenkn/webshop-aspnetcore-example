@@ -6,7 +6,7 @@ namespace WebShop.TestsLib
 {
     public static class TestServiceFactory
     {
-        public static WebShopDbContext Database()
+        public static WebShopDbContext InMemoryDatabase()
         {
             var dbOptions = new DbContextOptionsBuilder().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
             var db = new WebShopDbContext(dbOptions);

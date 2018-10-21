@@ -78,12 +78,12 @@ namespace WebShop.Infrastructure.PersistentCache
 
             _jobs.Add(job);
         }
+    }
 
-        private class CacheBasketItemJob : IBasketCacheJob
-        {
-            public Task Task { get; set; }
-            public int BasketId { get; set; }
-            public int BasketItemId { get; set; }
-        }
+    public class CacheBasketItemJob : IBasketCacheJob
+    {
+        public Task Task { get; set; }
+        public int BasketId { get; set; }
+        public int BasketItemId { get; set; }
     }
 }

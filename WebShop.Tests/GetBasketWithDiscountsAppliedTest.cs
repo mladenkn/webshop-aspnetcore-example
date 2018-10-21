@@ -64,7 +64,7 @@ namespace WebShop.Tests
 
         private class Fixture
         {
-            private readonly WebShopDbContext _db = TestServiceFactory.Database();
+            private readonly WebShopDbContext _db = TestServiceFactory.InMemoryDatabase();
             private readonly DataContainer _data = new DataContainer();
             private readonly List<Discount> _discounts = new List<Discount>();
             private readonly List<BasketItem> _basketItems = new List<BasketItem>();
