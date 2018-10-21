@@ -18,18 +18,6 @@ namespace Utilities
                 action(value);
         }
 
-        public static decimal PercentOf(this decimal percentage, decimal valueToBeDiscounted)
-        {
-            var dec = percentage / 100;
-            var without = valueToBeDiscounted * dec;
-            return valueToBeDiscounted - without;
-        }
-
-        public static decimal PercentOf(this int percentage, decimal valueToBeDiscounted)
-        {
-            return PercentOf((decimal)percentage, valueToBeDiscounted);
-        }
-
         public static Task WhenAll(this IEnumerable<Task> tasks) => Task.WhenAll(tasks);
 
         public static MustAssertions Must<T>(this T o) => new MustAssertions(o);
