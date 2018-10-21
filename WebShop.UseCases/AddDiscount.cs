@@ -39,9 +39,9 @@ namespace WebShop.Features
                     {
                         await newTransaction().Save(discount).Commit();
                     }
-                    catch (Exception)
+                    catch
                     {
-                        // catch if product does not exist
+                        // handle if product does not exist
                     }
                     return Responses.Success(discount);
                 });

@@ -36,7 +36,7 @@ namespace WebShop.Features
                     {
                         await newTransaction().Save(basketItem).Commit();
                     }
-                    catch (Exception)
+                    catch
                     {
                         // handle if product or basket do not exist
                     }
