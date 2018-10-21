@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Features", "WebShop.UseCases\WebShop.Features.csproj", "{D6BA5EE6-367F-4332-ACFF-912FEB466134}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel.Domain", "ApplicationKernel.Domain\ApplicationKernel.Domain.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationKernel", "ApplicationKernel.Domain\ApplicationKernel.csproj", "{90304C17-54C6-4F85-9E19-36396420662B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.RestApi", "WebShop.Web\WebShop.Infrastructure.RestApi.csproj", "{65ED3AF9-876E-4734-8BFC-BA1C4DDDAA62}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Tests", "WebShop.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure", "WebShop.Infrastructure\WebShop.Infrastructure.csproj", "{B1873642-95FB-4A6D-B213-765AECC036E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Infrastructure.PersistentCache", "WebShop.Infrastructure.ReadStore\WebShop.Infrastructure.PersistentCache.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShop.Infrastructure.PersistentCache", "WebShop.Infrastructure.ReadStore\WebShop.Infrastructure.PersistentCache.csproj", "{DEAD0D1D-BB4E-485C-AD50-6156EED8FB1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

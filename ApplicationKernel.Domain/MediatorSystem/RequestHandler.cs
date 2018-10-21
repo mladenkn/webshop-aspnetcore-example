@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace ApplicationKernel.Domain.MediatorSystem
+namespace ApplicationKernel.MediatorSystem
 {
     public interface IRequestHandler<in TRequest>
         : IRequestHandler<TRequest, Response>

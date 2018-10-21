@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 
-namespace ApplicationKernel.Domain.MediatorSystem
+namespace ApplicationKernel.MediatorSystem
 {
     public interface INotification<out TEvent> : INotification
     {

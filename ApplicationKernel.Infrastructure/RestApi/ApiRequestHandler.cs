@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using IRequest = ApplicationKernel.Domain.MediatorSystem.IRequest;
+using IRequest = ApplicationKernel.MediatorSystem.IRequest;
 
 namespace ApplicationKernel.Infrastructure.RestApi
 {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+using ApplicationKernel.MediatorSystem;
 using MediatR.Pipeline;
 using Utilities;
 using WebShop.Baskets;

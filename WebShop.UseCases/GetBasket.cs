@@ -1,4 +1,4 @@
-﻿using ApplicationKernel.Domain.MediatorSystem;
+﻿using ApplicationKernel.MediatorSystem;
 using FluentValidation;
 using WebShop.Baskets;
 

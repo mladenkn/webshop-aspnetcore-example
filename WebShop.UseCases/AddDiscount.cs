@@ -1,6 +1,6 @@
 ﻿using System;
-using ApplicationKernel.Domain;
-using ApplicationKernel.Domain.MediatorSystem;
+using ApplicationKernel;
+using ApplicationKernel.MediatorSystem;
 using AutoMapper;
 using FluentValidation;
 using WebShop.Discounts;

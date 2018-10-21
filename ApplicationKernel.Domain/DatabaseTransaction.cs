@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Utilities;
 
-namespace ApplicationKernel.Domain
+namespace ApplicationKernel
 {
     public interface IDatabaseTransaction
     {

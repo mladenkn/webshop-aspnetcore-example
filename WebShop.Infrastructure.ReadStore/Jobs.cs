@@ -1,4 +1,4 @@
-﻿using ApplicationKernel.Domain;
+﻿using ApplicationKernel;
 
 namespace WebShop.Infrastructure.PersistentCache
 {

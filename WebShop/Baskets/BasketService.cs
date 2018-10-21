@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using ApplicationKernel.Domain.MediatorSystem;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
 using WebShop.BasketItems;

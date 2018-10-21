@@ -1,4 +1,4 @@
-﻿namespace ApplicationKernel.Domain.MediatorSystem
+﻿namespace ApplicationKernel.MediatorSystem
 {
     public class Response
     {

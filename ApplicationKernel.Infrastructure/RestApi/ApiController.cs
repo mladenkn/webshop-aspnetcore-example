@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+using ApplicationKernel.MediatorSystem;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationKernel.Infrastructure.RestApi

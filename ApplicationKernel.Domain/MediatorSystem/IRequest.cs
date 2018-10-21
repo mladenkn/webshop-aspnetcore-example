@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ApplicationKernel.Domain.MediatorSystem
+namespace ApplicationKernel.MediatorSystem
 {
     public interface IRequest : IRequest<Response>
     {

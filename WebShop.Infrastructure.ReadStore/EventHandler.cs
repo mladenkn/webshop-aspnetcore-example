@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ApplicationKernel.Domain.MediatorSystem;
+using ApplicationKernel.MediatorSystem;
 using MediatR.Pipeline;
 using WebShop.BasketItems;
 using WebShop.Features;
