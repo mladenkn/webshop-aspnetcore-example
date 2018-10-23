@@ -24,7 +24,7 @@ namespace WebShop.Infrastructure.RestApi.Controllers
         public Task<IActionResult> Post(AddBasketItem.Request request) => _handler.Handle(request);
 
         [HttpGet]
-        [Route("baskets")]
+        [Route("/baskets")]
         public Task<IActionResult> Get(int basketId) => _handler.Handle(new GetBasket.Request{Id = basketId});
     }
 }
