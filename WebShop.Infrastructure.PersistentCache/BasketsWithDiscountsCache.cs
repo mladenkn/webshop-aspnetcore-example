@@ -19,36 +19,24 @@ namespace WebShop.Infrastructure.PersistentCache
     public class BasketsWithDiscountsCache : IBasketsWithDiscountsCache
     {
         private readonly IJobQueue _jobs;
-        private readonly IQueryable<Discount> _discountsTable;
-        private readonly IQueryable<Basket> _basketTable;
         private readonly IBasketsWithDiscountsLowLevelCache _lowLevelCache;
         private readonly GetBasketWithDiscountsApplied _getBasket;
 
         public BasketsWithDiscountsCache(
             IJobQueue jobs, 
-            IQueryable<Discount> discountsTable, 
-            IQueryable<Basket> basketTable,
             IBasketsWithDiscountsLowLevelCache lowLevelCache,
             GetBasketWithDiscountsApplied getBasket)
         {
             _jobs = jobs;
-            _discountsTable = discountsTable;
-            _basketTable = basketTable;
             _lowLevelCache = lowLevelCache;
             _getBasket = getBasket;
         }
 
         public async Task<Basket> GetBasketWithDiscountsApplied(int basketId)
         {
-            var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId).ToArray();
-
-            if (basketJobs.Any())
-            {
-                await basketJobs.Select(j => j.Task).WhenAll();
-                return await _lowLevelCache.Get(basketId);
-            }
-            else
-                return await _lowLevelCache.Get(basketId);
+            var basketJobs = _jobs.Jobs.OfType<IBasketCacheJob>().Where(j => j.BasketId == basketId);
+            await basketJobs.Select(j => j.Task).WhenAll();
+            return await _lowLevelCache.Get(basketId);
         }
 
         public async Task Add(int basketId)
