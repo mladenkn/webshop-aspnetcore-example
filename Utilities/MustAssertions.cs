@@ -17,4 +17,9 @@ namespace Utilities
                 throw new NullReferenceException();
         }
     }
+
+    public static class MustAssertionsExtensions
+    {
+        public static MustAssertions Must<T>(this T o) => new MustAssertions(o);
+    }
 }
