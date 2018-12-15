@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Utilities;
+using WebShop.DataAccess;
 using WebShop.Models;
 
 namespace WebShop.Logic

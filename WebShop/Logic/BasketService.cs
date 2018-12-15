@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using WebShop.DataAccess;
 using WebShop.Models;
 
 namespace WebShop.Logic

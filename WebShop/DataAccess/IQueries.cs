@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WebShop.Models;
 
-namespace WebShop
+namespace WebShop.DataAccess
 {
     public interface IQueries
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WebShop.Models;
 
-namespace WebShop
+namespace WebShop.DataAccess
 {
     public interface ISmartQueries
     {
