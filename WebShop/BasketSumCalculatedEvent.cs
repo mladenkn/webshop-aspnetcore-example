@@ -1,4 +1,6 @@
-﻿namespace WebShop.Baskets
+﻿using WebShop.Models;
+
+namespace WebShop
 {
     public class BasketSumCalculatedEvent
     {

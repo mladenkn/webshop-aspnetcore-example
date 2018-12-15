@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebShop.BasketItems;
-using WebShop.Baskets;
-using WebShop.Discounts;
+using WebShop.Models;
 
-namespace WebShop.Infrastructure
+namespace WebShop.DataAccess
 {
     public class WebShopDbContext : DbContext
     {
@@ -12,6 +10,7 @@ namespace WebShop.Infrastructure
         public DbSet<User> Users { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItemDiscounted> BasketItemDiscountedEvents { get; set; }
 
         public WebShopDbContext(DbContextOptions options) : base(options)
         {
@@ -20,10 +19,7 @@ namespace WebShop.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<BasketItem>().Ignore(it => it.Discounts);
-            modelBuilder.Entity<BasketItem>().Ignore(it => it.Price);
-            modelBuilder.Entity<Basket>().Ignore(it => it.TotalPrice);
+            modelBuilder.Entity<BasketItemDiscounted>().HasKey(e => new {e.BasketItemId, e.DiscountId});
         }
     }
 }

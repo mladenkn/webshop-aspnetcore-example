@@ -1,41 +1,39 @@
-﻿using WebShop.BasketItems;
-using WebShop.Baskets;
-using WebShop.Discounts;
+﻿using WebShop.Models;
 
 namespace WebShop.Tests.GetBasketWithDiscountsAppliedTest
 {
-    internal class DataContainer
+    public class DataGenerator
     {
-        internal Basket Basket { get; } = new Basket { Id = 1 };
+        public Basket Basket { get; } = new Basket { Id = 1 };
 
-        internal Product Butter { get; } = new Product
+        public Product Butter { get; } = new Product
         {
             Id = 1,
             RegularPrice = 0.8m
         };
 
-        internal Product Milk { get; } = new Product
+        public Product Milk { get; } = new Product
         {
             Id = 2,
             RegularPrice = 1.15m
         };
 
-        internal Product Bread { get; } = new Product
+        public Product Bread { get; } = new Product
         {
             Id = 3,
             RegularPrice = 1.0m
         };
 
-        internal Discount BreadDiscount { get; }
-        internal Discount MilkDiscount { get; }
+        public Discount BreadDiscount { get; }
+        public Discount MilkDiscount { get; }
 
-        internal DataContainer()
+        public DataGenerator()
         {
             MilkDiscount = new Discount
             {
                 TargetProductId = Milk.Id,
                 RequiredProductId = Milk.Id,
-                RequiredProductQuantity = 3,
+                RequiredProductRequiredQuantity = 3,
                 TargetProductQuantity = 1,
                 Value = 1
             };
@@ -43,13 +41,13 @@ namespace WebShop.Tests.GetBasketWithDiscountsAppliedTest
             {
                 TargetProductId = Bread.Id,
                 RequiredProductId = Butter.Id,
-                RequiredProductQuantity = 2,
+                RequiredProductRequiredQuantity = 2,
                 TargetProductQuantity = 1,
                 Value = 0.5m
             };
         }
 
-        internal BasketItem BasketItem(Product product)
+        public BasketItem BasketItem(Product product)
         {
             return new BasketItem
             {

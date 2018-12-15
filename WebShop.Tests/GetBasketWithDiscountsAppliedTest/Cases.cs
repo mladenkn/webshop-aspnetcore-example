@@ -6,7 +6,7 @@ namespace WebShop.Tests.GetBasketWithDiscountsAppliedTest
     public class Cases
     {
         private readonly Fixture _fixture = new Fixture();
-        private readonly DataContainer _data = new DataContainer();
+        private readonly DataGenerator _data = new DataGenerator();
 
         [Fact]
         public async Task Basket_has___1_bread__1_butter__1_milk()
