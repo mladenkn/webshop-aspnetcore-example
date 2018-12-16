@@ -12,7 +12,6 @@ namespace WebShop.Tests
     public class ApplyDiscountsTest
     {
         [Theory]
-
         [InlineData(0, 0, 1, 0)]
         [InlineData(0, 0, 2, 0)]
         [InlineData(0, 1, 1, 0)]
@@ -28,12 +27,12 @@ namespace WebShop.Tests
         [InlineData(2, 2, 1, 1)]
         [InlineData(2, 2, 2, 1)]
         [InlineData(2, 2, 2, 2)]
+        [InlineData(2, 2, 3, 0)]
         public async Task Run(
             int numberOfProducts1Purchased,
             int numberOfProducts2Purchased,
             int requiredQuantityOfProduct1ToReceiveDiscount,
-            int numberOfProducts2ThatShouldReceiveDiscount
-        )
+            int numberOfProducts2ThatShouldReceiveDiscount)
         {
             var db = TestServiceFactory.Database();
             var smartQueries = new SmartQueries(db);
@@ -59,11 +58,7 @@ namespace WebShop.Tests
                 TargetProductQuantity = numberOfProducts2ThatShouldReceiveDiscount
             };
 
-            db.Add(basket);
-            db.AddRange(product1, product2);
-            db.AddRange(basket.Items);
-            db.Add(discount);
-            db.SaveChanges();
+            await db.PersistAll(basket, product1, product2, basket.Items, discount);
 
             var appliedDiscounts = await discountService.ApplyDiscounts(basket);
 
