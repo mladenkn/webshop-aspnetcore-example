@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
+using FluentAssertions;
+using WebShop.Models;
 using Xunit;
 
 namespace WebShop.Tests
@@ -10,7 +10,10 @@ namespace WebShop.Tests
         [Fact]
         public void Play()
         {
-
+            var db = TestServiceFactory.Database();
+            db.Users.Add(new User());
+            db.SaveChangesAsync().Wait();
+            db.Users.Count().Should().Be(1);
         }
     }
 }

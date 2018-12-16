@@ -34,7 +34,7 @@ namespace WebShop.Tests
             int requiredQuantityOfProduct1ToReceiveDiscount,
             int numberOfProducts2ThatShouldReceiveDiscount)
         {
-            var db = TestServiceFactory.Database();
+            var db = TestServiceFactory.InMemoryDatabase();
             var smartQueries = new SmartQueries(db);
             var discountService = new DiscountService(smartQueries);
 
