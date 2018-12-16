@@ -10,10 +10,7 @@ namespace WebShop.Tests
         [Fact]
         public void Play()
         {
-            var db = TestServiceFactory.Database();
-            db.Users.Add(new User());
-            db.SaveChangesAsync().Wait();
-            db.Users.Count().Should().Be(1);
+
         }
     }
 }

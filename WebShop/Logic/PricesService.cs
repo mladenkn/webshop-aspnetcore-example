@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using MediatR;
 using Utilities;
 using WebShop.Models;
 
@@ -13,16 +14,19 @@ namespace WebShop.Logic
     public class PricesService : IPricesService
     {
         private readonly decimal _maxAllowedDiscount;
+        private readonly IMediator _mediator;
 
-        public PricesService(decimal maxAllowedDiscount)
+        public PricesService(decimal maxAllowedDiscount, IMediator mediator)
         {
             _maxAllowedDiscount = maxAllowedDiscount;
+            _mediator = mediator;
         }
 
         public void RefreshPriceOf(Basket basket)
         {
             basket.Items.Must().NotBeNull();
             basket.Price = basket.Items.Sum(i => i.Price);
+            _mediator.Publish(new BasketPriceRequested(basket));
         }
 
         public void RefreshPriceOf(BasketItem item)
