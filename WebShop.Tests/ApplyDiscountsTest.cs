@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using WebShop.DataAccess;
+using WebShop.Infrastructure.DataAccess;
 using WebShop.Logic;
 using WebShop.Models;
 using Xunit;
