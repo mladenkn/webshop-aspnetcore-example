@@ -36,8 +36,8 @@ namespace WebShop.Logic
 
             basketItem.Discounts = await _discountService.ApplyDiscounts(basket);
 
-            _pricesService.RefreshPriceOf(basket);
             _pricesService.RefreshPriceOf(basketItem);
+            _pricesService.RefreshPriceOf(basket);
 
             // todo: persist to db
         }

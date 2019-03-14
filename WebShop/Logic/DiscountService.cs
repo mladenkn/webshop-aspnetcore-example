@@ -26,13 +26,14 @@ namespace WebShop.Logic
             basket.Items.Must().NotBeNull();
 
             var discounts = await _smartQueries.GetDiscountsFor(basket);
+
             var appliedDiscounts = discounts.Select(d =>
             {
                 var discountedBasketItems = basket.Items
                     .Where(bi => bi.ProductId == d.TargetProductId)
                     .Take(d.TargetProductQuantity);
 
-                var appliedDiscounts_ = discountedBasketItems
+                var r = discountedBasketItems
                     .Select(bi => new BasketItemDiscounted
                     {
                         BasketItemId = bi.Id,
@@ -41,10 +42,11 @@ namespace WebShop.Logic
                         Discount = d
                     });
 
-                return appliedDiscounts_;
+                return r;
             })
             .SelectMany(ad => ad)
             .ToList();
+
             return appliedDiscounts;
         }
     }
