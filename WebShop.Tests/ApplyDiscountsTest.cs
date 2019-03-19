@@ -29,6 +29,7 @@ namespace WebShop.Tests
         [InlineData(2, 2, 2, 1)]
         [InlineData(2, 2, 2, 2)]
         [InlineData(2, 2, 3, 0)]
+        [InlineData(3, 4, 3, 1)]
         public async Task Run(
             int numberOfProducts1Purchased,
             int numberOfProducts2Purchased,

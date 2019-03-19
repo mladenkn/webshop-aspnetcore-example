@@ -30,6 +30,11 @@ namespace WebShop
         {
             var userId = _currentUserProvider.GetId();
             var basket = await _queries.GetUsersBasketWithItems(userId);
+            if (basket == null)
+            {
+                basket = new Basket { UserId = userId };
+                // todo: persist basket
+            }
             await _basketService.AddItem(basket, productId);
             return basket;
         }
