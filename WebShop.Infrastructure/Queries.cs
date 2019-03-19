@@ -19,5 +19,10 @@ namespace WebShop.Infrastructure.DataAccess
         {
             return _db.Baskets.Where(b => b.Id == basketId).Include(b => b.Items).FirstOrDefaultAsync();
         }
+
+        public Task<Basket> GetUsersBasketWithItems(string userId)
+        {
+            return _db.Baskets.FirstOrDefaultAsync(b => b.UserId == userId);
+        }
     }
 }
