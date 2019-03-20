@@ -6,7 +6,7 @@ using WebShop.DataAccess;
 
 namespace WebShop.Infrastructure.DataAccess
 {
-    class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly WebShopDbContext _dbContext;
 

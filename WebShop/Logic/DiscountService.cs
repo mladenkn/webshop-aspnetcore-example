@@ -9,7 +9,7 @@ namespace WebShop.Logic
 {
     public interface IDiscountService
     {
-        Task<IReadOnlyCollection<BasketItemDiscounted>> ApplyDiscounts(Basket basket);
+        Task ApplyDiscounts(Basket basket);
     }
 
     public class DiscountService : IDiscountService
@@ -21,33 +21,11 @@ namespace WebShop.Logic
             _smartQueries = smartQueries;
         }
 
-        public async Task<IReadOnlyCollection<BasketItemDiscounted>> ApplyDiscounts(Basket basket)
+        public async Task ApplyDiscounts(Basket basket)
         {
             basket.Items.Must().NotBeNull();
 
-            var discounts = await _smartQueries.GetDiscountsFor(basket);
-
-            var appliedDiscounts = discounts.Select(d =>
-            {
-                var discountedBasketItems = basket.Items
-                    .Where(bi => bi.ProductId == d.TargetProductId)
-                    .Take(d.TargetProductQuantity);
-
-                var r = discountedBasketItems
-                    .Select(bi => new BasketItemDiscounted
-                    {
-                        BasketItemId = bi.Id,
-                        DiscountId = d.Id,
-                        BasketItem = bi,
-                        Discount = d
-                    });
-
-                return r;
-            })
-            .SelectMany(ad => ad)
-            .ToList();
-
-            return appliedDiscounts;
+            var possibleDiscounts = await _smartQueries.GetPossibleDiscountsFor(basket);
         }
     }
 }

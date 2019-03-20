@@ -6,7 +6,8 @@ namespace WebShop.Infrastructure.DataAccess
     public class WebShopDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<RequiredProductOfDiscount> RequiredProductsOfDiscounts { get; set; }
+        public DbSet<MicroDiscount> MicroDiscounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }

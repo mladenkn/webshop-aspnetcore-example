@@ -5,13 +5,19 @@ using WebShop.Infrastructure.DataAccess;
 
 namespace WebShop.Tests
 {
-    internal static class TestServiceFactory
+    public static class TestServiceFactory
     {
-        internal static WebShopDbContext InMemoryDatabase()
+        public static WebShopDbContext InMemoryDatabase()
         {
             var dbOptions = new DbContextOptionsBuilder().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
             var db = new WebShopDbContext(dbOptions);
             return db;
         }
+
+        //public static IUnitOfWork UnitOfWork()
+        //{
+        //    var db = InMemoryDatabase();
+        //    return new Infrastructure.DataAccess.UnitOfWork(db);
+        //}
     }
 }
