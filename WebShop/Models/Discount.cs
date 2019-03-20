@@ -6,8 +6,8 @@ namespace WebShop.Models
     public class Discount
     {
         public int Id { get; set; }
-        public List<RequiredProduct> RequiredProducts { get; }
-        public List<MicroDiscount> MicroDiscounts { get; }
+        public IReadOnlyCollection<RequiredProduct> RequiredProducts { get; }
+        public IReadOnlyCollection<MicroDiscount> MicroDiscounts { get; }
 
 
         public class RequiredProduct
@@ -23,7 +23,8 @@ namespace WebShop.Models
             public decimal Value { get; set; }
         }
 
-        public Discount(int id, List<RequiredProduct> requiredProducts, List<MicroDiscount> microDiscounts)
+        public Discount(int id, IReadOnlyCollection<RequiredProduct> requiredProducts,
+            IReadOnlyCollection<MicroDiscount> microDiscounts)
         {
             Id = id;
             RequiredProducts = requiredProducts;
@@ -36,8 +37,8 @@ namespace WebShop.Models
     public class DiscountBuilder
     {
         private int _id;
-        private List<Discount.RequiredProduct> _requiredProducts;
-        private List<Discount.MicroDiscount> _microDiscounts;
+        private readonly List<Discount.RequiredProduct> _requiredProducts = new List<Discount.RequiredProduct>();
+        private readonly List<Discount.MicroDiscount> _microDiscounts = new List<Discount.MicroDiscount>();
 
         public DiscountBuilder Require(int productId, int requiredQuantity)
         {
