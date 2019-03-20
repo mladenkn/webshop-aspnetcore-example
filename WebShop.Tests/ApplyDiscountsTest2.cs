@@ -31,19 +31,21 @@ namespace WebShop.Tests
                 new BasketItem {ProductId = 3, BasketId = basket.Id},
             };
 
-            var discount = new Discount(1);
-            discount.AddRequiredProduct(productId: 1, requiredQuantity: 2);
-            discount.AddMicroDiscount(productId: 2, quantity: 1, value: 0.5m);
+            var discount = Discount.New()
+                .Id(1)
+                .Require(productId: 1, requiredQuantity: 2)
+                .DiscountFor(productId: 2, quantity: 1, value: 0.5m)
+                .Build();
 
             var db = TestServiceFactory.InMemoryDatabase();
-            var unitOfWork = new Infrastructure.DataAccess.UnitOfWork(db);
+            var unitOfWork = new Infrastructure.DataAccess.UnitOfWork(db, null);
 
             unitOfWork.AddRange(products);
             unitOfWork.Add(basket);
             unitOfWork.AddRange(basketItems);
             unitOfWork.Add(discount);
 
-            var service = new DiscountService(new SmartQueries(db));
+            var service = new DiscountService(new SmartQueries(new LowLevelQueries(db, null), null));
 
             await service.ApplyDiscounts(basket);
         }

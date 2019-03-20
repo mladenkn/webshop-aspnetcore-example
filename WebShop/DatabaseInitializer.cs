@@ -18,16 +18,15 @@ namespace WebShop
 
             var discounts = new[]
             {
-                Discount.Create(1, (require, discountFor) =>
-                {
-                    require(butter.Id, 2);
-                    discountFor(bread.Id, 1, 50);
-                }),
-                Discount.Create(2, (require, discountFor) =>
-                {
-                    require(milk.Id, 3);
-                    discountFor(milk.Id, 1, 100);
-                })
+                Discount.New()
+                    .Require(productId: butter.Id, requiredQuantity: 2)
+                    .DiscountFor(productId: bread.Id, quantity: 1, value: 50)
+                    .Build(),
+
+                Discount.New()
+                    .Require(productId: milk.Id, requiredQuantity: 3)
+                    .DiscountFor(productId: milk.Id, quantity: 1, value: 100)
+                    .Build(),
             };
 
             discounts.ForEach(unitOfWork.Add);

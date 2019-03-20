@@ -30,37 +30,33 @@ namespace WebShop.Models
             MicroDiscounts = microDiscounts;
         }
 
-        public Discount(int id)
+        public static DiscountBuilder New() => new DiscountBuilder();
+    }
+
+    public class DiscountBuilder
+    {
+        private int _id;
+        private List<Discount.RequiredProduct> _requiredProducts;
+        private List<Discount.MicroDiscount> _microDiscounts;
+
+        public DiscountBuilder Require(int productId, int requiredQuantity)
         {
-            Id = id;
-            RequiredProducts = new List<RequiredProduct>();
-            MicroDiscounts = new List<MicroDiscount>();
+            _requiredProducts.Add(new Discount.RequiredProduct { ProductId = productId, RequiredQuantity = requiredQuantity });
+            return this;
         }
 
-        public void AddRequiredProduct(int productId, int requiredQuantity)
+        public DiscountBuilder DiscountFor(int productId, int quantity, decimal value)
         {
-            RequiredProducts.Add(new RequiredProduct {ProductId = productId, RequiredQuantity = requiredQuantity});
+            _microDiscounts.Add(new Discount.MicroDiscount { TargetProductId = productId, MaxNumberOfTargetProductsToBeDiscounted = quantity, Value = value });
+            return this;
         }
 
-        public void AddMicroDiscount(int productId, int quantity, decimal value)
+        public DiscountBuilder Id(int id)
         {
-            MicroDiscounts.Add(new MicroDiscount { TargetProductId = productId, MaxNumberOfTargetProductsToBeDiscounted = quantity, Value = value});
+            _id = id;
+            return this;
         }
 
-        public static Discount Create(int id, Action<Action<int, int>> addRequiredProduct,
-            Action<Action<int, int, decimal>> addMicroDiscount)
-        {
-            var discount = new Discount(id);
-            addRequiredProduct(discount.AddRequiredProduct);
-            addMicroDiscount(discount.AddMicroDiscount);
-            return discount;
-        }
-
-        public static Discount Create(int id, Action<Action<int, int>, Action<int, int, decimal>> action)
-        {
-            var discount = new Discount(id);
-            action(discount.AddRequiredProduct, discount.AddMicroDiscount);
-            return discount;
-        }
+        public Discount Build() => new Discount(_id, _requiredProducts, _microDiscounts);
     }
 }
