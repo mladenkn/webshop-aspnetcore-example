@@ -5,7 +5,7 @@ namespace WebShop.Models
 {
     public class Discount
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public IReadOnlyCollection<RequiredProduct> RequiredProducts { get; }
         public IReadOnlyCollection<MicroDiscount> MicroDiscounts { get; }
 

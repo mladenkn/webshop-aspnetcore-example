@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Utilities;
 using WebShop.Infrastructure.DataAccess;
 using WebShop.DataAccess;
 using WebShop.Models;
@@ -12,20 +14,19 @@ namespace WebShop.Tests
 {
     public class DiscountsPersistanceTest
     {
-        private readonly Random _rand = new Random();
-
-        private int RandomInt() => _rand.Next(0, 100);
-        private decimal RandomDecimal() => RandomInt() + (decimal)_rand.NextDouble();
-
-        private int idForNextDiscount = 1;
+        private int nextUniqueInt = 1;
+        private decimal nextUniqueDecimal = 1;
 
         private Discount GenerateDiscount()
         {
-            return Discount.New()
-                .Id(idForNextDiscount++)
-                .Require(RandomInt(), RandomInt())
-                .DiscountFor(RandomInt(), RandomInt(), RandomDecimal())
+            var d = Discount.New()
+                .Id(nextUniqueInt++)
+                .Require(nextUniqueInt++, nextUniqueInt++)
+                .Require(nextUniqueInt++, nextUniqueInt++)
+                .DiscountFor(nextUniqueInt++, nextUniqueInt++, nextUniqueDecimal++)
+                .DiscountFor(nextUniqueInt++, nextUniqueInt++, nextUniqueDecimal++)
                 .Build();
+            return d;
         }
 
         [Fact]
@@ -34,7 +35,7 @@ namespace WebShop.Tests
             var db = TestServiceFactory.InMemoryDatabase();
             var customMapper = new CustomMapper(TestServiceFactory.AutoMapper());
 
-            var discounts = Enumerable.Range(0, 1).Select(_ => GenerateDiscount());
+            var discounts = General.GenerateSequence(GenerateDiscount, 10);
             var unitOfWork = new UnitOfWork(db, customMapper);
             unitOfWork.AddRange(discounts);
             await unitOfWork.PersistChanges();

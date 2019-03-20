@@ -11,5 +11,13 @@ namespace Utilities
             foreach (var x in enumerable)
                 action(x);
         }
+
+        public static IEnumerable<T> GenerateSequence<T>(Func<T> next, int count)
+        {
+            var r = new List<T>();
+            for (var i = 0; i < count; i++)
+                r.Add(next());
+            return r;
+        }
     }
 }
