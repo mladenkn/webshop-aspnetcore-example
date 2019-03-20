@@ -23,7 +23,8 @@ namespace WebShop.Tests
 
         public static IMapper AutoMapper()
         {
-
+            var config = new MapperConfiguration(c => { c.AddProfile<MapperProfile>(); });
+            return config.CreateMapper();
         }
     }
 }

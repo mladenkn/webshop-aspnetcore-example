@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.Configuration;
+﻿using AutoMapper;
 using WebShop.Models;
 
 namespace WebShop.Infrastructure.DataAccess
@@ -13,8 +7,13 @@ namespace WebShop.Infrastructure.DataAccess
     {
         public MapperProfile()
         {
-            CreateMap<Discount.MicroDiscount, MicroDiscount>().ReverseMap();
-            CreateMap<Discount.RequiredProduct, RequiredProductOfDiscount>().ReverseMap();
+            CreateMap<Discount.MicroDiscount, MicroDiscount>()
+                .ForMember(md => md.DiscountId, c => c.Ignore())
+                .ReverseMap();
+
+            CreateMap<Discount.RequiredProduct, RequiredProductOfDiscount>()
+                .ForMember(md => md.DiscountId, c => c.Ignore())
+                .ReverseMap();
         }
     }
 }

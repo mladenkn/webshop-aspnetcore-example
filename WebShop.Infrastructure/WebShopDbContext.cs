@@ -21,6 +21,8 @@ namespace WebShop.Infrastructure.DataAccess
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<BasketItemDiscounted>().HasKey(e => new {e.BasketItemId, e.DiscountId});
+            modelBuilder.Entity<RequiredProductOfDiscount>().HasKey(e => new {e.ProductId, e.DiscountId});
+            modelBuilder.Entity<MicroDiscount>().HasKey(e => new { e.TargetProductId, e.DiscountId });
         }
     }
 }

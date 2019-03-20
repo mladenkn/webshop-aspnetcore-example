@@ -16,13 +16,13 @@ namespace WebShop
     public class RequestExecutor : IRequestExecutor
     {
         private readonly ICurrentUserProvider _currentUserProvider;
-        private readonly IBasketService _basketService;
+        //private readonly IBasketService _basketService;
         private readonly IQueries _queries;
 
-        public RequestExecutor(ICurrentUserProvider currentUserProvider, IBasketService basketService, IQueries queries)
+        public RequestExecutor(ICurrentUserProvider currentUserProvider, IQueries queries)
         {
             _currentUserProvider = currentUserProvider;
-            _basketService = basketService;
+            //_basketService = basketService;
             _queries = queries;
         }
 
@@ -35,7 +35,7 @@ namespace WebShop
                 basket = new Basket { UserId = userId };
                 // todo: persist basket
             }
-            await _basketService.AddItem(basket, productId);
+            //await _basketService.AddItem(basket, productId);
             return basket;
         }
     }
