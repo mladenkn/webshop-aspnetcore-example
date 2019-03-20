@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Utilities;
 using WebShop.DataAccess;
 using WebShop.Models;
 
@@ -15,15 +16,22 @@ namespace WebShop
             unitOfWork.AddRange(butter, milk, bread);
             await unitOfWork.PersistChanges();
 
-            var discount1 = new Discount(1);
-            discount1.AddRequiredProduct(butter.Id, 2);
-            discount1.AddMicroDiscount(butter.Id, 1, 50);
+            var discounts = new[]
+            {
+                Discount.Create(1, (require, discountFor) =>
+                {
+                    require(butter.Id, 2);
+                    discountFor(bread.Id, 1, 50);
+                }),
+                Discount.Create(2, (require, discountFor) =>
+                {
+                    require(milk.Id, 3);
+                    discountFor(milk.Id, 1, 100);
+                })
+            };
 
-            var discount2 = new Discount(2);
-            discount2.AddRequiredProduct(milk.Id, 3);
-            discount2.AddMicroDiscount(milk.Id, 3, 100);
+            discounts.ForEach(unitOfWork.Add);
 
-            unitOfWork.AddRange(discount1, discount2);
             await unitOfWork.PersistChanges();
         }
     }

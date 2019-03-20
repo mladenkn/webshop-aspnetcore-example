@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebShop.Models
 {
     public class Discount
     {
+        public int Id { get; set; }
+        public List<RequiredProduct> RequiredProducts { get; }
+        public List<MicroDiscount> MicroDiscounts { get; }
+
+
         public class RequiredProduct
         {
             public int ProductId { get; set; }
@@ -31,10 +37,6 @@ namespace WebShop.Models
             MicroDiscounts = new List<MicroDiscount>();
         }
 
-        public int Id { get; set; }
-        public List<RequiredProduct> RequiredProducts { get; }
-        public List<MicroDiscount> MicroDiscounts { get; }
-
         public void AddRequiredProduct(int productId, int requiredQuantity)
         {
             RequiredProducts.Add(new RequiredProduct {ProductId = productId, RequiredQuantity = requiredQuantity});
@@ -43,6 +45,22 @@ namespace WebShop.Models
         public void AddMicroDiscount(int productId, int quantity, decimal value)
         {
             MicroDiscounts.Add(new MicroDiscount { TargetProductId = productId, MaxNumberOfTargetProductsToBeDiscounted = quantity, Value = value});
+        }
+
+        public static Discount Create(int id, Action<Action<int, int>> addRequiredProduct,
+            Action<Action<int, int, decimal>> addMicroDiscount)
+        {
+            var discount = new Discount(id);
+            addRequiredProduct(discount.AddRequiredProduct);
+            addMicroDiscount(discount.AddMicroDiscount);
+            return discount;
+        }
+
+        public static Discount Create(int id, Action<Action<int, int>, Action<int, int, decimal>> action)
+        {
+            var discount = new Discount(id);
+            action(discount.AddRequiredProduct, discount.AddMicroDiscount);
+            return discount;
         }
     }
 }

@@ -33,8 +33,20 @@ namespace WebShop.Infrastructure.DataAccess
         public (IEnumerable<RequiredProductOfDiscount> requiredProducts,
             IEnumerable<MicroDiscount> microDiscounts) ToDbModels(Discount domainModel)
         {
-            var requiredProducts2 = domainModel.RequiredProducts.Select(m => _mapper.Map<RequiredProductOfDiscount>(m));
-            var microDiscounts2 = domainModel.MicroDiscounts.Select(m => _mapper.Map<MicroDiscount>(m));
+            var requiredProducts2 = domainModel.RequiredProducts.Select(m =>
+            {
+                var m2 = _mapper.Map<RequiredProductOfDiscount>(m);
+                m2.DiscountId = domainModel.Id;
+                return m2;
+            });
+
+            var microDiscounts2 = domainModel.MicroDiscounts.Select(m =>
+            {
+                var m2 = _mapper.Map<MicroDiscount>(m);
+                m2.DiscountId = domainModel.Id;
+                return m2;
+            });
+
             return (requiredProducts2, microDiscounts2);
         }
     }
