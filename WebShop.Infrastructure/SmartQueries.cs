@@ -11,32 +11,19 @@ namespace WebShop.Infrastructure.DataAccess
 {
     public class SmartQueries : ISmartQueries
     {
+        private readonly ILowLevelQueries _lowLevelQueries;
         private readonly WebShopDbContext _db;
 
-        public SmartQueries(WebShopDbContext db)
+        public SmartQueries(ILowLevelQueries lowLevelQueries, WebShopDbContext db)
         {
+            _lowLevelQueries = lowLevelQueries;
             _db = db;
         }
 
-        //public async Task<IReadOnlyCollection<Discount>> GetDiscountsFor(Basket basket)
-        //{
-        //    Expression<Func<Discount, bool>> basketContainsProductInRequiredQuantity =
-        //        d => basket.Items.Count(bi => bi.ProductId == d.RequiredProductId) >= d.RequiredProductRequiredQuantity;
-
-        //    Expression<Func<Discount, bool>> basketContainsSomeTargetProducts =
-        //        d => basket.Items.Any(bi => bi.ProductId == d.TargetProductId);
-
-        //    var r = await _db.Discounts
-        //        .Where(basketContainsProductInRequiredQuantity)
-        //        .Where(basketContainsSomeTargetProducts)
-        //        .ToListAsync();
-
-        //    return r;
-        //}
-
-        public Task<IReadOnlyCollection<Discount>> GetPossibleDiscountsFor(Basket basket)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IEnumerable<Discount>> GetPossibleDiscountsFor(Basket basket) =>
+            _lowLevelQueries.QueryDiscounts(
+                rps => rps.Where(rp => basket.Items.Count(bi => bi.ProductId == rp.ProductId) >= rp.RequiredQuantity),
+                mds => mds.Where(md => basket.Items.Any(bi => bi.ProductId == md.TargetProductId))
+            );
     }
 }

@@ -18,5 +18,11 @@ namespace WebShop.DataAccess
             foreach (var o in objects)
                 unitOfWork.Add(o);
         }
+
+        public static void AddRange(this IUnitOfWork unitOfWork, params object[] objects)
+        {
+            foreach (var o in objects)
+                unitOfWork.Add(o);
+        }
     }
 }

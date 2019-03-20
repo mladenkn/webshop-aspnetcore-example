@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WebShop.DataAccess;
 using WebShop.Models;
 
@@ -15,30 +12,18 @@ namespace WebShop
             var milk = new Product {RegularPrice = 1.15m };
             var bread = new Product {RegularPrice = 1m};
 
-            unitOfWork.AddRange(new []{ butter, milk, bread });
+            unitOfWork.AddRange(butter, milk, bread);
             await unitOfWork.PersistChanges();
 
-            var discounts = new[]
-            {
-                new Discount
-                {
-                    RequiredProductId = butter.Id,
-                    RequiredProductRequiredQuantity = 2,
-                    TargetProductId = bread.Id,
-                    TargetProductQuantity = 1,
-                    Value = 50
-                },
-                new Discount
-                {
-                    RequiredProductId = milk.Id,
-                    RequiredProductRequiredQuantity = 3,
-                    TargetProductId = milk.Id,
-                    TargetProductQuantity = 4,
-                    Value = 100
-                },
-            };
+            var discount1 = new Discount(1);
+            discount1.AddRequiredProduct(butter.Id, 2);
+            discount1.AddMicroDiscount(butter.Id, 1, 50);
 
-            unitOfWork.AddRange(discounts);
+            var discount2 = new Discount(2);
+            discount2.AddRequiredProduct(milk.Id, 3);
+            discount2.AddMicroDiscount(milk.Id, 3, 100);
+
+            unitOfWork.AddRange(discount1, discount2);
             await unitOfWork.PersistChanges();
         }
     }

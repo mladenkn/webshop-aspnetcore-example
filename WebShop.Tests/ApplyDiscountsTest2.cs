@@ -31,7 +31,7 @@ namespace WebShop.Tests
                 new BasketItem {ProductId = 3, BasketId = basket.Id},
             };
 
-            var discount = new Discount {Id = 1};
+            var discount = new Discount(1);
             discount.AddRequiredProduct(productId: 1, requiredQuantity: 2);
             discount.AddMicroDiscount(productId: 2, quantity: 1, value: 0.5m);
 

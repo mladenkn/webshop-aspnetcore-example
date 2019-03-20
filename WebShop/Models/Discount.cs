@@ -12,8 +12,8 @@ namespace WebShop.Models
 
         public class MicroDiscount
         {
-            public int ProductId { get; set; }
-            public int Quantity { get; set; }
+            public int TargetProductId { get; set; }
+            public int MaxNumberOfTargetProductsToBeDiscounted { get; set; }
             public decimal Value { get; set; }
         }
 
@@ -42,7 +42,7 @@ namespace WebShop.Models
 
         public void AddMicroDiscount(int productId, int quantity, decimal value)
         {
-            MicroDiscounts.Add(new MicroDiscount { ProductId = productId, Quantity = quantity, Value = value});
+            MicroDiscounts.Add(new MicroDiscount { TargetProductId = productId, MaxNumberOfTargetProductsToBeDiscounted = quantity, Value = value});
         }
     }
 }
