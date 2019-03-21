@@ -6,9 +6,9 @@ namespace WebShop.Infrastructure.DataAccess
     public class WebShopDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
-        public DbSet<Discount.RequiredProduct> RequiredProductsOfDiscounts { get; set; }
-        public DbSet<Discount.MicroDiscount> MicroDiscounts { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<BasketDiscount.RequiredProduct> RequiredProductsOfDiscounts { get; set; }
+        public DbSet<BasketDiscount.BasketItemDiscount> MicroDiscounts { get; set; }
+        public DbSet<BasketDiscount> Discounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
@@ -22,8 +22,8 @@ namespace WebShop.Infrastructure.DataAccess
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<BasketItemDiscounted>().HasKey(e => new {e.BasketItemId, e.DiscountId});
-            modelBuilder.Entity<Discount.RequiredProduct>().HasKey(e => new {e.ProductId, e.DiscountId});
-            modelBuilder.Entity<Discount.MicroDiscount>().HasKey(e => new { e.TargetProductId, e.DiscountId });
+            modelBuilder.Entity<BasketDiscount.RequiredProduct>().HasKey(e => new {e.ProductId, DiscountId = e.BasketDiscountId});
+            modelBuilder.Entity<BasketDiscount.BasketItemDiscount>().HasKey(e => new { e.TargetProductId, DiscountId = e.BasketDiscountId });
         }
     }
 }

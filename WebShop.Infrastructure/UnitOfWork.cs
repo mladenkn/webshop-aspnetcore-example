@@ -21,7 +21,7 @@ namespace WebShop.Infrastructure.DataAccess
 
         public void Update(object o)
         {
-            if (o is Discount)
+            if (o is BasketDiscount)
                 throw new NotImplementedException();
             else
                 _dbContext.Update(o);

@@ -6,6 +6,6 @@ namespace WebShop.DataAccess
 {
     public interface ISmartQueries
     {
-        Task<IEnumerable<Discount>> GetDiscountsFor(Basket basket);
+        Task<IEnumerable<BasketDiscount>> GetDiscountsFor(Basket basket);
     }
 }

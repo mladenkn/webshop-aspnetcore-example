@@ -18,12 +18,12 @@ namespace WebShop
 
             var discounts = new[]
             {
-                Discount.New()
+                BasketDiscount.New()
                     .Require(productId: butter.Id, requiredQuantity: 2)
                     .DiscountFor(productId: bread.Id, quantity: 1, value: 50)
                     .Build(),
 
-                Discount.New()
+                BasketDiscount.New()
                     .Require(productId: milk.Id, requiredQuantity: 3)
                     .DiscountFor(productId: milk.Id, quantity: 1, value: 100)
                     .Build(),

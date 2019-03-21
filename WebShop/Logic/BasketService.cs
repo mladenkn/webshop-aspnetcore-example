@@ -28,28 +28,43 @@ namespace WebShop.Logic
         {
             basket.Items.Must().NotBeNull();
             var discountsToBeApplied = await _smartQueries.GetDiscountsFor(basket);
-            var appliedDiscounts = discountsToBeApplied
-                .Select(d => MapToAppliedDiscounts(basket, d))
-                .SelectMany(ap => ap);
-            basket.AppliedDiscounts = appliedDiscounts;
+            
+            //var appliedDiscounts = discountsToBeApplied
+            //    .Select(basketDiscount => MapToAppliedDiscounts(basket, basketDiscount.BasketItemDiscounts))
+            //    .SelectMany(ap => ap);
+            //basket.AppliedDiscounts = appliedDiscounts;
+         
+            discountsToBeApplied.Select(d =>
+            {
+                var numberOfBasketItemsThatShouldReceiveIt = d.RequiredProducts
+            })
+
             RefreshBasketPrice(basket);
         }
 
         private void RefreshBasketPrice(Basket basket)
         {
             _mediator.Publish(new BasketPriceRequested(basket));
-            // ....
+            
         }
 
-        private IEnumerable<AppliedDiscount> MapToAppliedDiscounts(Basket basket,
-            Discount discount)
+        private void Apply(Basket basket, BasketDiscount.BasketItemDiscount discount, int times)
         {
-            return discount.MicroDiscounts.Select(md => basket.Items
-                .Where(bi => bi.ProductId == md.TargetProductId)
-                .Take(md.MaxNumberOfTargetProductsToBeDiscounted)
-                .Select(bi => new AppliedDiscount {BasketItemId = bi.Id, DiscountId = discount.Id, Value = md.Value})
-            )
-            .SelectMany(c => c);
+
         }
+
+        //private IEnumerable<AppliedDiscount> MapToAppliedDiscounts(
+        //    Basket basket, IEnumerable<BasketDiscountSpecification.BasketItemDiscount> discounts)
+        //{
+        //    return discounts.Select(md => basket.Items
+        //        .Where(bi => bi.ProductId == md.TargetProductId)
+        //        .Take(md.MaxNumberOfTargetProductsToBeDiscounted)
+        //        .Select(bi => new AppliedDiscount
+        //        {
+        //            BasketItemId = bi.Id, DiscountId = discounts., Value = md.Value, BasketItem = bi
+        //        })
+        //    )
+        //    .SelectMany(ap => ap);
+        //}
     }
 }

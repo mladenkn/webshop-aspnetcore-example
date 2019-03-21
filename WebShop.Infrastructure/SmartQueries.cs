@@ -18,18 +18,18 @@ namespace WebShop.Infrastructure.DataAccess
             _db = db;
         }
 
-        public async Task<IEnumerable<Discount>> GetDiscountsFor(Basket basket)
+        public async Task<IEnumerable<BasketDiscount>> GetDiscountsFor(Basket basket)
         {
-            Expression<Func<Discount, bool>> basketContainsRequiredProductsInRequiredQuantity =
+            Expression<Func<BasketDiscount, bool>> basketContainsRequiredProductsInRequiredQuantity =
                 d => d.RequiredProducts.All(rp =>
                     basket.Items.Count(bi => bi.ProductId == rp.ProductId) >= rp.RequiredQuantity);
 
-            Expression<Func<Discount, bool>> basketContainsAnyTargetProducts =
-                d => d.MicroDiscounts.All(md => basket.Items.Any(bi => bi.ProductId == md.TargetProductId));
+            Expression<Func<BasketDiscount, bool>> basketContainsAnyTargetProducts =
+                d => d.BasketItemDiscounts.All(md => basket.Items.Any(bi => bi.ProductId == md.TargetProductId));
 
-            var r = await _db.Set<Discount>()
+            var r = await _db.Set<BasketDiscount>()
                 .Include(d => d.RequiredProducts)
-                .Include(d => d.MicroDiscounts)
+                .Include(d => d.BasketItemDiscounts)
                 .Where(basketContainsRequiredProductsInRequiredQuantity)
                 .Where(basketContainsAnyTargetProducts)
                 .ToListAsync();
