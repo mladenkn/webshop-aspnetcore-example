@@ -29,7 +29,7 @@ namespace WebShop.Rest
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
-            services.AddTransient<IDiscountService, DiscountService>();
+            services.AddTransient<IBasketService, BasketService>();
             services.AddTransient<IRequestExecutor, RequestExecutor>();
         }
 

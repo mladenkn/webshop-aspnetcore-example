@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Utilities
@@ -19,5 +20,8 @@ namespace Utilities
                 r.Add(next());
             return r;
         }
+
+        public static IEnumerable<object> ConcatAll(params IEnumerable<object>[] enumerables) =>
+            enumerables.SelectMany(o => o);
     }
 }

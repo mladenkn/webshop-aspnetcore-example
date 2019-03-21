@@ -15,14 +15,20 @@ namespace WebShop.Infrastructure.DataAccess
             _db = db;
         }
 
-        public Task<Basket> GetBasketWithItems(int basketId)
+        public Task<Basket> GetUsersBasketWithItemsAndDiscounts(string userId)
         {
-            return _db.Baskets.Where(b => b.Id == basketId).Include(b => b.Items).FirstOrDefaultAsync();
+            return _db.Baskets
+                .Include(b => b.Items)
+                .Include(b => b.AppliedDiscounts)
+                .Where(b => b.UserId == userId)
+                .FirstOrDefaultAsync();
         }
 
-        public Task<Basket> GetUsersBasketWithItems(string userId)
+        public Task<Basket> GetUsersBasket(string userId)
         {
-            return _db.Baskets.FirstOrDefaultAsync(b => b.UserId == userId);
+            return _db.Baskets
+                .Where(b => b.UserId == userId)
+                .FirstOrDefaultAsync();
         }
     }
 }

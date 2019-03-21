@@ -11,19 +11,30 @@ namespace WebShop.Infrastructure.DataAccess
 {
     public class SmartQueries : ISmartQueries
     {
-        private readonly ILowLevelQueries _lowLevelQueries;
         private readonly WebShopDbContext _db;
 
-        public SmartQueries(ILowLevelQueries lowLevelQueries, WebShopDbContext db)
+        public SmartQueries(WebShopDbContext db)
         {
-            _lowLevelQueries = lowLevelQueries;
             _db = db;
         }
 
-        public Task<IEnumerable<Discount>> GetPossibleDiscountsFor(Basket basket) =>
-            _lowLevelQueries.QueryDiscounts(
-                rps => rps.Where(rp => basket.Items.Count(bi => bi.ProductId == rp.ProductId) >= rp.RequiredQuantity),
-                mds => mds.Where(md => basket.Items.Any(bi => bi.ProductId == md.TargetProductId))
-            );
+        public async Task<IEnumerable<Discount>> GetDiscountsFor(Basket basket)
+        {
+            Expression<Func<Discount, bool>> basketContainsRequiredProductsInRequiredQuantity =
+                d => d.RequiredProducts.All(rp =>
+                    basket.Items.Count(bi => bi.ProductId == rp.ProductId) >= rp.RequiredQuantity);
+
+            Expression<Func<Discount, bool>> basketContainsAnyTargetProducts =
+                d => d.MicroDiscounts.All(md => basket.Items.Any(bi => bi.ProductId == md.TargetProductId));
+
+            var r = await _db.Set<Discount>()
+                .Include(d => d.RequiredProducts)
+                .Include(d => d.MicroDiscounts)
+                .Where(basketContainsRequiredProductsInRequiredQuantity)
+                .Where(basketContainsAnyTargetProducts)
+                .ToListAsync();
+
+            return r;
+        }
     }
 }

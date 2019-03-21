@@ -9,6 +9,6 @@ namespace WebShop.Models
         public ICollection<BasketItem> Items { get; set; }
         public decimal Price { get; set; }
 
-        public User User { get; set; }
+        public IEnumerable<AppliedDiscount> AppliedDiscounts { get; set; }
     }
 }

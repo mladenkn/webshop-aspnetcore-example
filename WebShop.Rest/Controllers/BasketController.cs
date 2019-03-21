@@ -20,7 +20,7 @@ namespace WebShop.Rest.Controllers
             _requestExecutor = requestExecutor;
         }
 
-        public Task<Basket> AddItem(int productId)
+        public Task AddItem(int productId)
         {
             return _requestExecutor.AddItemToBasket(productId);
         }

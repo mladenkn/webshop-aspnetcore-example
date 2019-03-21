@@ -5,7 +5,7 @@ namespace WebShop.DataAccess
 {
     public interface IQueries
     {
-        Task<Basket> GetBasketWithItems(int basketId);
-        Task<Basket> GetUsersBasketWithItems(string userId);
+        Task<Basket> GetUsersBasketWithItemsAndDiscounts(string userId);
+        Task<Basket> GetUsersBasket(string userId);
     }
 }

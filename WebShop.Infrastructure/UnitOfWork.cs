@@ -17,16 +17,7 @@ namespace WebShop.Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
-        public void Add(object o)
-        {
-            if (o is Discount discount)
-            {
-                _dbContext.AddRange(discount.RequiredProducts);
-                _dbContext.AddRange(discount.MicroDiscounts);
-            }
-            else
-                _dbContext.Add(o);
-        }
+        public void Add(object o) => _dbContext.Add(o);
 
         public void Update(object o)
         {
@@ -36,16 +27,7 @@ namespace WebShop.Infrastructure.DataAccess
                 _dbContext.Update(o);
         }
 
-        public void Delete(object o)
-        {
-            if (o is Discount discount)
-            {
-                _dbContext.RemoveRange(discount.RequiredProducts);
-                _dbContext.RemoveRange(discount.MicroDiscounts);
-            }
-            else
-                _dbContext.Remove(o);
-        }
+        public void Delete(object o) => _dbContext.Remove(o);
 
         public Task PersistChanges() => _dbContext.SaveChangesAsync();
     }
