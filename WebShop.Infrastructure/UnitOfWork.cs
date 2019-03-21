@@ -11,21 +11,18 @@ namespace WebShop.Infrastructure.DataAccess
     public class UnitOfWork : IUnitOfWork
     {
         private readonly WebShopDbContext _dbContext;
-        private readonly ICustomMapper _mapper;
 
-        public UnitOfWork(WebShopDbContext dbContext, ICustomMapper mapper)
+        public UnitOfWork(WebShopDbContext dbContext)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
         }
 
         public void Add(object o)
         {
             if (o is Discount discount)
             {
-                var (rps,  mds) = _mapper.ToDbModels(discount);
-                _dbContext.AddRange(rps);
-                _dbContext.AddRange(mds);
+                _dbContext.AddRange(discount.RequiredProducts);
+                _dbContext.AddRange(discount.MicroDiscounts);
             }
             else
                 _dbContext.Add(o);
@@ -43,9 +40,8 @@ namespace WebShop.Infrastructure.DataAccess
         {
             if (o is Discount discount)
             {
-                var (rps, mds) = _mapper.ToDbModels(discount);
-                _dbContext.RemoveRange(rps);
-                _dbContext.RemoveRange(mds);
+                _dbContext.RemoveRange(discount.RequiredProducts);
+                _dbContext.RemoveRange(discount.MicroDiscounts);
             }
             else
                 _dbContext.Remove(o);

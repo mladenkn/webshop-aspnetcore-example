@@ -32,14 +32,13 @@ namespace WebShop.Tests
         public async Task Run()
         {
             var db = TestServiceFactory.InMemoryDatabase();
-            var customMapper = new CustomMapper(TestServiceFactory.AutoMapper());
 
             var discounts = General.GenerateSequence(GenerateDiscount, 10);
-            var unitOfWork = new UnitOfWork(db, customMapper);
+            var unitOfWork = new UnitOfWork(db);
             unitOfWork.AddRange(discounts);
             await unitOfWork.PersistChanges();
 
-            var lowLevelQueries = new LowLevelQueries(db, customMapper);
+            var lowLevelQueries = new LowLevelQueries(db);
             var discountsWhenRead = await lowLevelQueries.QueryDiscounts(rp => rp, md => md);
 
             foreach (var discount in discountsWhenRead)

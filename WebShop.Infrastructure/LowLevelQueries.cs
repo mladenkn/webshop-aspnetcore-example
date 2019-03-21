@@ -10,56 +10,43 @@ namespace WebShop.Infrastructure.DataAccess
 {
     public interface ILowLevelQueries
     {
-        Task<IEnumerable<Discount>> QueryDiscounts(Query<RequiredProductOfDiscount> rpQuery, Query<MicroDiscount> mdQuery);
+        Task<IEnumerable<Discount>> QueryDiscounts(Query<Discount.RequiredProduct> rpQuery, Query<Discount.MicroDiscount> mdQuery);
     }
 
     public class LowLevelQueries : ILowLevelQueries
     {
         private readonly WebShopDbContext _db;
-        private readonly ICustomMapper _mapper;
 
-        public LowLevelQueries(WebShopDbContext db, ICustomMapper mapper)
+        public LowLevelQueries(WebShopDbContext db)
         {
             _db = db;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Discount>>
-            QueryDiscounts(Query<RequiredProductOfDiscount> rpQuery, Query<MicroDiscount> mdQuery)
+            QueryDiscounts(Query<Discount.RequiredProduct> rpQuery, Query<Discount.MicroDiscount> mdQuery)
         {
             var requiredProductsOfDiscount = await rpQuery(_db.RequiredProductsOfDiscounts).ToListAsync();
             var microDiscounts = await mdQuery(_db.MicroDiscounts).ToListAsync();
 
             var bothModelsByDiscount =
-                new Dictionary<Guid, (List<RequiredProductOfDiscount> rps, List<MicroDiscount> mds)>();
+                new Dictionary<Guid, (List<Discount.RequiredProduct> rps, List<Discount.MicroDiscount> mds)>();
 
-            void AddRp(Guid discountId, RequiredProductOfDiscount rp)
-            {
-                if (!bothModelsByDiscount.ContainsKey(discountId))
-                {
-                    bothModelsByDiscount[discountId] =
-                        (new List<RequiredProductOfDiscount>(), new List<MicroDiscount>());
-                }
-                bothModelsByDiscount[discountId].rps.Add(rp);
-            }
+            var allDiscountIds = Enumerable
+                .Concat(requiredProductsOfDiscount.Select(m => m.DiscountId), 
+                        microDiscounts.Select(m => m.DiscountId))
+                .Distinct();
 
-            void AddMd(Guid discountId, MicroDiscount md)
-            {
-                if (!bothModelsByDiscount.ContainsKey(discountId))
-                {
-                    bothModelsByDiscount[discountId] =
-                        (new List<RequiredProductOfDiscount>(), new List<MicroDiscount>());
-                }
-                bothModelsByDiscount[discountId].mds.Add(md);
-            }
+            foreach (var discountId in allDiscountIds)
+                bothModelsByDiscount[discountId] =
+                    (new List<Discount.RequiredProduct>(), new List<Discount.MicroDiscount>());
 
             foreach (var rp in requiredProductsOfDiscount)
-                AddRp(rp.DiscountId, rp);
+                bothModelsByDiscount[rp.DiscountId].rps.Add(rp);
 
             foreach (var md in microDiscounts)
-                AddMd(md.DiscountId, md);
+                bothModelsByDiscount[md.DiscountId].mds.Add(md);
 
-            var discounts = bothModelsByDiscount.Select(m => _mapper.ToDomainModel(m.Value.rps, m.Value.mds));
+            var discounts = bothModelsByDiscount.Select(m => Discount.FromDbModels(m.Value.rps, m.Value.mds));
 
             return discounts;
         }

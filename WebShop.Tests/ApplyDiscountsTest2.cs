@@ -37,14 +37,14 @@ namespace WebShop.Tests
                 .Build();
 
             var db = TestServiceFactory.InMemoryDatabase();
-            var unitOfWork = new Infrastructure.DataAccess.UnitOfWork(db, null);
+            var unitOfWork = new Infrastructure.DataAccess.UnitOfWork(db);
 
             unitOfWork.AddRange(products);
             unitOfWork.Add(basket);
             unitOfWork.AddRange(basketItems);
             unitOfWork.Add(discount);
 
-            var service = new DiscountService(new SmartQueries(new LowLevelQueries(db, null), null));
+            var service = new DiscountService(new SmartQueries(new LowLevelQueries(db), TestServiceFactory.InMemoryDatabase()));
 
             await service.ApplyDiscounts(basket);
         }

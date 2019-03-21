@@ -20,11 +20,5 @@ namespace WebShop.Tests
         //    var db = InMemoryDatabase();
         //    return new Infrastructure.DataAccess.UnitOfWork(db);
         //}
-
-        public static IMapper AutoMapper()
-        {
-            var config = new MapperConfiguration(c => { c.AddProfile<MapperProfile>(); });
-            return config.CreateMapper();
-        }
     }
 }
