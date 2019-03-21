@@ -10,16 +10,9 @@ namespace WebShop.Infrastructure.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
-        public DbSet<BasketItemDiscounted> BasketItemDiscountedEvents { get; set; }
 
         public WebShopDbContext(DbContextOptions options) : base(options)
         {
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<BasketItemDiscounted>().HasKey(e => new {e.BasketItemId, e.DiscountId});
         }
     }
 }
