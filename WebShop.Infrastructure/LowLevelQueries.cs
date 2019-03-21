@@ -31,9 +31,9 @@ namespace WebShop.Infrastructure.DataAccess
             var microDiscounts = await mdQuery(_db.MicroDiscounts).ToListAsync();
 
             var bothModelsByDiscount =
-                new Dictionary<int, (List<RequiredProductOfDiscount> rps, List<MicroDiscount> mds)>();
+                new Dictionary<Guid, (List<RequiredProductOfDiscount> rps, List<MicroDiscount> mds)>();
 
-            void AddRp(int discountId, RequiredProductOfDiscount rp)
+            void AddRp(Guid discountId, RequiredProductOfDiscount rp)
             {
                 if (!bothModelsByDiscount.ContainsKey(discountId))
                 {
@@ -43,7 +43,7 @@ namespace WebShop.Infrastructure.DataAccess
                 bothModelsByDiscount[discountId].rps.Add(rp);
             }
 
-            void AddMd(int discountId, MicroDiscount md)
+            void AddMd(Guid discountId, MicroDiscount md)
             {
                 if (!bothModelsByDiscount.ContainsKey(discountId))
                 {

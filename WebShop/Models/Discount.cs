@@ -5,10 +5,9 @@ namespace WebShop.Models
 {
     public class Discount
     {
-        public int Id { get; }
+        public Guid Id { get; }
         public IReadOnlyCollection<RequiredProduct> RequiredProducts { get; }
         public IReadOnlyCollection<MicroDiscount> MicroDiscounts { get; }
-
 
         public class RequiredProduct
         {
@@ -22,8 +21,8 @@ namespace WebShop.Models
             public int MaxNumberOfTargetProductsToBeDiscounted { get; set; }
             public decimal Value { get; set; }
         }
-
-        public Discount(int id, IReadOnlyCollection<RequiredProduct> requiredProducts,
+        
+        public Discount(Guid id, IReadOnlyCollection<RequiredProduct> requiredProducts,
             IReadOnlyCollection<MicroDiscount> microDiscounts)
         {
             Id = id;
@@ -52,12 +51,6 @@ namespace WebShop.Models
             return this;
         }
 
-        public DiscountBuilder Id(int id)
-        {
-            _id = id;
-            return this;
-        }
-
-        public Discount Build() => new Discount(_id, _requiredProducts, _microDiscounts);
+        public Discount Build() => new Discount(Guid.NewGuid(), _requiredProducts, _microDiscounts);
     }
 }

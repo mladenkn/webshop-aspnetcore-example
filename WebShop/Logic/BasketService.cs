@@ -27,10 +27,10 @@
 //            _maxAllowedDiscount = maxAllowedDiscount;
 //            _mediator = mediator;
 //        }
-        
+
 //        public async Task<Basket> AddItem(Basket basket, int productId)
 //        {
-//            var basketItem = new BasketItem {BasketId = basket.Id, ProductId = productId};
+//            var basketItem = new BasketItem { BasketId = basket.Id, ProductId = productId };
 //            basket.Items.Add(basketItem);
 
 //            basketItem.Discounts = await _discountService.ApplyDiscounts(basket);

@@ -20,7 +20,6 @@ namespace WebShop.Tests
         private Discount GenerateDiscount()
         {
             var d = Discount.New()
-                .Id(nextUniqueInt++)
                 .Require(nextUniqueInt++, nextUniqueInt++)
                 .Require(nextUniqueInt++, nextUniqueInt++)
                 .DiscountFor(nextUniqueInt++, nextUniqueInt++, nextUniqueDecimal++)

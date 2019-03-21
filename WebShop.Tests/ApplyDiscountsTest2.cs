@@ -32,7 +32,6 @@ namespace WebShop.Tests
             };
 
             var discount = Discount.New()
-                .Id(1)
                 .Require(productId: 1, requiredQuantity: 2)
                 .DiscountFor(productId: 2, quantity: 1, value: 0.5m)
                 .Build();
