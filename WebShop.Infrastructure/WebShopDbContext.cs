@@ -6,8 +6,6 @@ namespace WebShop.Infrastructure.DataAccess
     public class WebShopDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
-        public DbSet<BasketDiscount.RequiredProduct> RequiredProductsOfDiscounts { get; set; }
-        public DbSet<BasketDiscount.BasketItemDiscount> MicroDiscounts { get; set; }
         public DbSet<BasketDiscount> Discounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
@@ -22,8 +20,6 @@ namespace WebShop.Infrastructure.DataAccess
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<BasketItemDiscounted>().HasKey(e => new {e.BasketItemId, e.DiscountId});
-            modelBuilder.Entity<BasketDiscount.RequiredProduct>().HasKey(e => new {e.ProductId, DiscountId = e.BasketDiscountId});
-            modelBuilder.Entity<BasketDiscount.BasketItemDiscount>().HasKey(e => new { e.TargetProductId, DiscountId = e.BasketDiscountId });
         }
     }
 }

@@ -19,7 +19,6 @@ namespace WebShop.Infrastructure.DataAccess
         {
             return _db.Baskets
                 .Include(b => b.Items)
-                .Include(b => b.AppliedDiscounts)
                 .Where(b => b.UserId == userId)
                 .FirstOrDefaultAsync();
         }

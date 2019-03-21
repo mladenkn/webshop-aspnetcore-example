@@ -36,21 +36,83 @@ namespace WebShop.Tests
             var milk = Product(2);
             var bread = Product(3);
 
-            var twoButtersDiscount = BasketDiscount.New()
-                .Require(productId: butter.Id, requiredQuantity: 2)
-                .DiscountFor(productId: bread.Id, quantity: 1, value: 0.5m)
-                .Build();
+            var twoButtersDiscount = new BasketDiscount
+            {
+                Id = 1,
+                RequiredProductId = butter.Id,
+                TargetProductId = bread.Id,
+                RequiredPerOneDiscounted = 2,
+                TargetProductDiscountedBy = 0.5m
+            };
 
-            var threeMilksDiscount = BasketDiscount.New()
-                .Require(productId: milk.Id, requiredQuantity: 3)
-                .DiscountFor(productId: milk.Id, quantity: 1, value: 0.5m)
-                .Build();
+            var threeMilksDiscount = new BasketDiscount
+            {
+                Id = 2,
+                RequiredProductId = milk.Id,
+                TargetProductId = milk.Id,
+                RequiredPerOneDiscounted = 3,
+                TargetProductDiscountedBy = 1
+            };
+
+            var otherDiscounts = new[]
+            {
+                new BasketDiscount
+                {
+                    Id = 3,
+                    RequiredProductId = butter.Id,
+                    TargetProductId = butter.Id,
+                    RequiredPerOneDiscounted = 5,
+                    TargetProductDiscountedBy = 2
+                },
+                new BasketDiscount
+                {
+                    Id = 4,
+                    RequiredProductId = Product(6).Id,
+                    TargetProductId = butter.Id,
+                    RequiredPerOneDiscounted = 5,
+                    TargetProductDiscountedBy = 2
+                },
+            };
 
             void AddBaseArgs(Args a)
             {
-                a.Products = new[] { butter, milk, bread};
-                a.Discounts = new[] {twoButtersDiscount, threeMilksDiscount};
+                a.Products = new[] { butter, milk, bread, Product(4), Product(5)};
+                a.Discounts = new[] {twoButtersDiscount, threeMilksDiscount}.Concat(otherDiscounts);
             }
+
+            await RunWithArgs(a =>
+            {
+                AddBaseArgs(a);
+                a.BasketItems = new BasketItem[0];
+                a.AppliedDiscounts = new Args.AppliedDiscount[0];
+            });
+
+            await RunWithArgs(a =>
+            {
+                AddBaseArgs(a);
+                a.BasketItems = new[] { BasketItem(bread), BasketItem(butter), BasketItem(milk) };
+                a.AppliedDiscounts = new Args.AppliedDiscount[0];
+            });
+
+            await RunWithArgs(a =>
+            {
+                AddBaseArgs(a);
+                a.BasketItems = new[] { BasketItem(butter), BasketItem(butter), BasketItem(bread), BasketItem(bread) };
+                a.AppliedDiscounts = new[]
+                {
+                    AppliedDiscount(bread, twoButtersDiscount, 1),
+                };
+            });
+
+            await RunWithArgs(a =>
+            {
+                AddBaseArgs(a);
+                a.BasketItems = GenerateSequence(() => BasketItem(milk), 4);
+                a.AppliedDiscounts = new[]
+                {
+                    AppliedDiscount(milk, threeMilksDiscount, 1)
+                };
+            });
 
             await RunWithArgs(a =>
             {
@@ -60,7 +122,11 @@ namespace WebShop.Tests
                     .Append(BasketItem(butter))
                     .Append(BasketItem(bread))
                 ;
-                a.AppliedDiscounts = new[] { AppliedDiscount(milk, threeMilksDiscount, 2) };
+                a.AppliedDiscounts = new[]
+                {
+                    AppliedDiscount(bread, twoButtersDiscount, 1),
+                    AppliedDiscount(milk, threeMilksDiscount, 2)
+                };
             });
         }
 
@@ -76,19 +142,20 @@ namespace WebShop.Tests
             var basket = new Basket {Items = a.BasketItems.ToList()};
             a.BasketItems.ForEach(bi => bi.BasketId = basket.Id);
             
-            var allDiscountsRequiredProducts = a.Discounts.Select(d => d.RequiredProducts).SelectMany(o => o);
-            var allDiscountsMicroDiscounts = a.Discounts.Select(d => d.BasketItemDiscounts).SelectMany(o => o);
-            var allModels = ConcatAll(a.Products, a.Discounts, allDiscountsRequiredProducts, allDiscountsMicroDiscounts).Append(basket);
+            var allModels = ConcatAll(a.Products, a.Discounts).Append(basket);
             allModels.ForEach(o => db.Add(o));
             await db.SaveChangesAsync();
 
-            await sut.ApplyDiscounts(basket);
+            var basketWithPrice = await sut.ApplyDiscounts(basket);
+
+            basketWithPrice.DiscountedItems.Count().Should()
+                .Be(a.AppliedDiscounts.Sum(ad => ad.NumberOfBasketItemsThatShouldReceiveIt));
 
             foreach (var appliedDiscount in a.AppliedDiscounts)
             {
-                var count = basket.AppliedDiscounts.Count(ap =>
-                    ap.BasketItem.ProductId == appliedDiscount.ProductId &&
-                    ap.DiscountId == appliedDiscount.DiscountId
+                var count = basketWithPrice.DiscountedItems.Count(i =>
+                    i.BasketItem.ProductId == appliedDiscount.ProductId &&
+                    i.DiscountId == appliedDiscount.DiscountId
                 );
                 count.Should().Be(appliedDiscount.NumberOfBasketItemsThatShouldReceiveIt);
             }
@@ -106,7 +173,7 @@ namespace WebShop.Tests
         public class AppliedDiscount
         {
             public int ProductId { get; set; }
-            public Guid DiscountId { get; set; }
+            public int DiscountId { get; set; }
             public int NumberOfBasketItemsThatShouldReceiveIt { get; set; }
         }
     }

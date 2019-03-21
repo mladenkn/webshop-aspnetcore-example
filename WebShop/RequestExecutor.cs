@@ -34,8 +34,6 @@ namespace WebShop
             var basket = await _queries.GetUsersBasket(_currentUserProvider.GetId());
             var basketItem = new BasketItem {ProductId = productId, BasketId = basket.Id};
             _unitOfWork.Add(basketItem);
-            await _basketService.ApplyDiscounts(basket);
-            basket.AppliedDiscounts.ForEach(_unitOfWork.Add);
             await _unitOfWork.PersistChanges();
         }
 

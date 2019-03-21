@@ -10,7 +10,7 @@ namespace WebShop.Logic
 {
     public interface IBasketService
     {
-        Task ApplyDiscounts(Basket basket);
+        Task<BasketWithPrice> ApplyDiscounts(Basket basket);
     }
 
     public class BasketService : IBasketService
@@ -24,33 +24,43 @@ namespace WebShop.Logic
             _mediator = mediator;
         }
 
-        public async Task ApplyDiscounts(Basket basket)
+        public async Task<BasketWithPrice> ApplyDiscounts(Basket basket)
         {
             basket.Items.Must().NotBeNull();
             var discountsToBeApplied = await _smartQueries.GetDiscountsFor(basket);
-            
-            //var appliedDiscounts = discountsToBeApplied
-            //    .Select(basketDiscount => MapToAppliedDiscounts(basket, basketDiscount.BasketItemDiscounts))
-            //    .SelectMany(ap => ap);
-            //basket.AppliedDiscounts = appliedDiscounts;
-         
-            discountsToBeApplied.Select(d =>
-            {
-                var numberOfBasketItemsThatShouldReceiveIt = d.RequiredProducts
-            })
 
-            RefreshBasketPrice(basket);
+            var itemsWithDiscounts = discountsToBeApplied.Select(d =>
+                {
+                    var basketItemsOfTargetProduct = basket.Items.Where(bi => bi.ProductId == d.TargetProductId);
+                    var countOfRequiredProducts = basket.Items.Count(bi => bi.ProductId == d.RequiredProductId);
+                    var numberOfBasketItemsToBeDiscounted = countOfRequiredProducts / d.RequiredPerOneDiscounted;
+
+                    return basketItemsOfTargetProduct
+                        .Take(numberOfBasketItemsToBeDiscounted)
+                        .Select(bi => new DiscountedBasketItem
+                        {
+                            BasketItemId = bi.Id,
+                            BasketItem = bi,
+                            DiscountId = d.Id,
+                            NewPrice = bi.Product.RegularPrice - (bi.Product.RegularPrice * d.TargetProductDiscountedBy)
+                        });
+                })
+                .SelectMany(i => i);
+
+            return MapToDiscountedBasket(basket, itemsWithDiscounts);
         }
 
-        private void RefreshBasketPrice(Basket basket)
+        private BasketWithPrice MapToDiscountedBasket(Basket basket, IEnumerable<DiscountedBasketItem> discountedBasketItems)
         {
             _mediator.Publish(new BasketPriceRequested(basket));
-            
-        }
-
-        private void Apply(Basket basket, BasketDiscount.BasketItemDiscount discount, int times)
-        {
-
+            var price = discountedBasketItems.Select(i => i.NewPrice).Sum();
+            return new BasketWithPrice
+            {
+                BasketId = basket.Id,
+                BasketItems = basket.Items,
+                DiscountedItems = discountedBasketItems,
+                Price = price
+            };
         }
 
         //private IEnumerable<AppliedDiscount> MapToAppliedDiscounts(
