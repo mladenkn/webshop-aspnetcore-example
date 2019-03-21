@@ -14,7 +14,7 @@ namespace WebShop.Tests
 {
     public class ApplyDiscountsTest2
     {
-        [Fact]
+        //[Fact]
         public async Task Run()
         {
             var products = new[] {1, 2, 3, 4}.Select(id => new Product {Id = id});

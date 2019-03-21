@@ -14,11 +14,5 @@ namespace WebShop.Tests
             var db = new WebShopDbContext(dbOptions);
             return db;
         }
-
-        //public static IUnitOfWork UnitOfWork()
-        //{
-        //    var db = InMemoryDatabase();
-        //    return new Infrastructure.DataAccess.UnitOfWork(db);
-        //}
     }
 }
