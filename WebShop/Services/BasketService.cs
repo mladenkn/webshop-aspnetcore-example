@@ -6,7 +6,7 @@ using Utilities;
 using WebShop.DataAccess;
 using WebShop.Models;
 
-namespace WebShop.Logic
+namespace WebShop.Services
 {
     public interface IBasketService
     {
@@ -29,7 +29,7 @@ namespace WebShop.Logic
             basket.Items.Must().NotBeNull();
             var discountsToBeApplied = await _smartQueries.GetDiscountsFor(basket);
 
-            var itemsWithDiscounts = discountsToBeApplied.Select(d =>
+            var discountedBasketItems = discountsToBeApplied.Select(d =>
             {
                 var basketItemsOfTargetProduct = basket.Items.Where(bi => bi.ProductId == d.TargetProductId);
                 var countOfRequiredProducts = basket.Items.Count(bi => bi.ProductId == d.RequiredProductId);
@@ -47,17 +47,18 @@ namespace WebShop.Logic
             })
             .SelectMany(i => i);
 
-            return MapToDiscountedBasket(basket, itemsWithDiscounts);
+            var basketWithPrice = MapToDiscountedBasket(basket, discountedBasketItems);
+            await _mediator.Publish(new BasketPriceCalculated(basketWithPrice));
+
+            return basketWithPrice;
         }
 
         private BasketWithPrice MapToDiscountedBasket(Basket basket, IEnumerable<BasketWithPrice.Item> discountedBasketItems)
         {
-            _mediator.Publish(new BasketPriceRequested(basket));
             var notDiscountedBasketItems =
                 basket.Items.Where(bi => !discountedBasketItems.Any(di => di.BasketItemId == bi.Id));
 
-            BasketWithPrice.Item MapBasketItem(BasketItem bi) => 
-                new BasketWithPrice.Item
+            BasketWithPrice.Item MapBasketItem(BasketItem bi) => new BasketWithPrice.Item
                 {
                     BasketItemId = bi.Id, Price = bi.Product.RegularPrice, ProductId = bi.ProductId
                 };

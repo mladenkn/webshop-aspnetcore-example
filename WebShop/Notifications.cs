@@ -1,16 +1,15 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using WebShop.Models;
 
 namespace WebShop
 {
-    public class BasketPriceRequested : INotification
+    public class BasketPriceCalculated : INotification
     {
-        public BasketPriceRequested(Basket basket)
+        public BasketPriceCalculated(BasketWithPrice basket)
         {
             Basket = basket;
         }
 
-        public Basket Basket { get; }
+        public BasketWithPrice Basket { get; }
     }
 }

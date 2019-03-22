@@ -4,8 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Utilities;
 using WebShop.DataAccess;
-using WebShop.Logic;
 using WebShop.Models;
+using WebShop.Services;
 
 namespace WebShop
 {

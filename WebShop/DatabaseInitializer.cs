@@ -16,20 +16,28 @@ namespace WebShop
             unitOfWork.AddRange(butter, milk, bread);
             await unitOfWork.PersistChanges();
 
-            //var discounts = new[]
-            //{
-            //    BasketDiscount.New()
-            //        .Require(productId: butter.Id, requiredQuantity: 2)
-            //        .DiscountFor(productId: bread.Id, quantity: 1, value: 50)
-            //        .Build(),
+            var discounts = new[]
+            {
+                new BasketDiscount
+                {
+                    Id = 1,
+                    RequiredProductId = butter.Id,
+                    TargetProductId = bread.Id,
+                    RequiredPerOneDiscounted = 2,
+                    TargetProductDiscountedBy = 0.5m
+                },
 
-            //    BasketDiscount.New()
-            //        .Require(productId: milk.Id, requiredQuantity: 3)
-            //        .DiscountFor(productId: milk.Id, quantity: 1, value: 100)
-            //        .Build(),
-            //};
+                new BasketDiscount
+                {
+                    Id = 2,
+                    RequiredProductId = milk.Id,
+                    TargetProductId = milk.Id,
+                    RequiredPerOneDiscounted = 3,
+                    TargetProductDiscountedBy = 1
+                },
+            };
 
-            //discounts.ForEach(unitOfWork.Add);
+            discounts.ForEach(unitOfWork.Add);
 
             await unitOfWork.PersistChanges();
         }

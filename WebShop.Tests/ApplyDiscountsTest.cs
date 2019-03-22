@@ -8,8 +8,8 @@ using Moq;
 using Utilities;
 using WebShop.DataAccess;
 using WebShop.Infrastructure.DataAccess;
-using WebShop.Logic;
 using WebShop.Models;
+using WebShop.Services;
 using Xunit;
 using static Utilities.General;
 
