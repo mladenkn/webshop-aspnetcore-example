@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
-namespace WebShop.Infrastructure.DataAccess
+namespace WebShop.DataAccess
 {
     public delegate IQueryable<T> Query<T>(IQueryable<T> queryable);
 }

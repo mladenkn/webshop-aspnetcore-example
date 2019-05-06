@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using WebShop.DataAccess;
 using WebShop.Models;
 
-namespace WebShop.Infrastructure.DataAccess
+namespace WebShop.DataAccess
 {
     public class UnitOfWork : IUnitOfWork
     {

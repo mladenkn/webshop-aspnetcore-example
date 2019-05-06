@@ -19,9 +19,13 @@ namespace WebShop.Rest.Controllers
             _requestExecutor = requestExecutor;
         }
 
+        [HttpPatch]
         public Task AddItem(int productId)
         {
             return _requestExecutor.AddItemToBasket(productId);
         }
+
+        public Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts(string userId) =>
+            _requestExecutor.GetUsersBasketWithItemsAndDiscounts(userId);
     }
 }

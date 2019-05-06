@@ -7,7 +7,6 @@ using MediatR;
 using Moq;
 using Utilities;
 using WebShop.DataAccess;
-using WebShop.Infrastructure.DataAccess;
 using WebShop.Models;
 using WebShop.Services;
 using Xunit;
