@@ -5,9 +5,9 @@ using MediatR;
 
 namespace WebShop
 {
-    public class Logger : INotificationHandler<BasketPriceCalculated>
+    public class Logger : INotificationHandler<BasketPriceRequested>
     {
-        public Task Handle(BasketPriceCalculated notification, CancellationToken cancellationToken)
+        public Task Handle(BasketPriceRequested notification, CancellationToken cancellationToken)
         {
             var basket = notification.Basket;
             Console.WriteLine($"Calculated price of basket of id: {basket.BasketId}. Price: {basket.Price}");

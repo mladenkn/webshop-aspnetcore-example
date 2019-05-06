@@ -1,15 +1,17 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using WebShop.Models;
 
 namespace WebShop
 {
-    public class BasketPriceCalculated : INotification
+    public class BasketPriceRequested : INotification
     {
-        public BasketPriceCalculated(BasketWithPrice basket)
+        public BasketPriceRequested(BasketWithPrice basket)
         {
             Basket = basket;
         }
 
         public BasketWithPrice Basket { get; }
+        public DateTime DateTime { get; } = DateTime.Now;
     }
 }

@@ -15,7 +15,7 @@ using static Utilities.General;
 
 namespace WebShop.Tests
 {
-    public class ApplyDiscountsTest
+    public class CalculateBasketPriceTest
     {
         Product Product(int id, decimal price) => new Product {Id = id, RegularPrice = price };
 
@@ -145,9 +145,9 @@ namespace WebShop.Tests
             allModels.ForEach(o => db.Add(o));
             await db.SaveChangesAsync();
 
-            var basketWithPrice = await sut.ApplyDiscounts(basket);
+            var basketWithPrice = await sut.CalculatePrice(basket);
 
-            //basketWithPrice.Price.Should().Be(a.ExpectedBasketPrice);
+            basketWithPrice.Price.Should().Be(a.ExpectedBasketPrice);
 
             var discountedItems = basketWithPrice.Items.Where(i => i.DiscountId != null);
 

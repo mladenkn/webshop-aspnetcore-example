@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebShop.Infrastructure\WebShop.Infrastructure.DataAccess.csproj" />
+    <ProjectReference Include="..\WebShop.DataAccess\WebShop.DataAccess.csproj" />
     <ProjectReference Include="..\WebShop\WebShop.csproj" />
   </ItemGroup>
 

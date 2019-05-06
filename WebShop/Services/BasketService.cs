@@ -10,7 +10,7 @@ namespace WebShop.Services
 {
     public interface IBasketService
     {
-        Task<BasketWithPrice> ApplyDiscounts(Basket basket);
+        Task<BasketWithPrice> CalculatePrice(Basket basket);
     }
 
     public class BasketService : IBasketService
@@ -24,7 +24,7 @@ namespace WebShop.Services
             _mediator = mediator;
         }
 
-        public async Task<BasketWithPrice> ApplyDiscounts(Basket basket)
+        public async Task<BasketWithPrice> CalculatePrice(Basket basket)
         {
             basket.Items.Must().NotBeNull();
             var discountsToBeApplied = await _smartQueries.GetDiscountsFor(basket);
@@ -48,7 +48,7 @@ namespace WebShop.Services
             .SelectMany(i => i);
 
             var basketWithPrice = MapToDiscountedBasket(basket, discountedBasketItems);
-            await _mediator.Publish(new BasketPriceCalculated(basketWithPrice));
+            await _mediator.Publish(new BasketPriceRequested(basketWithPrice));
 
             return basketWithPrice;
         }
