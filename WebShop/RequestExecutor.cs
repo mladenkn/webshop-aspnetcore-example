@@ -12,7 +12,7 @@ namespace WebShop
     public interface IRequestExecutor
     {
         Task AddItemToBasket(int productId);
-        Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts(string userId);
+        Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts();
     }
 
     public class RequestExecutor : IRequestExecutor
@@ -39,16 +39,27 @@ namespace WebShop
 
         public async Task AddItemToBasket(int productId)
         {
-            var basket = await _queries.GetUsersBasket(_currentUserProvider.GetId());
+            var usersId = _currentUserProvider.GetId();
+            var basket = await _queries.GetUsersBasket(usersId, d => { });
+            if(basket == null)
+            {
+                basket = new Basket { UserId = usersId };
+                _unitOfWork.Add(basket);
+            }
             var basketItem = new BasketItem {ProductId = productId, BasketId = basket.Id};
             _unitOfWork.Add(basketItem);
             _basketCache.Invalidate(basket.Id);
             await _unitOfWork.PersistChanges();
         }
 
-        public async Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts(string userId)
+        public async Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts()
         {
-            var basketWithoutPrice = await _queries.GetUsersBasketWithItemsAndDiscounts(userId);
+            var usersId = _currentUserProvider.GetId();
+            var basketWithoutPrice = await _queries.GetUsersBasket(usersId, d => d.Add(b => b.Items).Add("Items.Product"));
+
+            if(basketWithoutPrice == null)
+                throw new ModelNotFoundException("Users basket not found.");
+
             if (_basketCache.IsValid(basketWithoutPrice.Id))
                 return await _basketCache.Get(basketWithoutPrice.Id);
             else

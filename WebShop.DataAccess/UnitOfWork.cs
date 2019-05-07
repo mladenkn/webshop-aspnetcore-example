@@ -17,10 +17,7 @@ namespace WebShop.DataAccess
 
         public void Update(object o)
         {
-            if (o is BasketDiscount)
-                throw new NotImplementedException();
-            else
-                _dbContext.Update(o);
+            _dbContext.Update(o);
         }
 
         public void Delete(object o) => _dbContext.Remove(o);

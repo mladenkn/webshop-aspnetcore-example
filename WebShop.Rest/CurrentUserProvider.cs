@@ -10,16 +10,6 @@ namespace WebShop.Rest
 {
     public class CurrentUserProvider : ICurrentUserProvider
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentUserProvider(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string GetId()
-        {
-            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        }
+        public string GetId() => "mladen";
     }
 }

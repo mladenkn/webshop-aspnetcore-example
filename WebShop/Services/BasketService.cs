@@ -11,17 +11,22 @@ namespace WebShop.Services
     public interface IBasketService
     {
         Task<BasketWithPrice> CalculatePrice(Basket basket);
+        Task RemoveItem(int id);
     }
 
     public class BasketService : IBasketService
     {
         private readonly ISmartQueries _smartQueries;
         private readonly IMediator _mediator;
+        private readonly IQueries _queries;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BasketService(ISmartQueries smartQueries, IMediator mediator)
+        public BasketService(ISmartQueries smartQueries, IMediator mediator, IQueries queries, IUnitOfWork unitOfWork)
         {
             _smartQueries = smartQueries;
             _mediator = mediator;
+            _queries = queries;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<BasketWithPrice> CalculatePrice(Basket basket)
@@ -53,17 +58,29 @@ namespace WebShop.Services
             return basketWithPrice;
         }
 
+        public async Task RemoveItem(int id)
+        {
+            var item = await _queries.GetBasketItem(id);
+            if(item == null)
+                throw new ModelNotFoundException("Basket item not found.");
+            _unitOfWork.Delete(item);
+            await _unitOfWork.PersistChanges();
+        }
+
         private BasketWithPrice MapToDiscountedBasket(Basket basket, IEnumerable<BasketWithPrice.Item> discountedBasketItems)
         {
             var notDiscountedBasketItems =
                 basket.Items.Where(bi => !discountedBasketItems.Any(di => di.BasketItemId == bi.Id));
 
-            BasketWithPrice.Item MapBasketItem(BasketItem bi) => new BasketWithPrice.Item
+            var allItems = notDiscountedBasketItems
+                .Select(bi => new BasketWithPrice.Item
                 {
-                    BasketItemId = bi.Id, Price = bi.Product.RegularPrice, ProductId = bi.ProductId
-                };
+                    BasketItemId = bi.Id,
+                    Price = bi.Product.RegularPrice,
+                    ProductId = bi.ProductId
+                })
+                .Concat(discountedBasketItems);
 
-            var allItems = notDiscountedBasketItems.Select(MapBasketItem).Concat(discountedBasketItems);
             var price = allItems.Select(i => i.Price).Sum();
 
             return new BasketWithPrice

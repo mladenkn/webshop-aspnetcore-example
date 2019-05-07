@@ -1,6 +1,4 @@
-﻿using Utilities;
-
-namespace WebShop.Models
+﻿namespace WebShop.Models
 {
     public class BasketDiscount
     {

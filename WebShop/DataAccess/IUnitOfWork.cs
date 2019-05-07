@@ -11,7 +11,7 @@ namespace WebShop.DataAccess
         Task PersistChanges();
     }
 
-    public static class UnitOfWork
+    public static class UnitOfWorkExtensions
     {
         public static void AddRange(this IUnitOfWork unitOfWork, IEnumerable<object> objects)
         {

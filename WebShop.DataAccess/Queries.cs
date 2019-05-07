@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebShop.Models;
@@ -14,19 +15,14 @@ namespace WebShop.DataAccess
             _db = db;
         }
 
-        public Task<Basket> GetUsersBasketWithItemsAndDiscounts(string userId)
+        public Task<Basket> GetUsersBasket(string userId, Action<IncludesBuilder<Basket>> includeProps)
         {
             return _db.Baskets
-                .Include(b => b.Items)
+                .Include(includeProps)
                 .Where(b => b.UserId == userId)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<Basket> GetUsersBasket(string userId)
-        {
-            return _db.Baskets
-                .Where(b => b.UserId == userId)
-                .FirstOrDefaultAsync();
-        }
+        public Task<BasketItem> GetBasketItem(int id) => _db.BasketItems.FirstOrDefaultAsync(i => i.Id == id);
     }
 }

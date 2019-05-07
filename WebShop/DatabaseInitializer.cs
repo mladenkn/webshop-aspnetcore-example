@@ -5,9 +5,9 @@ using WebShop.Models;
 
 namespace WebShop
 {
-    public class DatabaseInitializer
+    public static class DatabaseInitializer
     {
-        public async Task Initialize(IUnitOfWork unitOfWork)
+        public static async Task Initialize(IUnitOfWork unitOfWork)
         {
             var butter = new Product {RegularPrice = 0.8m};
             var milk = new Product {RegularPrice = 1.15m };
