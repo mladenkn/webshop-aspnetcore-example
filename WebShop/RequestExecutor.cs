@@ -11,7 +11,8 @@ namespace WebShop
 {
     public interface IRequestExecutor
     {
-        Task AddItemToBasket(int productId);
+        Task AddBasketItem(int productId);
+        Task RemoveBasketItem(int id);
         Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts();
     }
 
@@ -37,7 +38,7 @@ namespace WebShop
             _basketService = basketService;
         }
 
-        public async Task AddItemToBasket(int productId)
+        public async Task AddBasketItem(int productId)
         {
             var usersId = _currentUserProvider.GetId();
             var basket = await _queries.GetUsersBasket(usersId, d => { });
@@ -50,6 +51,13 @@ namespace WebShop
             _unitOfWork.Add(basketItem);
             _basketCache.Invalidate(basket.Id);
             await _unitOfWork.PersistChanges();
+        }
+
+        public async Task RemoveBasketItem(int id)
+        {
+            await _basketService.RemoveItem(id);
+            var basket = await _queries.GetBasketWithItem(id);
+            _basketCache.Invalidate(basket.Id);
         }
 
         public async Task<BasketWithPrice> GetUsersBasketWithItemsAndDiscounts()

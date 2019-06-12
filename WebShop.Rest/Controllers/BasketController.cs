@@ -20,10 +20,10 @@ namespace WebShop.Rest.Controllers
         }
 
         [HttpPost]
-        public Task AddItem(int productId) => _safeRunner.Run(() => _requestExecutor.AddItemToBasket(productId), Ok);
+        public Task AddItem(int productId) => _safeRunner.Run(() => _requestExecutor.AddBasketItem(productId), Ok);
 
         [HttpDelete]
-        public Task RemoveItem(int itemId) => _safeRunner.Run(() => _basketService.RemoveItem(itemId), Ok);
+        public Task RemoveItem(int itemId) => _safeRunner.Run(() => _requestExecutor.RemoveBasketItem(itemId), Ok);
 
         [HttpGet]
         public Task<IActionResult> GetUsersBasketWithItemsAndDiscounts() =>

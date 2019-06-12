@@ -8,5 +8,6 @@ namespace WebShop.DataAccess
     {
         Task<Basket> GetUsersBasket(string userId, Action<IncludesBuilder<Basket>> includeProps);
         Task<BasketItem> GetBasketItem(int id);
+        Task<Basket> GetBasketWithItem(int itemId);
     }
 }

@@ -24,5 +24,9 @@ namespace WebShop.DataAccess
         }
 
         public Task<BasketItem> GetBasketItem(int id) => _db.BasketItems.FirstOrDefaultAsync(i => i.Id == id);
+
+        public Task<Basket> GetBasketWithItem(int itemId) => _db.Baskets
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.Items.Any(i => i.Id == itemId));
     }
 }
