@@ -58,9 +58,11 @@ namespace WebShop
             var item = await _queries.GetBasketItem(id);
             if (item == null)
                 throw new ModelNotFoundException("Basket item not found.");
+            var basket = await _queries.GetBasketWithItem(id);
+
             _unitOfWork.Delete(item);
             await _unitOfWork.PersistChanges();
-            var basket = await _queries.GetBasketWithItem(id);
+
             _basketCache.Invalidate(basket.Id);
         }
 
