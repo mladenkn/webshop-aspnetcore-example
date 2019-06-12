@@ -55,7 +55,10 @@ namespace WebShop
 
         public async Task RemoveBasketItem(int id)
         {
-            await _basketService.RemoveItem(id);
+            var item = await _queries.GetBasketItem(id);
+            if (item == null)
+                throw new ModelNotFoundException("Basket item not found.");
+            _unitOfWork.Delete(item);
             var basket = await _queries.GetBasketWithItem(id);
             _basketCache.Invalidate(basket.Id);
         }

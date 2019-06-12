@@ -132,7 +132,7 @@ namespace WebShop.Tests
         {
             var db = TestServiceFactory.InMemoryDatabase();
             var smartQueries = new SmartQueries(db);
-            var sut = new BasketService(smartQueries, Mock.Of<IMediator>(), Mock.Of<IQueries>(), Mock.Of<IUnitOfWork>());
+            var sut = new BasketService(smartQueries, Mock.Of<IMediator>());
 
             var a = new Args();
             buildArgs(a);
